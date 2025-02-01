@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "755405539897",
+    "project_id": "alinas-app",
+    "storage_bucket": "alinas-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755405539897:android:8df40fed972a6934dedbe8",
+        "android_client_info": {
+          "package_name": "com.example.journal_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWoYMs7YM0d86TCirOgL9VPVMhXXUmwB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
