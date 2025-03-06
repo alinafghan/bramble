@@ -11,6 +11,7 @@ class UserRepository {
   Future<Users> getCurrentUserFromFirebase() async {
     try {
       Users? user = await _authRepository.getCurrentUser();
+
       if (user == null) {
         throw Exception("User is not logged in");
       }

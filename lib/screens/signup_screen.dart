@@ -30,7 +30,8 @@ class _SignupScreenState extends State<SignupScreen> {
     String email = emailController.text;
     String password = passwordController.text;
 
-    Users user = Users(userId: '', username: username, email: email);
+    Users user =
+        Users(userId: '', username: username, email: email, savedBooks: []);
 
     Users? user2 = await _provider.emailSignUp(user, password);
 

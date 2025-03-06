@@ -74,6 +74,7 @@ class BookCard extends StatelessWidget {
         top: -6,
         right: -6,
         child: FloatingActionButton(
+          heroTag: book.bookId,
           onPressed: () {
             addBookDialog(context, book);
           },

@@ -5,12 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
 import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
 import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
-import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/models/user.dart';
-import 'package:journal_app/providers/library_provider/library_provider.dart';
-import 'package:journal_app/providers/user_provider/user_provider.dart';
-import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:journal_app/screens/library_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/popup_menu.dart';
@@ -85,6 +80,8 @@ class _BooklistScreenState extends State<BooklistScreen> {
               ],
               child: BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
                 builder: (context, state) {
+                  Book book =
+                      Book(bookId: '0', author: '', title: 'No Books Added');
                   List<Book> items = [];
                   if (state is GetAllBooksLoaded) {
                     if (state.bookList != null) {
@@ -141,9 +138,7 @@ class _BooklistScreenState extends State<BooklistScreen> {
   }
 
   Future<void> getBooks() async {
-    FirebaseAuthRepository auth = FirebaseAuthRepository();
-    Users? curr = await auth.getCurrentUser();
-    curr.savedBooks;
+    context.read<GetSavedBooksCubit>().getAllBooks();
   }
 
   Future<void> deleteBookDialog(Book book) async {
