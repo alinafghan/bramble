@@ -1,25 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/models/user.dart';
-import 'package:journal_app/providers/book_provider/book_provider.dart';
+import 'package:journal_app/providers/library_provider/library_provider.dart';
 
 part 'get_library_event.dart';
 part 'get_library_state.dart';
 
 class GetLibraryBloc extends Bloc<GetLibraryEvent, GetLibraryState> {
-  BookProvider bookProvider = BookProvider();
+  LibraryProvider libraryProvider = LibraryProvider();
 
-  GetLibraryBloc({required BookProvider provider})
-      : bookProvider = provider,
+  GetLibraryBloc({required LibraryProvider provider})
+      : libraryProvider = provider,
         super(GetLibraryInitial()) {
-    on<GetUserLibrary>((event, emit) async {
-      emit(GetUserLibraryLoading());
+    on<GetLibrary>((event, emit) async {
+      print('bloc level reached');
+      emit(GetLibraryLoading());
       try {
-        List<Book> library = await provider.getLibrary(event.user.userId);
-        emit(GetUserLibraryLoaded(booklist: library));
+        List<Book> library = await provider.getLibrary();
+        emit(GetLibraryLoaded(booklist: library));
       } catch (e) {
-        emit(GetUserLibraryFailed());
+        emit(GetLibraryFailed());
       }
     });
   }

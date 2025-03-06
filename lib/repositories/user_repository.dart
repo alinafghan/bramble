@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:logger/logger.dart';
@@ -11,10 +10,11 @@ class UserRepository {
 
   Future<Users> getCurrentUserFromFirebase() async {
     try {
-      User? user = await _authRepository.getCurrentUser();
+      Users? user = await _authRepository.getCurrentUser();
       if (user == null) {
         throw Exception("User is not logged in");
       }
+
       QuerySnapshot querySnapshot = await usersCollection
           .where('email', isEqualTo: user.email)
           .limit(1)

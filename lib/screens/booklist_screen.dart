@@ -2,12 +2,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/add_book_bloc/add_book_bloc.dart';
+import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
+import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
 import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
 import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/user.dart';
+import 'package:journal_app/providers/library_provider/library_provider.dart';
 import 'package:journal_app/providers/user_provider/user_provider.dart';
+import 'package:journal_app/repositories/auth_repository.dart';
+import 'package:journal_app/screens/library_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 
@@ -25,8 +29,6 @@ class _BooklistScreenState extends State<BooklistScreen> {
     getBooks(); // Fetch books only once when the widget initializes
   }
 
-  final TextEditingController _addBookController = TextEditingController();
-  final TextEditingController _addAuthorController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +62,10 @@ class _BooklistScreenState extends State<BooklistScreen> {
               ),
               color: AppTheme.text,
               onPressed: () {
-                addBookDialog();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LibraryScreen()));
               },
             ),
           ),
@@ -70,21 +75,21 @@ class _BooklistScreenState extends State<BooklistScreen> {
           padding: const EdgeInsets.all(12.0),
           child: MultiBlocListener(
               listeners: [
-                BlocListener<AddBookBloc, AddBookState>(
+                BlocListener<AddBookCubit, AddBookState>(
                     listenWhen: (previous, current) => current is AddBookLoaded,
                     listener: (context, state) {
                       if (state is AddBookLoaded) {
-                        context
-                            .read<GetLibraryBloc>()
-                            .add(GetUserLibrary(user: state.book.user));
+                        getBooks();
                       }
                     })
               ],
-              child: BlocBuilder<GetLibraryBloc, GetLibraryState>(
+              child: BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
                 builder: (context, state) {
                   List<Book> items = [];
-                  if (state is GetUserLibraryLoaded) {
-                    items = state.booklist;
+                  if (state is GetAllBooksLoaded) {
+                    if (state.bookList != null) {
+                      items = state.bookList!;
+                    }
                     return ReorderableListView(
                       onReorder: (int oldIndex, int newIndex) {
                         setState(() {
@@ -136,12 +141,9 @@ class _BooklistScreenState extends State<BooklistScreen> {
   }
 
   Future<void> getBooks() async {
-    UserProvider provider = UserProvider();
-    Users user = await provider.getCurrentUser();
-
-    // if (mounted) {
-    context.read<GetLibraryBloc>().add(GetUserLibrary(user: user));
-    // }
+    FirebaseAuthRepository auth = FirebaseAuthRepository();
+    Users? curr = await auth.getCurrentUser();
+    curr.savedBooks;
   }
 
   Future<void> deleteBookDialog(Book book) async {
@@ -151,17 +153,13 @@ class _BooklistScreenState extends State<BooklistScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             insetPadding: const EdgeInsets.all(30),
-            title: Text('Are you sure you want to delete ${book.title}'),
+            title: Text(
+                'Are you sure you want to remove ${book.title} from your saved?'),
             actions: [
               TextButton(
                   onPressed: () {
-                    context
-                        .read<RemoveBookCubit>()
-                        .removeBook(book.user.userId, book.bookId);
+                    context.read<RemoveBookCubit>().removeBook(book);
                     getBooks();
-                    // context
-                    //     .read<GetLibraryBloc>()
-                    //     .add(GetUserLibrary(user: book.user));
                     Navigator.pop(context);
                   },
                   child: const Text('Yes')),
@@ -173,62 +171,5 @@ class _BooklistScreenState extends State<BooklistScreen> {
             ],
           );
         });
-  }
-
-  Future<void> addBookDialog() async {
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            insetPadding: const EdgeInsets.all(50),
-            title: const Text('Add new book to library'),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  controller: _addBookController,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text('Title'),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  controller: _addAuthorController,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text('author'),
-                  ),
-                ),
-              ),
-              TextButton(
-                  onPressed: () {
-                    addBook();
-                    // getBooks();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Add'))
-            ],
-          );
-        });
-  }
-
-  void addBook() {
-    String bookTitle = _addBookController.text.trim();
-    String authorName = _addAuthorController.text.trim();
-
-    context.read<AddBookBloc>().add(AddBook(
-        book: Book(
-            author: authorName,
-            bookId: '',
-            user: Users(userId: '', email: ''),
-            userId: '',
-            dateAdded: '',
-            title: bookTitle)));
   }
 }

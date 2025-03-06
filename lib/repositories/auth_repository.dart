@@ -21,8 +21,13 @@ class FirebaseAuthRepository {
     });
   }
 
-  Future<User?> getCurrentUser() async {
-    return _auth.currentUser;
+  Future<Users> getCurrentUser() async {
+    try {
+      User? firebaseUser = _auth.currentUser;
+      return Users.fromFirebaseUser(firebaseUser!);
+    } catch (e) {
+      throw Exception('User not found $e');
+    }
   }
 
   Future<Users?> emailSignUp(Users user, String password) async {
@@ -95,9 +100,9 @@ class FirebaseAuthRepository {
   }
 }
 
-// extension on User {
-//   /// Maps a [firebase_auth.User] into a [User].
-//   Users toUser(String userName) {
-//     return Users(userId: uid, email: email!, username: userName);
-//   }
-// }
+extension on User {
+  /// Maps a [firebase_auth.User] into a [User].
+  Users toUser(String userName) {
+    return Users(userId: uid, email: email!, username: userName);
+  }
+}

@@ -7,9 +7,9 @@ part 'add_book_event.dart';
 part 'add_book_state.dart';
 
 class AddBookBloc extends Bloc<AddBookEvent, AddBookState> {
-  BookProvider bookProvider = BookProvider();
+  BookListProvider bookProvider = BookListProvider();
 
-  AddBookBloc({required BookProvider provider})
+  AddBookBloc({required BookListProvider provider})
       : bookProvider = provider,
         super(AddBookLoading()) {
     on<AddBook>((event, emit) async {
