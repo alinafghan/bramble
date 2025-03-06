@@ -1,5 +1,5 @@
 class Book {
-  String bookId; //cover_id
+  int bookId; //cover_id int from the api, string
   String title;
   String author;
   String? coverUrl;
@@ -29,7 +29,7 @@ class Book {
 
   factory Book.fromFirebase(Map<String, dynamic> json) {
     return Book(
-      bookId: json['bookid'] ?? 'null',
+      bookId: json['bookId'] ?? 'null',
       title: json['title'] ?? 'Unknown Title',
       author: json['author'] ?? 'Unknown Author',
     );

@@ -26,7 +26,6 @@ class BookListRepository {
     try {
       Users? currentUser = await userRepo.getCurrentUserFromFirebase();
       currentUser?.savedBooks?.add(book);
-      _logger.d('putting ${book.title} in the firebase');
       await usersCollection
           .doc(currentUser.userId)
           .update(currentUser.toDocument());
@@ -37,10 +36,13 @@ class BookListRepository {
 
   void removeBook(Book book) async {
     try {
-      Users? currentUser = await repo.getCurrentUser();
+      Users? currentUser = await userRepo.getCurrentUserFromFirebase();
       currentUser?.savedBooks?.remove(book);
+      await usersCollection
+          .doc(currentUser.userId)
+          .update(currentUser.toDocument());
     } catch (e) {
-      _logger.e('error saving book $e');
+      _logger.e('error deleting book $e');
     }
   }
 }

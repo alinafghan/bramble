@@ -32,41 +32,44 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
-      Card(
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(
-                book.coverUrl ??
-                    'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
-                fit: BoxFit.contain,
-                height: 180,
-                width: double.infinity,
-              ),
-              Flexible(
-                  child: Text(
-                book.title,
-                textWidthBasis: TextWidthBasis.parent,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+      GestureDetector(
+        onDoubleTap: () {},
+        child: Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  book.coverUrl ??
+                      'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
+                  fit: BoxFit.contain,
+                  height: 180,
+                  width: double.infinity,
                 ),
-              )),
-              Flexible(
-                  child: Text(
-                book.author,
-                textWidthBasis: TextWidthBasis.parent,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                style: const TextStyle(
-                  fontSize: 10,
-                ),
-              )),
-            ],
+                Flexible(
+                    child: Text(
+                  book.title,
+                  textWidthBasis: TextWidthBasis.parent,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
+                Flexible(
+                    child: Text(
+                  book.author,
+                  textWidthBasis: TextWidthBasis.parent,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                )),
+              ],
+            ),
           ),
         ),
       ),

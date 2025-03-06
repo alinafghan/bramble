@@ -81,7 +81,7 @@ class _BooklistScreenState extends State<BooklistScreen> {
               child: BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
                 builder: (context, state) {
                   Book book =
-                      Book(bookId: '0', author: '', title: 'No Books Added');
+                      Book(bookId: 0, author: '', title: 'No Books Added');
                   List<Book> items = [];
                   if (state is GetAllBooksLoaded) {
                     if (state.bookList != null) {
