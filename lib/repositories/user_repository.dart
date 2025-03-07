@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:logger/logger.dart';
+import 'dart:io';
 
 class UserRepository {
   final Logger _logger = Logger();
@@ -27,6 +28,9 @@ class UserRepository {
       } else {
         throw Exception("No user found with the given email.");
       }
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       throw Exception("Failed to fetch user: $e");
     }
@@ -35,6 +39,9 @@ class UserRepository {
   Future<void> setUser(Users user) async {
     try {
       await usersCollection.doc(user.userId).set(user.toDocument());
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       _logger.e('Error while setting user: $e');
       return;

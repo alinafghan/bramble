@@ -31,25 +31,25 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final MyAuthProvider authProvider;
-  //have a repository for all the auth methods so not calling
+  //have a Bloc for all the auth methods so not calling
   const MyApp(this.authProvider, {super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(providers: [
-      RepositoryProvider<RemoveBookCubit>(
+    return MultiBlocProvider(providers: [
+      BlocProvider<RemoveBookCubit>(
         create: (_) => RemoveBookCubit(provider: BookListProvider()),
       ),
-      RepositoryProvider<GetSavedBooksCubit>(
+      BlocProvider<GetSavedBooksCubit>(
         create: (_) => GetSavedBooksCubit(provider: BookListProvider()),
       ),
-      RepositoryProvider<AddBookCubit>(
+      BlocProvider<AddBookCubit>(
         create: (_) => AddBookCubit(provider: BookListProvider()),
       ),
-      RepositoryProvider<GetLibraryBloc>(
+      BlocProvider<GetLibraryBloc>(
         create: (_) => GetLibraryBloc(provider: LibraryProvider()),
       ),
-      RepositoryProvider<AuthenticationBloc>(
+      BlocProvider<AuthenticationBloc>(
           create: (_) =>
               AuthenticationBloc(authRepository: FirebaseAuthRepository()))
     ], child: const MyAppView());

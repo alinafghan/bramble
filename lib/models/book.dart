@@ -1,4 +1,6 @@
-class Book {
+import 'package:equatable/equatable.dart';
+
+class Book extends Equatable {
   int bookId; //cover_id int from the api, string
   String title;
   String author;
@@ -34,4 +36,7 @@ class Book {
       author: json['author'] ?? 'Unknown Author',
     );
   }
+
+  @override
+  List<Object?> get props => [bookId, title, author, coverUrl];
 }

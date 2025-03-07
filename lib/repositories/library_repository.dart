@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:journal_app/models/book.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
@@ -23,6 +23,9 @@ class LibraryRepository {
       }
       getCoverImage();
       return allBooks;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       _logger.e('error getting all books from api $e');
       throw Exception('error getting books from api');

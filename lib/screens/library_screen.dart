@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
 import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
 import 'package:journal_app/utils/book_card.dart';
+import 'package:journal_app/utils/constants.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -18,11 +18,22 @@ class _LibraryScreenState extends State<LibraryScreen> {
     super.initState();
   }
 
+  TextEditingController searchText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                // return TextField(
+                //   controller: searchText,
+
+                // );
+              },
+              icon: const Icon(Icons.search))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -41,7 +52,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   if (state is GetLibraryLoaded) {
                     return BookCard(book: state.booklist[i]);
                   } else {
-                    return const Text('book en route...');
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppTheme.primary,
+                      ),
+                    );
                   }
                 },
               );

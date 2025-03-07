@@ -8,6 +8,7 @@ import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/screens/library_screen.dart';
 import 'package:journal_app/utils/constants.dart';
+import 'package:logger/logger.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 
 class BooklistScreen extends StatefulWidget {
@@ -18,6 +19,8 @@ class BooklistScreen extends StatefulWidget {
 }
 
 class _BooklistScreenState extends State<BooklistScreen> {
+  final Logger _logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -71,12 +74,19 @@ class _BooklistScreenState extends State<BooklistScreen> {
           child: MultiBlocListener(
               listeners: [
                 BlocListener<AddBookCubit, AddBookState>(
-                    listenWhen: (previous, current) => current is AddBookLoaded,
                     listener: (context, state) {
-                      if (state is AddBookLoaded) {
-                        getBooks();
-                      }
-                    })
+                  if (state is AddBookLoaded) {
+                    _logger.d('listener for addbook called');
+                    getBooks();
+                  }
+                }),
+                BlocListener<RemoveBookCubit, RemoveBookState>(
+                    listener: (context, state) {
+                  if (state is RemoveBookLoaded) {
+                    _logger.d('listener for removebook called');
+                    getBooks();
+                  }
+                })
               ],
               child: BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
                 builder: (context, state) {
@@ -84,6 +94,7 @@ class _BooklistScreenState extends State<BooklistScreen> {
                       Book(bookId: 0, author: '', title: 'No Books Added');
                   List<Book> items = [];
                   if (state is GetAllBooksLoaded) {
+                    _logger.d('called again');
                     if (state.bookList != null) {
                       items = state.bookList!;
                     }
@@ -154,7 +165,6 @@ class _BooklistScreenState extends State<BooklistScreen> {
               TextButton(
                   onPressed: () {
                     context.read<RemoveBookCubit>().removeBook(book);
-                    getBooks();
                     Navigator.pop(context);
                   },
                   child: const Text('Yes')),

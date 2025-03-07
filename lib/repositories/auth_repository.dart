@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
+import 'dart:io';
 
 class FirebaseAuthRepository {
   final Logger _logger = Logger();
@@ -25,6 +26,9 @@ class FirebaseAuthRepository {
     try {
       User? firebaseUser = _auth.currentUser;
       return Users.fromFirebaseUser(firebaseUser!);
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       throw Exception('User not found $e');
     }
@@ -41,6 +45,9 @@ class FirebaseAuthRepository {
           .set(user.toDocument());
       //copywith method
       return user.copyWith(userId: credentials.user!.uid);
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } on FirebaseAuthException catch (e) {
       _logger.e("FirebaseAuthException: ${e.message}");
     }
@@ -66,6 +73,9 @@ class FirebaseAuthRepository {
       UserCredential credentials = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       return credentials.user;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
     } on FirebaseAuthException catch (e) {
       _logger.e("FirebaseAuthException: ${e.message}");
     }

@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/add_book_bloc/add_book_bloc.dart';
-import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
-import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
-import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
-import 'package:journal_app/providers/book_provider/book_provider.dart';
-import 'package:journal_app/providers/library_provider/library_provider.dart';
 import 'package:journal_app/screens/booklist_screen.dart';
 import 'package:journal_app/screens/home_screen.dart';
 import 'package:journal_app/utils/constants.dart';
@@ -81,23 +74,7 @@ class PopupMenuState extends State<PopupMenu> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider<GetLibraryBloc>(
-                        create: (context) => GetLibraryBloc(
-                          provider: LibraryProvider(),
-                        ),
-                      ),
-                      BlocProvider(
-                        create: (context) =>
-                            AddBookCubit(provider: BookListProvider()),
-                      ),
-                      BlocProvider(
-                          create: (context) =>
-                              RemoveBookCubit(provider: BookListProvider()))
-                    ],
-                    child: const BooklistScreen(),
-                  ),
+                  builder: (context) => const BooklistScreen(),
                 ),
               );
             },
