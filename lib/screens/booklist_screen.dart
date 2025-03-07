@@ -123,14 +123,21 @@ class _BooklistScreenState extends State<BooklistScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  leading: const Icon(
-                                    HugeIcons.strokeRoundedBook02,
-                                  ),
+                                  // leading: const Icon(
+                                  //   HugeIcons.strokeRoundedBook02,
+                                  // ),
+                                  key: ValueKey(item),
+                                  leading: ClipOval(
+                                      child: Image.network(
+                                    item.coverUrl!,
+                                    fit: BoxFit.cover,
+                                    height: 50,
+                                    width: 50,
+                                  )),
                                   trailing: const Icon(
                                     HugeIcons.strokeRoundedMenu09,
                                     color: AppTheme.text,
                                   ),
-                                  key: ValueKey(item),
                                   title: Text(item.title),
                                   subtitle: Text(item.author),
                                 ),

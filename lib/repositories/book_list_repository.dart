@@ -33,6 +33,7 @@ class BookListRepository {
 
   void saveBook(Book book) async {
     try {
+      _logger.d(book);
       Users? currentUser = await userRepo.getCurrentUserFromFirebase();
 
       if (currentUser.savedBooks!.contains(book)) {
@@ -41,6 +42,7 @@ class BookListRepository {
       }
 
       currentUser?.savedBooks?.add(book);
+
       await usersCollection
           .doc(currentUser.userId)
           .update(currentUser.toDocument());

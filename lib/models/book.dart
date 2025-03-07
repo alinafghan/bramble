@@ -18,6 +18,7 @@ class Book extends Equatable {
       'bookId': bookId,
       'title': title,
       'author': author,
+      'coverUrl': coverUrl,
     };
   }
 
@@ -34,6 +35,8 @@ class Book extends Equatable {
       bookId: json['bookId'] ?? 'null',
       title: json['title'] ?? 'Unknown Title',
       author: json['author'] ?? 'Unknown Author',
+      coverUrl: json['coverUrl'] ??
+          'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
     );
   }
 
