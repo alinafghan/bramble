@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/models/book.dart';
+import 'package:journal_app/screens/review_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 
 class BookScreen extends StatefulWidget {
@@ -76,7 +77,12 @@ class _BookScreenState extends State<BookScreen> {
                                     icon: HugeIcons.strokeRoundedEye,
                                     color: AppTheme.primary)),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ReviewScreen(book: state.book);
+                                  }));
+                                },
                                 icon: const HugeIcon(
                                     icon:
                                         HugeIcons.strokeRoundedAddCircleHalfDot,
