@@ -76,22 +76,18 @@ class _BooklistScreenState extends State<BooklistScreen> {
                 BlocListener<AddBookCubit, AddBookState>(
                     listener: (context, state) {
                   if (state is AddBookLoaded) {
-                    _logger.d('listener for addbook called');
                     getBooks();
                   }
                 }),
                 BlocListener<RemoveBookCubit, RemoveBookState>(
                     listener: (context, state) {
                   if (state is RemoveBookLoaded) {
-                    _logger.d('listener for removebook called');
                     getBooks();
                   }
                 })
               ],
               child: BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
                 builder: (context, state) {
-                  Book book =
-                      Book(bookId: 0, author: '', title: 'No Books Added');
                   List<Book> items = [];
                   if (state is GetAllBooksLoaded) {
                     _logger.d('called again');
@@ -123,9 +119,6 @@ class _BooklistScreenState extends State<BooklistScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  // leading: const Icon(
-                                  //   HugeIcons.strokeRoundedBook02,
-                                  // ),
                                   key: ValueKey(item),
                                   leading: ClipOval(
                                       child: Image.network(

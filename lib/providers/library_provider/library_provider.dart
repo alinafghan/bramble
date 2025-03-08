@@ -7,4 +7,8 @@ class LibraryProvider {
   Future<List<Book>> getLibrary() async {
     return await libraryRepository.getLibrary();
   }
+
+  Future<Book> getBookDetails(Book book) async {
+    return await libraryRepository.getBookDetails(book);
+  }
 }

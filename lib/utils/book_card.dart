@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
 import 'package:journal_app/models/book.dart';
+import 'package:journal_app/screens/book_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +34,10 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
       GestureDetector(
-        onDoubleTap: () {},
+        onDoubleTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BookScreen(book: book)));
+        },
         child: Card(
           elevation: 2,
           child: Padding(

@@ -32,6 +32,25 @@ class LibraryRepository {
     }
   }
 
+  Future<Book> getBookDetails(Book book) async {
+    final String url = 'https://openlibrary.org${book.key}.json';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+      Map<String, dynamic> data = json.decode(response.body);
+      _logger.d('reached here first, the book is $data');
+      book = Book.addJson(book, data);
+      _logger.d('reached here, the book is $book');
+      return book;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e('error getting book details from api $e');
+      throw Exception('error getting books details from api');
+    }
+  }
+
   Future<void> getCoverImage() async {
     for (int i = 0; i < allBooks.length; i++) {
       var coverUrl =
