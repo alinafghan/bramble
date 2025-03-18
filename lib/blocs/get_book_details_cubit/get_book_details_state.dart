@@ -15,17 +15,17 @@ class GetBookDetailsLoading extends GetBookDetailsState {
 }
 
 class GetBookDetailsError extends GetBookDetailsState {
-  String message;
+  final String message;
 
-  GetBookDetailsError({required this.message});
+  const GetBookDetailsError({required this.message});
   @override
   List<Object> get props => [message];
 }
 
 class GetAllBooksLoaded extends GetBookDetailsState {
-  Book book;
+  final Book book;
 
-  GetAllBooksLoaded({required this.book});
+  const GetAllBooksLoaded({required this.book});
 
   @override
   List<Object> get props => [book];

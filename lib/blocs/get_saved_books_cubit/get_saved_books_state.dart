@@ -14,7 +14,7 @@ class GetAllBooksLoading extends GetAllBooksState {}
 class GetAllBooksFailed extends GetAllBooksState {}
 
 class GetAllBooksLoaded extends GetAllBooksState {
-  List<Book>? bookList;
+  final List<Book>? bookList;
 
-  GetAllBooksLoaded({required this.bookList});
+  const GetAllBooksLoaded({required this.bookList});
 }

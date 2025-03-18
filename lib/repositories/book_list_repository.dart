@@ -37,11 +37,11 @@ class BookListRepository {
       Users? currentUser = await userRepo.getCurrentUserFromFirebase();
 
       if (currentUser.savedBooks!.contains(book)) {
-        print('this book already in the list');
+        _logger.d('this book already in the list');
         return;
       }
 
-      currentUser?.savedBooks?.add(book);
+      currentUser.savedBooks?.add(book);
 
       await usersCollection
           .doc(currentUser.userId)

@@ -30,111 +30,112 @@ class _BookScreenState extends State<BookScreen> {
         builder: (context, state) {
           if (state is GetAllBooksLoaded) {
             return SingleChildScrollView(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      Image.network(state.book.coverUrl!,
-                          fit: BoxFit.cover, height: 300, width: 200),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    Image.network(state.book.coverUrl!,
+                        fit: BoxFit.cover, height: 300, width: 200),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Text(
                                 state.book.title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                state.book.author,
                                 textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 20),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'First published in: ${state.book.publishYear}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          Column(children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: const HugeIcon(
-                                    icon: HugeIcons.strokeRoundedEye,
-                                    color: AppTheme.primary)),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ReviewScreen(book: state.book);
-                                  }));
-                                },
-                                icon: const HugeIcon(
-                                    icon:
-                                        HugeIcons.strokeRoundedAddCircleHalfDot,
-                                    color: AppTheme.primary))
-                          ])
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text.rich(
-                          textAlign: TextAlign.justify,
-                          TextSpan(children: [
-                            const TextSpan(
-                                text: 'Description: ',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            TextSpan(
-                              text: state.book.description,
-                              style: const TextStyle(fontSize: 20),
-                            )
-                          ])),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text('----------------------------------------'),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text.rich(
-                        textAlign: TextAlign.justify,
-                        TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Sneak peek: ',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            TextSpan(
-                              text: '${state.book.excerpt}...',
-                              style: const TextStyle(fontSize: 20),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              state.book.author,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'First published in: ${state.book.publishYear}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ],
                         ),
+                        Column(children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedEye,
+                                  color: AppTheme.primary)),
+                          IconButton(
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ReviewScreen(book: state.book);
+                                }));
+                              },
+                              icon: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedAddCircleHalfDot,
+                                  color: AppTheme.primary))
+                        ])
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text.rich(
+                        textAlign: TextAlign.justify,
+                        TextSpan(children: [
+                          const TextSpan(
+                              text: 'Description: ',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          TextSpan(
+                            text: state.book.description,
+                            style: const TextStyle(fontSize: 20),
+                          )
+                        ])),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('---------------------------------------'),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text.rich(
+                      textAlign: TextAlign.justify,
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Sneak peek: ',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: '${state.book.excerpt}...',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
               ),
             );

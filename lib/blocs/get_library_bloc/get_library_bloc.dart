@@ -13,7 +13,6 @@ class GetLibraryBloc extends Bloc<GetLibraryEvent, GetLibraryState> {
       : libraryProvider = provider,
         super(GetLibraryInitial()) {
     on<GetLibrary>((event, emit) async {
-      print('bloc level reached');
       emit(GetLibraryLoading());
       try {
         List<Book> library = await provider.getLibrary();

@@ -14,7 +14,7 @@ class AddBookLoading extends AddBookState {}
 class AddBookFailed extends AddBookState {}
 
 class AddBookLoaded extends AddBookState {
-  Book book;
+  final Book book;
 
-  AddBookLoaded({required this.book});
+  const AddBookLoaded({required this.book});
 }
