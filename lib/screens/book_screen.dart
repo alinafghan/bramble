@@ -83,7 +83,7 @@ class _BookScreenState extends State<BookScreen> {
                               onPressed: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return ReviewScreen(book: state.book);
+                                  return SetReviewScreen(book: state.book);
                                 }));
                               },
                               icon: const HugeIcon(

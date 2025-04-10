@@ -5,6 +5,7 @@ class Users {
   String userId;
   String? username;
   String email;
+  String? profileUrl;
   List<Book>? savedBooks = [];
 
   Users({
@@ -12,6 +13,7 @@ class Users {
     this.username,
     required this.email,
     this.savedBooks,
+    this.profileUrl,
   });
 
   Map<String, Object?> toDocument() {
@@ -20,6 +22,7 @@ class Users {
       'username': username,
       'email': email,
       'savedBooks': savedBooks?.map((book) => book.toJson()).toList(),
+      'profileUrl': profileUrl,
     };
   }
 
@@ -28,6 +31,7 @@ class Users {
       userId: firebaseUser.uid,
       email: firebaseUser.email!,
       username: username,
+      profileUrl: firebaseUser.photoURL,
       savedBooks: [],
     );
   }
@@ -37,6 +41,7 @@ class Users {
       userId: doc['userId'],
       username: doc['username'],
       email: doc['email'],
+      profileUrl: doc['profileUrl'],
       savedBooks: (doc['savedBooks'] as List<dynamic>?)
           ?.map((book) => Book.fromFirebase(book))
           .toList(),
