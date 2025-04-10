@@ -57,21 +57,13 @@ class BookCard extends StatelessWidget {
                 CachedNetworkImage(
                   imageUrl: book.coverUrl ??
                       'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
-                  errorWidget: (context, url, error) =>
-                      const Icon(Icons.error), // Show on error
-                  progressIndicatorBuilder: (context, url, downloadProgress) {
-                    if (downloadProgress == null) {
-                      return const SizedBox.shrink(); // No progress
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.primary,
-                          value: downloadProgress
-                              .progress, // Show the download progress
-                        ),
-                      );
-                    }
-                  },
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                    child: CircularProgressIndicator(
+                        color: AppTheme.primary,
+                        value: downloadProgress.progress),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   fit: BoxFit.contain,
                   height: 180,
                   width: double.infinity,

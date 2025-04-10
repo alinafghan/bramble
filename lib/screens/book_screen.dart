@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/screens/review_screen.dart';
+import 'package:journal_app/screens/reviews_book_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 
 class BookScreen extends StatefulWidget {
@@ -75,7 +76,12 @@ class _BookScreenState extends State<BookScreen> {
                         ),
                         Column(children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return BookReviewsScreen(book: state.book);
+                                }));
+                              },
                               icon: const HugeIcon(
                                   icon: HugeIcons.strokeRoundedEye,
                                   color: AppTheme.primary)),
