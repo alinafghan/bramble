@@ -17,4 +17,8 @@ class ReviewProvider {
   Future<Review?> setReview(Book book, Review review) async {
     return reviewRepository.setReview(review, book);
   }
+
+  Future<Review?> likeReview(Review review) async {
+    return reviewRepository.likeReview(review);
+  }
 }

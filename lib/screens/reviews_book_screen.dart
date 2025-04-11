@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
+import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/models/book.dart';
+import 'package:journal_app/utils/constants.dart';
 
 class BookReviewsScreen extends StatefulWidget {
   final Book book;
@@ -39,20 +43,25 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
               separatorBuilder: (_, __) => const Divider(thickness: 0.5),
               itemBuilder: (context, index) {
                 final review = reviews[index];
-                final user = review?.user;
+                if (review == null) return const SizedBox.shrink();
+                final user = review.user;
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
+                      backgroundColor: AppTheme.white,
                       radius: 20,
-                      backgroundImage: (user?.profileUrl != null &&
-                              user!.profileUrl!.isNotEmpty)
-                          ? NetworkImage(user!.profileUrl!)
+                      backgroundImage: (user.profileUrl != null &&
+                              user.profileUrl!.isNotEmpty)
+                          ? NetworkImage(user.profileUrl!)
                           : null,
-                      child: (user?.profileUrl == null ||
-                              user!.profileUrl!.isEmpty)
-                          ? const Icon(Icons.person)
-                          : null,
+                      child:
+                          (user.profileUrl == null || user.profileUrl!.isEmpty)
+                              ? const Icon(
+                                  Icons.person,
+                                  color: AppTheme.primary,
+                                )
+                              : null,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -60,18 +69,49 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user?.username ?? 'Anonymous',
+                            user.username ?? 'Anonymous',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            review?.text ?? 'No review provided',
+                            review.text,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    IconButton(
+                      icon: Icon(
+                        review.isLikedByCurrentUser
+                            ? CupertinoIcons.heart_fill // red heart
+                            : CupertinoIcons.heart, // outlined heart
+                        color: review.isLikedByCurrentUser
+                            ? Colors.red
+                            : Colors.grey,
+                      ),
+                      onPressed: () {
+                        context.read<SetReviewCubit>().likeReview(review);
+                      },
+                    ),
+                    BlocListener<SetReviewCubit, SetReviewState>(
+                      listener: (context, state) {
+                        if (state is SetReviewSuccess) {
+                          // Update the review list after liking a review
+                          context
+                              .read<GetReviewForBookCubit>()
+                              .getReviewForBook(widget.book);
+                        }
+                      },
+                      child: Text(
+                        '${review.numLikes}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color.fromARGB(255, 68, 68, 68),
+                        ),
                       ),
                     ),
                   ],

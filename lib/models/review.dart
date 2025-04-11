@@ -7,9 +7,12 @@ class Review {
   Book book;
   String text;
   String createdAt;
+  int numLikes;
+  bool isLikedByCurrentUser = false;
 
   Review({
     required this.text,
+    required this.numLikes,
     required this.id,
     required this.user,
     required this.book,
@@ -23,6 +26,7 @@ class Review {
       'createdAt': createdAt,
       'user': user.toDocument(),
       'book': book.toJson(),
+      'numLikes': numLikes,
     };
   }
 
@@ -31,6 +35,7 @@ class Review {
       userId: doc['user']['userId'] as String,
       username: doc['user']['username'] as String,
       email: doc['user']['email'] as String,
+      profileUrl: doc['user']['profileUrl'] as String,
     );
     Book book = Book(
       key: doc['book']['key'] as String,
@@ -44,6 +49,7 @@ class Review {
       book: book,
       createdAt: doc['createdAt'] as String,
       text: doc['text'] as String,
+      numLikes: doc['numLikes'] as int,
     );
   }
 

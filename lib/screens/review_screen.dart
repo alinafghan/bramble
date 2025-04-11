@@ -53,6 +53,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
             user: Users(userId: '', email: ''), //current user,
             book: book,
             text: reviewTextController.text,
+            numLikes: 0,
             createdAt:
                 DateTime.now().toString(), //current time // Example rating
           ),

@@ -28,3 +28,25 @@ final class SetReviewSuccess extends SetReviewState {
   @override
   List<Object> get props => [review];
 }
+
+final class LikeReviewInitial extends SetReviewState {}
+
+final class LikeReviewLoading extends SetReviewState {}
+
+final class LikeReviewLoaded extends SetReviewState {
+  final Review review;
+
+  const LikeReviewLoaded(this.review);
+
+  @override
+  List<Object> get props => [review];
+}
+
+final class LikeReviewFailure extends SetReviewState {
+  final String message;
+
+  const LikeReviewFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
