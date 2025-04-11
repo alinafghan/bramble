@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
@@ -54,6 +55,15 @@ class FirebaseAuthRepository {
     return null;
   }
 
+  Future<void> saveUserToFirestore(Users user) async {
+    user.savedBooks = []; // Initialize savedBooks to an empty list
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(user.userId)
+        .set(user.toDocument());
+  }
+
   Future<User?> emailLogin(String emailOrUsername, String password) async {
     String email = '';
 
@@ -89,6 +99,25 @@ class FirebaseAuthRepository {
       _logger.e("FirebaseAuthException: ${e.message}");
     }
     return null;
+  }
+
+  Future<UserCredential> signUpWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      return await _auth.signInWithCredential(credential);
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e("Error signing in with Google: $e");
+      throw Exception("Error signing in with Google: $e");
+    }
   }
 
   //helper functions

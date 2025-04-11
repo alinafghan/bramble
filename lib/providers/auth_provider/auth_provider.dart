@@ -16,4 +16,12 @@ class MyAuthProvider {
   Future<User?> signOut() async {
     return await _authRepository.signOut();
   }
+
+  Future<UserCredential> signUpWithGoogle() async {
+    return await _authRepository.signUpWithGoogle();
+  }
+
+  Future<void> saveUserToFirestore(Users user) async {
+    return await _authRepository.saveUserToFirestore(user);
+  }
 }
