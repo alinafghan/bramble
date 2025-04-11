@@ -16,11 +16,7 @@ class GetReviewForBookCubit extends Cubit<GetReviewForBookState> {
     emit(GetReviewForBookLoading());
     try {
       final result = await reviewProvider.getReviewsForBook(book);
-      if (result != null) {
-        emit(GetReviewForBookSuccess(result));
-      } else {
-        emit(GetReviewForBookFailure('Failed to get reviews'));
-      }
+      emit(GetReviewForBookSuccess(result));
     } catch (e) {
       emit(GetReviewForBookFailure(e.toString()));
     }

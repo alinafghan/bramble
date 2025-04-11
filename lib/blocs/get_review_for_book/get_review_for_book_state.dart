@@ -12,9 +12,9 @@ final class GetReviewForBookInitial extends GetReviewForBookState {}
 final class GetReviewForBookLoading extends GetReviewForBookState {}
 
 final class GetReviewForBookFailure extends GetReviewForBookState {
-  String message;
+  final String message;
 
-  GetReviewForBookFailure(this.message);
+  const GetReviewForBookFailure(this.message);
   @override
   List<Object> get props => [message];
 }

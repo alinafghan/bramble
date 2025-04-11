@@ -12,9 +12,9 @@ final class SetReviewInitial extends SetReviewState {}
 final class SetReviewLoading extends SetReviewState {}
 
 final class SetReviewFailure extends SetReviewState {
-  String message;
+  final String message;
 
-  SetReviewFailure(this.message);
+  const SetReviewFailure(this.message);
 
   @override
   List<Object> get props => [message];
