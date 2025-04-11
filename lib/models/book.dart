@@ -40,6 +40,19 @@ class Book extends Equatable {
     );
   }
 
+  factory Book.fromSearch(Map<String, dynamic> json) {
+    return Book(
+      key: json['key'] ?? '',
+      bookId: json['cover_i'] ?? 0,
+      title: json['title'] ?? 'Unknown Title',
+      author: json['author_name']?[0] ?? 'Unknown Author',
+      coverUrl: json['cover_i'] != null
+          ? 'https://covers.openlibrary.org/b/id/${json['cover_i']}-L.jpg'
+          : 'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
+      publishYear: json['first_publish_year']?.toString() ?? 'No date provided',
+    );
+  }
+
   factory Book.addJson(Book book, Map<String, dynamic> json) {
     return Book(
       key: book.key,

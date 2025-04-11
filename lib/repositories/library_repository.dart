@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 class LibraryRepository {
   List<Book> allBooks = [];
+  List<Book> searchedBooks = [];
   final Logger _logger = Logger();
 
   Future<List<Book>> getLibrary() async {
@@ -33,20 +35,22 @@ class LibraryRepository {
   }
 
   Future<List<Book>> searchBook(String keyword) async {
-    var url = "https://openlibrary.org/search.json?q=$keyword&limit=20";
+    var url = "https://openlibrary.org/search.json?q=$keyword&limit=30";
     try {
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         List<dynamic> listData =
             data['docs']; //list data is a list of maps basically.
-        allBooks = listData
+
+        searchedBooks = listData
             .whereType<Map<String, dynamic>>()
-            .map((mapItem) => Book.fromJson(mapItem))
+            .map((mapItem) => Book.fromSearch(mapItem))
             .toList();
+        debugPrint('the books are $allBooks');
       }
       getCoverImage();
-      return allBooks;
+      return searchedBooks;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
       throw Exception('No internet connection. Please check your network.');

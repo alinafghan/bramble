@@ -40,20 +40,15 @@ class BookCard extends StatelessWidget {
               MaterialPageRoute(builder: (context) => BookScreen(book: book)));
         },
         child: Card(
-          elevation: 2,
+          // Remove shadow
+          surfaceTintColor: Colors.transparent,
+          color: Colors.transparent,
+          elevation: 0,
           child: Padding(
             padding: const EdgeInsets.all(6.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image.network(
-                //   book.coverUrl ??
-                //       'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
-                //   fit: BoxFit.contain,
-                //   height: 180,
-                //   width: double.infinity,
-                // ),
-
                 CachedNetworkImage(
                   imageUrl: book.coverUrl ??
                       'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
@@ -64,9 +59,12 @@ class BookCard extends StatelessWidget {
                         value: downloadProgress.progress),
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
-                  fit: BoxFit.contain,
-                  height: 180,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height / 5.4,
                   width: double.infinity,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Flexible(
                     child: Text(
@@ -75,6 +73,7 @@ class BookCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 )),
@@ -85,7 +84,7 @@ class BookCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                   ),
                 )),
               ],
@@ -97,7 +96,7 @@ class BookCard extends StatelessWidget {
         top: -6,
         right: -6,
         child: FloatingActionButton(
-          heroTag: book.bookId,
+          heroTag: null,
           onPressed: () {
             addBookDialog(context, book);
           },
