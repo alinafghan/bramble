@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
+import 'package:journal_app/screens/home_screen.dart';
 import 'package:journal_app/screens/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -39,6 +41,27 @@ class _SignupScreenState extends State<SignupScreen> {
       //TODO//add toast message
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const LoginScreen()));
+    }
+  }
+
+  void signUpWithGoogle() async {
+    UserCredential user = await _provider.signUpWithGoogle();
+    if (user.user != null) {
+      Users user2 = Users(
+        userId: user.user!.uid,
+        username: user.user!.displayName,
+        email: user.user!.email!,
+        profileUrl: user.user!.photoURL,
+      );
+
+      await _provider.saveUserToFirestore(user2);
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      }
     }
   }
 
@@ -112,7 +135,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPressed: () {
                   signUp();
                 },
-                child: const Text('Sign Up'))
+                child: const Text('Sign Up')),
+            TextButton(
+                onPressed: () {
+                  signUpWithGoogle();
+                },
+                child: const Text('Sign Up With Google')),
           ],
         ),
       )),

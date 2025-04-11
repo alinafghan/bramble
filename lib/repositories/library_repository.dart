@@ -32,6 +32,31 @@ class LibraryRepository {
     }
   }
 
+  Future<List<Book>> searchBook(String keyword) async {
+    var url = "https://openlibrary.org/search.json?q=$keyword&limit=20";
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        List<dynamic> listData =
+            data['docs']; //list data is a list of maps basically.
+        allBooks = listData
+            .whereType<Map<String, dynamic>>()
+            .map((mapItem) => Book.fromJson(mapItem))
+            .toList();
+      }
+      getCoverImage();
+      return allBooks;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e('error searching books from api $e');
+      throw Exception(
+          'There has been a server error while searching for books. Please try again');
+    }
+  }
+
   Future<Book> getBookDetails(Book book) async {
     final String url = 'https://openlibrary.org${book.key}.json';
 
