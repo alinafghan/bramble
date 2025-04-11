@@ -112,7 +112,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPressed: () {
                   signUp();
                 },
-                child: const Text('Sign Up'))
+                child: const Text('Sign Up')),
+            TextButton(
+                onPressed: () {
+                  signUp();
+                },
+                child: const Text('Sign Up With Google')),
           ],
         ),
       )),

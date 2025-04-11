@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
+import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
 import 'package:journal_app/utils/book_card.dart';
 import 'package:journal_app/utils/constants.dart';
 
@@ -67,5 +68,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   Future<void> getLibrary() async {
     context.read<GetLibraryBloc>().add(const GetLibrary());
+  }
+
+  Future<void> searchLibrary() async {
+    context.read<SearchBookCubit>().searchBooks('hello');
   }
 }
