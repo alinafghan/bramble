@@ -14,13 +14,14 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  final TextEditingController searchText = TextEditingController();
+  bool isSearching = false;
+
   @override
   void initState() {
-    getLibrary();
     super.initState();
+    getLibrary();
   }
-
-  TextEditingController searchText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +52,23 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 onSuffixTap: () {
                   setState(() {
                     searchText.clear();
+                    isSearching = false;
                   });
                   getLibrary();
                 },
                 rtl: false,
                 onSubmitted: (String value) {
-                  debugPrint("onSubmitted value: $value");
-                  searchLibrary(value);
+                  if (value.isNotEmpty) {
+                    // setState(() {
+                    //   isSearching = true;
+                    // });
+                    searchLibrary(value);
+                  } else {
+                    // setState(() {
+                    //   isSearching = false;
+                    // });
+                    getLibrary();
+                  }
                 },
                 textInputAction: TextInputAction.search,
                 searchBarOpen: (a) {
@@ -69,36 +80,44 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 8,
-                childAspectRatio: 0.5,
-              ),
-              itemCount: 30,
-              clipBehavior: Clip.none,
-              itemBuilder: (context, i) {
-                return BlocBuilder<SearchBookCubit, SearchBookState>(
-                  builder: (context, searchState) {
-                    return BlocBuilder<GetLibraryBloc, GetLibraryState>(
-                      builder: (context, state) {
-                        if (searchState is SearchBookLoaded) {
-                          return BookCard(book: searchState.books[i]);
-                        } else if (state is GetLibraryLoaded) {
-                          return BookCard(book: state.booklist[i]);
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppTheme.primary,
-                            ),
-                          );
-                        }
-                      },
+          child: BlocBuilder<SearchBookCubit, SearchBookState>(
+            builder: (context, searchState) {
+              return BlocBuilder<GetLibraryBloc, GetLibraryState>(
+                builder: (context, libraryState) {
+                  List books = [];
+
+                  if (searchState is SearchBookLoaded) {
+                    books = searchState.books;
+                  } else if (libraryState is GetLibraryLoaded) {
+                    books = libraryState.booklist;
+                  }
+
+                  if (books.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppTheme.primary,
+                      ),
                     );
-                  },
-                );
-              }),
+                  }
+
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 0.5,
+                    ),
+                    itemCount: books.length,
+                    clipBehavior: Clip.none,
+                    itemBuilder: (context, i) {
+                      return BookCard(book: books[i]);
+                    },
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     ]);

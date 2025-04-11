@@ -273,17 +273,17 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar>
                     onSubmitted: (value) => {
                       widget.onSubmitted(value),
                       unfocusKeyboard(),
-                      setState(() {
-                        toggle = 0;
-                      }),
-                      widget.textController.clear(),
+                      // setState(() {
+                      //   toggle = 0;
+                      // }),
+                      // widget.textController.clear(),
                     },
                     onEditingComplete: () {
                       /// on editing complete the keyboard will be closed and the search bar will be closed
-                      unfocusKeyboard();
-                      setState(() {
-                        toggle = 0;
-                      });
+                      // unfocusKeyboard();
+                      // setState(() {
+                      //   toggle = 0;
+                      // });
                     },
 
                     ///style is of type TextStyle, the default is just a color black
