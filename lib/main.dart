@@ -16,6 +16,7 @@ import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/providers/book_provider/book_provider.dart';
 import 'package:journal_app/providers/review_provider/review_provider.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
+import 'package:journal_app/screens/test_screen.dart';
 import 'package:journal_app/simple_bloc_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -31,7 +32,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp(MyAuthProvider()));
+  runApp(const TestScreen());
 }
 
 class MyApp extends StatelessWidget {

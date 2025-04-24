@@ -1,31 +1,62 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// // This is a basic Flutter widget test.
+// //
+// // To perform an interaction with a widget in your test, use the WidgetTester
+// // utility in the flutter_test package. For example, you can send tap and scroll
+// // gestures. You can also use WidgetTester to find child widgets in the widget
+// // tree, read text, and verify that the values of widget properties are correct.
 
+// import 'package:alchemist/alchemist.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:journal_app/screens/test_screen.dart';
+
+// void main() {
+//   setUpAll(() async {
+//     TestWidgetsFlutterBinding.ensureInitialized();
+//   });
+
+//   goldenTest(
+//     'TestScreen renders correctly',
+//     fileName: 'test_screen',
+//     builder: () => GoldenTestGroup(
+//         scenarioConstraints: const BoxConstraints(maxWidth: 600),
+//         children: [
+//           GoldenTestScenario(
+//             name: 'TestScr',
+//             child: const TestScreen(),
+//           ),
+//         ]),
+//   );
+// }
+import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-// import 'package:journal_app/main.dart';
-import 'package:journal_app/my_app_view.dart';
+import 'package:journal_app/screens/test_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyAppView());
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  group('MyApp Golden Tests', () {
+    goldenTest(
+      'renders full countries list on multiple screen sizes',
+      fileName: 'text_screen',
+      builder: () => GoldenTestGroup(
+        scenarioConstraints: const BoxConstraints(maxWidth: 6000),
+        children: [
+          GoldenTestScenario(
+            name: 'Mobile (iPhone 13 Pro)',
+            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 844),
+            child: const TestScreen(),
+          ),
+          GoldenTestScenario(
+            name: 'Tablet (iPad Air)',
+            constraints: const BoxConstraints(maxWidth: 800, maxHeight: 1180),
+            child: const TestScreen(),
+          ),
+        ],
+      ),
+    );
   });
 }
