@@ -7,6 +7,7 @@ import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.
 import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
 import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
 import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
+import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
 import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:journal_app/my_app_view.dart';
 import 'package:journal_app/providers/library_provider/library_provider.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/providers/book_provider/book_provider.dart';
+import 'package:journal_app/providers/mood_provider/mood_provider.dart';
 import 'package:journal_app/providers/review_provider/review_provider.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:journal_app/simple_bloc_observer.dart';
@@ -68,6 +70,9 @@ class MyApp extends StatelessWidget {
       BlocProvider<SearchBookCubit>(
         create: (_) => SearchBookCubit(provider: LibraryProvider()),
       ),
+      BlocProvider<MoodBloc>(
+        create: (_) => MoodBloc(provider: MoodProvider()),
+      )
     ], child: const MyAppView());
   }
 }

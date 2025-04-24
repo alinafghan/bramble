@@ -4,7 +4,9 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart'; // For formatting the date
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
+import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
+import 'package:journal_app/models/mood.dart';
 import 'package:journal_app/providers/journal_provider/journal_provider.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -22,8 +24,68 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    super.initState();
+    context.read<MoodBloc>().add(GetMonthlyMoodEvent(DateTime.now()));
+    // context.read<CalendarBloc>().add(ChangeFocusedMonth(DateTime.now()));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final DateTime now = DateTime.now();
+
+    void moodDialog(DateTime selectedDay) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Select Mood'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<MoodBloc>().add(SetMoodEvent(Mood(
+                            date: selectedDay,
+                            mood: 'assets/moods/sipping_mug.png',
+                          )));
+                      Navigator.pop(context);
+                    },
+                    child: Image.asset(
+                      'assets/moods/sipping_mug.png',
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                  // Add more moods as needed
+                ],
+              ),
+            ),
+          );
+        },
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider<SetJournalBloc>(
+                  create: (context) => SetJournalBloc(
+                    provider: JournalProvider(),
+                  ),
+                ),
+                BlocProvider<GetJournalBloc>(
+                  create: (context) => GetJournalBloc(
+                    provider: JournalProvider(),
+                  ),
+                ),
+              ],
+              child: KeyboardVisibilityProvider(
+                child: JournalScreen(selectedDate: selectedDay),
+              )),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -99,80 +161,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: TableCalendar(
-                      firstDay: DateTime.utc(2010, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      focusedDay: focusedDate,
-                      headerVisible: false,
-                      daysOfWeekVisible: false,
-                      onDaySelected: (selectedDay, focusedDay) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider<SetJournalBloc>(
-                                    create: (context) => SetJournalBloc(
-                                      provider: JournalProvider(),
-                                    ),
-                                  ),
-                                  BlocProvider<GetJournalBloc>(
-                                    create: (context) => GetJournalBloc(
-                                      provider: JournalProvider(),
-                                    ),
-                                  ),
-                                ],
-                                child: KeyboardVisibilityProvider(
+                    child: BlocBuilder<MoodBloc, MoodBlocState>(
+                      builder: (context, moodState) {
+                        Map<DateTime, String> moodMap = {};
+
+                        if (moodState is GetMonthlyMoodsLoaded) {
+                          moodMap = {
+                            for (var entry in moodState.moods!.entries)
+                              entry.key: entry.value.mood
+                          };
+                        }
+                        return TableCalendar(
+                          firstDay: DateTime.utc(2010, 10, 16),
+                          lastDay: DateTime.utc(2030, 3, 14),
+                          focusedDay: focusedDate,
+                          headerVisible: false,
+                          daysOfWeekVisible: false,
+                          onDaySelected: (selectedDay, focusedDay) {
+                            moodDialog(selectedDay);
+                          },
+                          onPageChanged: (newFocusedMonth) {
+                            context
+                                .read<CalendarBloc>()
+                                .add(ChangeFocusedMonth(newFocusedMonth));
+                            context.read<MoodBloc>().add(GetMonthlyMoodEvent(
+                                  newFocusedMonth,
+                                ));
+                          },
+                          calendarStyle: const CalendarStyle(
+                            todayDecoration: BoxDecoration(
+                              color: AppTheme.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            outsideDaysVisible:
+                                false, // Hides prev/next month days
+                            // defaultTextStyle: TextStyle(),
+                          ),
+                          calendarBuilders: CalendarBuilders(
+                            defaultBuilder: (context, date, _) {
+                              final normalizedDate =
+                                  DateTime(date.year, date.month, date.day);
+                              final mood = moodMap[normalizedDate];
+
+                              if (mood != null) {
+                                print('Mood for $normalizedDate: $mood');
+                                return Center(
                                   child:
-                                      JournalScreen(selectedDate: selectedDay),
-                                )),
+                                      Image.asset(mood, height: 30, width: 30),
+                                );
+                              }
+                              if (date.weekday == DateTime.sunday ||
+                                  date.weekday == DateTime.saturday) {
+                                return Center(
+                                    child: Text(
+                                  '${date.day}',
+                                  style: TextStyle(
+                                    color: date.weekday == DateTime.sunday
+                                        ? AppTheme.red
+                                        : date.weekday == DateTime.saturday
+                                            ? AppTheme.blue
+                                            : null,
+                                  ),
+                                ));
+                              }
+                              if (date.isAfter(now)) {
+                                return Center(
+                                  //we overriding default, default wraps in center
+                                  child: Text(
+                                    '${date.day}',
+                                    style: TextStyle(
+                                      color: AppTheme
+                                          .text2, // Lighter color for future dates
+                                    ),
+                                  ),
+                                );
+                              }
+                              return null;
+                            },
                           ),
                         );
                       },
-                      onPageChanged: (newFocusedMonth) {
-                        context
-                            .read<CalendarBloc>()
-                            .add(ChangeFocusedMonth(newFocusedMonth));
-                      },
-                      calendarStyle: const CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                          color: AppTheme.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        outsideDaysVisible: false, // Hides prev/next month days
-                        // defaultTextStyle: TextStyle(),
-                      ),
-                      calendarBuilders: CalendarBuilders(
-                        defaultBuilder: (context, date, _) {
-                          if (date.weekday == DateTime.sunday ||
-                              date.weekday == DateTime.saturday) {
-                            return Center(
-                                child: Text(
-                              '${date.day}',
-                              style: TextStyle(
-                                color: date.weekday == DateTime.sunday
-                                    ? AppTheme.red
-                                    : date.weekday == DateTime.saturday
-                                        ? AppTheme.blue
-                                        : null,
-                              ),
-                            ));
-                          }
-                          if (date.isAfter(now)) {
-                            return Center(
-                              //we overriding default, default wraps in center
-                              child: Text(
-                                '${date.day}',
-                                style: TextStyle(
-                                  color: AppTheme
-                                      .text2, // Lighter color for future dates
-                                ),
-                              ),
-                            );
-                          }
-                          return null;
-                        },
-                      ),
                     ),
                   )
                 ]),
@@ -180,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   foregroundColor: AppTheme.text,
                   backgroundColor: AppTheme.primary,
                   onPressed: () {
-                    // Add functionality for the FAB
+                    moodDialog(DateTime.now());
                   },
                   child: const Icon(Icons.add),
                 )

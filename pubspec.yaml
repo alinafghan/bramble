@@ -99,6 +99,7 @@ flutter:
     - assets/bramble_icon.png  # You list the font file here
     - assets/white-paper-texture-background.jpg
     - assets/lottie/loading.json
+    - assets/moods/sipping_mug.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
