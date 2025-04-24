@@ -5,6 +5,7 @@ import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
 import 'package:journal_app/utils/book_card.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/animated_searchbar.dart';
+import 'package:lottie/lottie.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -35,7 +36,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
       ),
       Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           actions: [
@@ -50,23 +51,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 textFieldColor: AppTheme.backgroundColor,
                 textController: searchText,
                 onSuffixTap: () {
-                  setState(() {
-                    searchText.clear();
-                    isSearching = false;
-                  });
                   getLibrary();
                 },
                 rtl: false,
                 onSubmitted: (String value) {
                   if (value.isNotEmpty) {
-                    // setState(() {
-                    //   isSearching = true;
-                    // });
                     searchLibrary(value);
                   } else {
-                    // setState(() {
-                    //   isSearching = false;
-                    // });
                     getLibrary();
                   }
                 },
@@ -93,10 +84,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   }
 
                   if (books.isEmpty) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppTheme.primary,
-                      ),
+                    return Center(
+                      child: Lottie.asset('assets/lottie/loading.json'),
                     );
                   }
 
@@ -124,6 +113,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   Future<void> getLibrary() async {
+    searchText.clear();
+    isSearching = false;
     context.read<GetLibraryBloc>().add(const GetLibrary());
   }
 

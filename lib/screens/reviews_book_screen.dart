@@ -5,6 +5,7 @@ import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/constants.dart';
+import 'package:lottie/lottie.dart';
 
 class BookReviewsScreen extends StatefulWidget {
   final Book book;
@@ -30,7 +31,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
       body: BlocBuilder<GetReviewForBookCubit, GetReviewForBookState>(
         builder: (context, state) {
           if (state is GetReviewForBookLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: Lottie.asset('assets/lottie/loading.json'));
           } else if (state is GetReviewForBookSuccess) {
             final reviews = state.reviews;
             if (reviews.isEmpty) {

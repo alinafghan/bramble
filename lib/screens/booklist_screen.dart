@@ -10,6 +10,7 @@ import 'package:journal_app/screens/library_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:logger/logger.dart';
 import 'package:journal_app/utils/popup_menu.dart';
+import 'package:lottie/lottie.dart';
 
 class BooklistScreen extends StatefulWidget {
   const BooklistScreen({super.key});
@@ -138,10 +139,8 @@ class _BooklistScreenState extends State<BooklistScreen> {
                           .toList(),
                     );
                   } else {
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      color: AppTheme.primary,
-                    ));
+                    return Center(
+                        child: Lottie.asset('assets/lottie/loading.json'));
                   }
                 },
               ))),

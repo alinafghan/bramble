@@ -35,7 +35,8 @@ class ReviewRepository {
       if (doc.exists) {
         return Review.fromDocument(doc.data() as Map<String, dynamic>);
       } else {
-        _logger.e('Document does not exist'); // Document doesn't exist
+        _logger.e('Document does not exist');
+        return null; // Document doesn't exist
       }
     } on SocketException {
       throw Exception('Please connect your wifi');

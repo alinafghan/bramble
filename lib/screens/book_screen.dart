@@ -6,6 +6,7 @@ import 'package:journal_app/models/book.dart';
 import 'package:journal_app/screens/review_screen.dart';
 import 'package:journal_app/screens/reviews_book_screen.dart';
 import 'package:journal_app/utils/constants.dart';
+import 'package:lottie/lottie.dart';
 
 class BookScreen extends StatefulWidget {
   final Book book;
@@ -146,8 +147,8 @@ class _BookScreenState extends State<BookScreen> {
               ),
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: Lottie.asset('assets/lottie/loading.json'),
             );
           }
         },
