@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:journal_app/models/mood.dart';
 import 'package:journal_app/repositories/mood_repository.dart';
 

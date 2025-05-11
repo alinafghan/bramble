@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/mood.dart';
 import 'package:logger/logger.dart';
@@ -21,7 +19,6 @@ class MoodRepository {
 
   Future<Map<DateTime, Mood>?> getMood(DateTime month) async {
     final start = DateTime(month.year, month.month, 1);
-    print(month.month);
     final end =
         DateTime(month.year, month.month + 1, 0, 23, 59, 59); // End of month
 
@@ -30,8 +27,6 @@ class MoodRepository {
         .where('date', isLessThanOrEqualTo: end.toIso8601String())
         .get();
 
-    print(snapshot);
-
     final moods = <DateTime, Mood>{};
     for (var doc in snapshot.docs) {
       final mood = Mood.fromJson(doc.data());
@@ -39,9 +34,6 @@ class MoodRepository {
           DateTime(mood.date.year, mood.date.month, mood.date.day);
       moods[normalized] = mood;
     }
-
-    print('Moods for the month: $month');
-    print('Moods: $moods');
     return moods;
   }
 }

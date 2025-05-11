@@ -5,12 +5,14 @@ class Journal {
   String date;
   String content;
   Users user;
+  List<String?>? images = [];
 
   Journal({
     required this.id,
     required this.user,
     required this.date,
     required this.content,
+    this.images,
   });
 
   Map<String, Object?> toDocument() {
@@ -19,6 +21,7 @@ class Journal {
       'user': userToMap(user),
       'date': date,
       'content': content,
+      'images': images ?? [],
     };
   }
 
@@ -42,6 +45,7 @@ class Journal {
       user: user,
       date: doc['date'] as String,
       content: doc['content'] as String,
+      images: List<String>.from(doc['images'] ?? []),
     );
   }
 
@@ -50,12 +54,14 @@ class Journal {
     String? id,
     String? date,
     String? content,
+    List<String?>? images,
   }) {
     return Journal(
       user: user ?? this.user,
       id: id ?? this.id,
       date: date ?? this.date,
       content: content ?? this.content,
+      images: images ?? this.images,
     );
   }
 

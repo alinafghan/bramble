@@ -22,5 +22,15 @@ class SetJournalBloc extends Bloc<SetJournalEvent, SetJournalState> {
         emit(SetJournalFailure());
       }
     });
+    on<AddImage>((event, emit) async {
+      emit(SetJournalLoading());
+      try {
+        Journal entry =
+            await journalProvider.addImage(event.journal, event.image);
+        emit(SetJournalSuccess(journal: entry));
+      } catch (e) {
+        emit(SetJournalFailure());
+      }
+    });
   }
 }

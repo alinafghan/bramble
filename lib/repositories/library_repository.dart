@@ -67,9 +67,7 @@ class LibraryRepository {
     try {
       var response = await http.get(Uri.parse(url));
       Map<String, dynamic> data = json.decode(response.body);
-      _logger.d('reached here first, the book is $data');
       book = Book.addJson(book, data);
-      _logger.d('reached here, the book is $book');
       return book;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');

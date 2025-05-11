@@ -16,3 +16,13 @@ class SetJournal extends SetJournalEvent {
   @override
   List<Object> get props => [journal];
 }
+
+class AddImage extends SetJournalEvent {
+  final Journal journal;
+  final List<String> image;
+
+  const AddImage({required this.journal, required this.image});
+
+  @override
+  List<Object> get props => [image];
+}

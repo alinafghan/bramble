@@ -50,6 +50,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             mood: 'assets/moods/sipping_mug.png',
                           )));
                       Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider<SetJournalBloc>(
+                                  create: (context) => SetJournalBloc(
+                                    provider: JournalProvider(),
+                                  ),
+                                ),
+                                BlocProvider<GetJournalBloc>(
+                                  create: (context) => GetJournalBloc(
+                                    provider: JournalProvider(),
+                                  ),
+                                ),
+                              ],
+                              child: KeyboardVisibilityProvider(
+                                child: JournalScreen(selectedDate: selectedDay),
+                              )),
+                        ),
+                      );
                     },
                     child: Image.asset(
                       'assets/moods/sipping_mug.png',
@@ -63,27 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider<SetJournalBloc>(
-                  create: (context) => SetJournalBloc(
-                    provider: JournalProvider(),
-                  ),
-                ),
-                BlocProvider<GetJournalBloc>(
-                  create: (context) => GetJournalBloc(
-                    provider: JournalProvider(),
-                  ),
-                ),
-              ],
-              child: KeyboardVisibilityProvider(
-                child: JournalScreen(selectedDate: selectedDay),
-              )),
-        ),
       );
     }
 

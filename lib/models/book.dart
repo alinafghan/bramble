@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class Book extends Equatable {
-  int bookId; //cover_id int from the api, string
-  String key;
-  String title;
-  String author;
+  final int bookId; //cover_id int from the api, string
+  final String key;
+  final String title;
+  final String author;
   String? coverUrl;
   String? publishYear;
   String? description;
@@ -63,7 +63,7 @@ class Book extends Equatable {
           ? json['description']
           : json['description']?['value'] ?? "No description available.",
       excerpt: json['excerpts']?[0]?['excerpt'] ??
-          json['first_sentence']['value'] ??
+          json['first_sentence']?['value'] ??
           'No excerpt provided',
       publishYear: json['first_publish_date'] ?? 'No date provided',
       coverUrl: book.coverUrl,

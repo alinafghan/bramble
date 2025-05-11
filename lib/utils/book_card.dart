@@ -35,7 +35,7 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
       GestureDetector(
-        onDoubleTap: () {
+        onTap: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => BookScreen(book: book)));
         },

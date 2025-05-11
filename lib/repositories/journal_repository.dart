@@ -27,20 +27,71 @@ class JournalRepository {
     }
   }
 
+  // Future<Journal> setJournal(Journal journal) async {
+  //   UserProvider provider = UserProvider();
+  //   try {
+  //     journal.user = await provider.getCurrentUser();
+  //     journal.id = journal.user.userId + journal.date;
+  //     await userJournalCollection.doc(journal.id).set(journal.toDocument());
+  //   } on SocketException {
+  //     _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+  //     throw Exception('No internet connection. Please check your network.');
+  //   } catch (e) {
+  //     //log error
+  //     _logger.e('Error while setting journal: $e');
+  //     rethrow;
+  //   }
+  //   return journal;
+  // }
   Future<Journal> setJournal(Journal journal) async {
     UserProvider provider = UserProvider();
+
     try {
       journal.user = await provider.getCurrentUser();
       journal.id = journal.user.userId + journal.date;
-      await userJournalCollection.doc(journal.id).set(journal.toDocument());
+
+      final docRef = userJournalCollection.doc(journal.id);
+      final snapshot = await docRef.get();
+
+      if (snapshot.exists) {
+        // Update only the content and images fields
+        await docRef.update({
+          'content': journal.content,
+          'images': journal.images,
+          'updatedAt': FieldValue.serverTimestamp(), // optional
+        });
+      } else {
+        // Create new document
+        await docRef.set(journal.toDocument());
+      }
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
       throw Exception('No internet connection. Please check your network.');
     } catch (e) {
-      //log error
       _logger.e('Error while setting journal: $e');
       rethrow;
     }
+
     return journal;
+  }
+
+  Future<Journal> addImage(Journal journal, List<String> image) async {
+    print('we are adding image');
+    print(image);
+    UserProvider provider = UserProvider();
+    try {
+      journal.user = await provider.getCurrentUser();
+      journal.id = journal.user.userId + journal.date;
+      journal.images = journal.images ?? [];
+      journal.images!.addAll(image);
+      await userJournalCollection.doc(journal.id).update(journal.toDocument());
+      return journal;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e('Error while adding image: $e');
+      rethrow;
+    }
   }
 }

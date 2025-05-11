@@ -21,6 +21,7 @@ import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:journal_app/simple_bloc_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,11 @@ void main() async {
   }
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Supabase.initialize(
+    url: 'https://jzboacqcyalyouakshwx.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6Ym9hY3FjeWFseW91YWtzaHd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg0MjEsImV4cCI6MjA2MjA0NDQyMX0.sEPz6PIDh41-JPK76fQHjvIOcENe3T3Zfw9toNde-Dk',
   );
   runApp(MyApp(MyAuthProvider()));
 }
@@ -72,7 +78,7 @@ class MyApp extends StatelessWidget {
       ),
       BlocProvider<MoodBloc>(
         create: (_) => MoodBloc(provider: MoodProvider()),
-      )
+      ),
     ], child: const MyAppView());
   }
 }

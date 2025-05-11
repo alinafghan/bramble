@@ -35,7 +35,7 @@ class Review {
       userId: doc['user']['userId'] as String,
       username: doc['user']['username'] as String,
       email: doc['user']['email'] as String,
-      profileUrl: doc['user']['profileUrl'] as String,
+      profileUrl: doc['user']['profileUrl'] as String?,
     );
     Book book = Book(
       key: doc['book']['key'] as String,

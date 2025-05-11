@@ -13,4 +13,9 @@ class JournalProvider {
     entry = await _journalRepository.setJournal(entry);
     return entry;
   }
+
+  Future<Journal> addImage(Journal journal, List<String> image) async {
+    Journal entry = await _journalRepository.addImage(journal, image);
+    return entry;
+  }
 }

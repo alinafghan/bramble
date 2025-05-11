@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/user_provider/user_provider.dart';
+import 'package:journal_app/utils/bottom_nav.dart';
 import '../utils/popup_menu2.dart';
 import '../utils/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -26,14 +25,13 @@ class JournalScreen extends StatefulWidget {
 class _JournalScreenState extends State<JournalScreen> {
   Journal? journal;
   final TextEditingController journalController = TextEditingController();
-  final List<File> _selectedImages = [];
+  final List<String> _selectedImages = [];
 
   bool _hasInitializedContent = false;
 
   @override
   void initState() {
     super.initState();
-    // Dispatch the event to fetch the journal content.
     _fetchJournal();
   }
 
@@ -57,26 +55,23 @@ class _JournalScreenState extends State<JournalScreen> {
   Future<void> _saveJournalEntry() async {
     String text = journalController.text.trim();
     String docId = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
-    journal = Journal(
-      content: text,
-      date: docId,
-      id: '',
-      user: Users(userId: '', email: ''),
-    );
-    context.read<SetJournalBloc>().add(SetJournal(journal: journal!));
-  }
 
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final pickedImages = await picker.pickMultiImage();
-
-    if (pickedImages.isNotEmpty) {
-      setState(() {
-        _selectedImages.clear();
-        _selectedImages
-            .addAll(pickedImages.take(4).map((file) => File(file.path)));
-      });
+    if (journal != null) {
+      print('Journal exists, updating...');
+      print('Saving journal entry: ${journal!.images}');
+      journal = journal!.copyWith(
+        content: text,
+        date: docId,
+      );
+    } else {
+      journal = Journal(
+        content: text,
+        date: docId,
+        id: '',
+        user: Users(userId: '', email: ''),
+      );
     }
+    context.read<SetJournalBloc>().add(SetJournal(journal: journal!));
   }
 
   @override
@@ -132,22 +127,58 @@ class _JournalScreenState extends State<JournalScreen> {
                     color: Colors.grey,
                   ),
                 ),
-                //image carousel will go here
-                if (_selectedImages.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: imageHeight,
-                        enableInfiniteScroll: false,
-                        viewportFraction: 1.0,
-                      ),
-                      items: _selectedImages
-                          .map((file) => Image.file(file,
-                              width: imageWidth, fit: BoxFit.cover))
-                          .toList(),
+                // Listen for SetJournalLoaded event
+                BlocListener<SetJournalBloc, SetJournalState>(
+                  listener: (context, setListenerState) {
+                    if (setListenerState is SetJournalSuccess) {
+                      context
+                          .read<GetJournalBloc>()
+                          .add(GetJournal(id: setListenerState.journal.id));
+                      journal = setListenerState.journal;
+                      print(
+                          'Updated journal from the set listener: ${journal!.images}');
+                    }
+                  },
+                  child: BlocListener<GetJournalBloc, GetJournalState>(
+                    listener: (context, getListenerState) {
+                      if (getListenerState is GetJournalSuccess) {
+                        journal = getListenerState.journal;
+                        print(
+                            'Updated journal from the get listener: ${journal!.images}');
+                      }
+                    },
+                    child: BlocBuilder<GetJournalBloc, GetJournalState>(
+                      builder: (context, state) {
+                        if (state is GetJournalSuccess) {
+                          // Rebuild the carousel if images are updated
+                          if (state.journal.images != null &&
+                              state.journal.images!.isNotEmpty) {
+                            _selectedImages.clear();
+                            _selectedImages.addAll(
+                                state.journal.images?.whereType<String>() ??
+                                    []);
+                            return Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  height: imageHeight,
+                                  enableInfiniteScroll: false,
+                                  viewportFraction: 1.0,
+                                ),
+                                items: state.journal.images!
+                                    .map((url) =>
+                                        Image.network(url!, fit: BoxFit.cover))
+                                    .toList(),
+                              ),
+                            );
+                          }
+                        }
+                        return const SizedBox
+                            .shrink(); // Return an empty widget if no images are present
+                      },
                     ),
                   ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -213,73 +244,20 @@ class _JournalScreenState extends State<JournalScreen> {
               ],
             ),
           ),
-          bottomNavigationBar: bottomNav(journalController),
+          bottomNavigationBar: bottomNav(),
         ));
   }
 
-  Widget? bottomNav(TextEditingController journalController) {
+  Widget bottomNav() {
     final bool isKeyboardVisible =
         KeyboardVisibilityProvider.isKeyboardVisible(context);
-    if (isKeyboardVisible == true) {
-      return SingleChildScrollView(
-        reverse: true,
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppTheme.backgroundColor,
-            border: Border(
-              top: BorderSide(
-                color: Colors.grey.withValues(),
-              ),
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: 2,
-                right: 4,
-                left: 4,
-                bottom: MediaQuery.of(context).viewInsets.bottom * 1),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          DateTime timeStamp = DateTime.now();
-                          String formattedTime =
-                              DateFormat.jm().format(timeStamp);
 
-                          journalController.text += formattedTime;
-                        },
-                        icon: const Icon(
-                          HugeIcons.strokeRoundedClock01,
-                          size: 32,
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                            _pickImage();
-                          },
-                          icon: const Icon(
-                            HugeIcons.strokeRoundedAlbum02,
-                            size: 32,
-                          ))
-                    ],
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        _saveJournalEntry();
-                        Navigator.pop(context);
-                      },
-                      icon: const HugeIcon(
-                        icon: HugeIcons.strokeRoundedTick02,
-                        color: AppTheme.text,
-                        size: 32,
-                      ))
-                ]),
-          ),
-        ),
-      );
-    }
+    return Offstage(
+      offstage: !isKeyboardVisible, // visually hide when false…
+      child: BottomNav(
+        onSave: _saveJournalEntry,
+        journal: journal,
+      ),
+    );
   }
 }
