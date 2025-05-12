@@ -33,58 +33,123 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final DateTime now = DateTime.now();
+    Map<DateTime, String> moodMap = {};
 
-    void moodDialog(DateTime selectedDay) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Select Mood'),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      context.read<MoodBloc>().add(SetMoodEvent(Mood(
-                            date: selectedDay,
-                            mood: 'assets/moods/sipping_mug.png',
-                          )));
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MultiBlocProvider(
-                              providers: [
-                                BlocProvider<SetJournalBloc>(
-                                  create: (context) => SetJournalBloc(
-                                    provider: JournalProvider(),
-                                  ),
-                                ),
-                                BlocProvider<GetJournalBloc>(
-                                  create: (context) => GetJournalBloc(
-                                    provider: JournalProvider(),
-                                  ),
-                                ),
-                              ],
-                              child: KeyboardVisibilityProvider(
-                                child: JournalScreen(selectedDate: selectedDay),
-                              )),
-                        ),
-                      );
-                    },
-                    child: Image.asset(
-                      'assets/moods/sipping_mug.png',
-                      height: 100,
-                      width: 100,
+    void moodDialog(DateTime selectedDay, Map<DateTime, String> moodMap) {
+      final normalizedDate =
+          DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+      if (moodMap.containsKey(normalizedDate)) {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<SetJournalBloc>(
+                    create: (context) => SetJournalBloc(
+                      provider: JournalProvider(),
                     ),
                   ),
-                  // Add more moods as needed
+                  BlocProvider<GetJournalBloc>(
+                    create: (context) => GetJournalBloc(
+                      provider: JournalProvider(),
+                    ),
+                  ),
                 ],
+                child: KeyboardVisibilityProvider(
+                  child: JournalScreen(selectedDate: selectedDay),
+                )),
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Select Mood'),
+              content: SingleChildScrollView(
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.read<MoodBloc>().add(SetMoodEvent(Mood(
+                              date: selectedDay,
+                              mood: 'assets/moods/sipping_mug.png',
+                            )));
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider<SetJournalBloc>(
+                                    create: (context) => SetJournalBloc(
+                                      provider: JournalProvider(),
+                                    ),
+                                  ),
+                                  BlocProvider<GetJournalBloc>(
+                                    create: (context) => GetJournalBloc(
+                                      provider: JournalProvider(),
+                                    ),
+                                  ),
+                                ],
+                                child: KeyboardVisibilityProvider(
+                                  child:
+                                      JournalScreen(selectedDate: selectedDay),
+                                )),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/moods/sipping_mug.png',
+                        height: 100,
+                        width: 100,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        context.read<MoodBloc>().add(SetMoodEvent(Mood(
+                              date: selectedDay,
+                              mood: 'assets/moods/sipping_mug.png',
+                            )));
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider<SetJournalBloc>(
+                                    create: (context) => SetJournalBloc(
+                                      provider: JournalProvider(),
+                                    ),
+                                  ),
+                                  BlocProvider<GetJournalBloc>(
+                                    create: (context) => GetJournalBloc(
+                                      provider: JournalProvider(),
+                                    ),
+                                  ),
+                                ],
+                                child: KeyboardVisibilityProvider(
+                                  child:
+                                      JournalScreen(selectedDate: selectedDay),
+                                )),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/moods/cool_guy.png',
+                        height: 100,
+                        width: 100,
+                      ),
+                    ),
+                    // Add more moods as needed
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      );
+            );
+          },
+        );
+      }
     }
 
     return Scaffold(
@@ -163,8 +228,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(12),
                     child: BlocBuilder<MoodBloc, MoodBlocState>(
                       builder: (context, moodState) {
-                        Map<DateTime, String> moodMap = {};
-
                         if (moodState is GetMonthlyMoodsLoaded) {
                           moodMap = {
                             for (var entry in moodState.moods!.entries)
@@ -178,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           headerVisible: false,
                           daysOfWeekVisible: false,
                           onDaySelected: (selectedDay, focusedDay) {
-                            moodDialog(selectedDay);
+                            moodDialog(selectedDay, moodMap);
                           },
                           onPageChanged: (newFocusedMonth) {
                             context
@@ -248,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   foregroundColor: AppTheme.text,
                   backgroundColor: AppTheme.primary,
                   onPressed: () {
-                    moodDialog(DateTime.now());
+                    moodDialog(DateTime.now(), moodMap);
                   },
                   child: const Icon(Icons.add),
                 )

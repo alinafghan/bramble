@@ -103,6 +103,7 @@ flutter:
     - assets/white-paper-texture-background.jpg
     - assets/lottie/loading.json
     - assets/moods/sipping_mug.png
+    - assets/moods/cool_guy.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
