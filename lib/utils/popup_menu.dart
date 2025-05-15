@@ -29,10 +29,19 @@ class PopupMenuState extends State<PopupMenu> {
         color: AppTheme.backgroundColor,
         position: PopupMenuPosition.under,
         popUpAnimationStyle: AnimationStyle.noAnimation,
-        child: const HugeIcon(
-          icon: HugeIcons.strokeRoundedArrowDown01,
-          color: Colors.black,
-          size: 24,
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            HugeIcon(
+              icon: HugeIcons.strokeRoundedHome05,
+              color: AppTheme.text,
+            ),
+            HugeIcon(
+              icon: HugeIcons.strokeRoundedArrowDown01,
+              color: Colors.black,
+              size: 24,
+            ),
+          ],
         ),
         itemBuilder: (context) => [
           PopupMenuItem<String>(

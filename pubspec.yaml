@@ -104,6 +104,9 @@ flutter:
     - assets/lottie/loading.json
     - assets/moods/sipping_mug.png
     - assets/moods/cool_guy.png
+    - assets/moods/reading_book.png
+    - assets/moods/listen_music.png
+    - assets/moods/sick.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

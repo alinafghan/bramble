@@ -68,7 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
     void _showMoodDialog(DateTime selectedDay) {
       final moods = [
         'assets/moods/sipping_mug.png',
-        'assets/moods/cool_guy.png'
+        'assets/moods/cool_guy.png',
+        'assets/moods/reading_book.png',
+        'assets/moods/listen_music.png',
+        'assets/moods/sick.png'
       ]; // Add more moods here
       final normalizedDate =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
@@ -80,22 +83,28 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context) {
             return AlertDialog(
               title: const Text('Select Mood'),
-              content: SingleChildScrollView(
-                child: Row(
-                  children: moods.map((moodAsset) {
-                    return GestureDetector(
-                      onTap: () => {
-                        Navigator.pop(context),
-                        _onMoodSelected(moodAsset, selectedDay)
-                      },
-                      child: Image.asset(
-                        moodAsset,
-                        height: 100,
-                        width: 100,
-                      ),
-                    );
-                  }).toList(),
-                ),
+              content: SizedBox(
+                height: MediaQuery.of(context).size.width * .4,
+                width: MediaQuery.of(context).size.width * .5,
+                child: GridView.builder(
+                    itemCount: moods.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3),
+                    itemBuilder: (context, i) {
+                      final moodAsset = moods[i];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          _onMoodSelected(moodAsset, selectedDay);
+                        },
+                        child: Image.asset(
+                          moodAsset,
+                          height: 100,
+                          width: 100,
+                        ),
+                      );
+                    }),
               ),
             );
           },
@@ -105,20 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0, // Ensures alignment of the leading widget with padding
+        titleSpacing: 0,
+        leadingWidth:
+            64, // Ensures alignment of the leading widget with padding
         leading: const Padding(
           padding: EdgeInsets.only(left: 12.0), // Add padding to the left
           child: Row(
             mainAxisSize: MainAxisSize
                 .min, // Ensures the Row takes only as much space as needed
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 2.0), // Add padding to the right
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedHome05,
-                  color: AppTheme.text,
-                ),
-              ), // Add spacing between the icon and the arrow
               PopupMenu(selectedVal: 'Diary'),
             ],
           ),
@@ -191,7 +195,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           headerVisible: false,
                           daysOfWeekVisible: false,
                           onDaySelected: (selectedDay, focusedDay) {
-                            _showMoodDialog(selectedDay);
+                            final now = DateTime.now();
+                            final normalizedSelectedDay = DateTime(
+                                selectedDay.year,
+                                selectedDay.month,
+                                selectedDay.day);
+                            final normalizedNow =
+                                DateTime(now.year, now.month, now.day);
+
+                            if (normalizedSelectedDay.isAfter(normalizedNow)) {
+                              // Do nothing or show a message that future journaling is not allowed
+                              return;
+                            } else {
+                              _showMoodDialog(selectedDay);
+                            }
                           },
                           onPageChanged: (newFocusedMonth) {
                             context
