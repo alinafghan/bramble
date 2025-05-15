@@ -15,8 +15,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class JournalScreen extends StatefulWidget {
   final DateTime selectedDate;
+  final String mood;
 
-  const JournalScreen({super.key, required this.selectedDate});
+  const JournalScreen(
+      {super.key, required this.selectedDate, required this.mood});
 
   @override
   State<JournalScreen> createState() => _JournalScreenState();
@@ -111,6 +113,11 @@ class _JournalScreenState extends State<JournalScreen> {
           body: Center(
             child: Column(
               children: <Widget>[
+                Image.asset(
+                  widget.mood,
+                  height: 100,
+                  width: 100,
+                ),
                 Text(
                   '$currentMonth $currentDate, $currentYear',
                   style: const TextStyle(

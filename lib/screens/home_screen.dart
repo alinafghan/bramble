@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final DateTime now = DateTime.now();
     Map<DateTime, String> moodMap = {};
 
-    void _goToJournal(DateTime selectedDay) {
+    void _goToJournal(DateTime selectedDay, String mood) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -51,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
             child: KeyboardVisibilityProvider(
-              child: JournalScreen(selectedDate: selectedDay),
+              child: JournalScreen(
+                selectedDate: selectedDay,
+                mood: mood,
+              ),
             ),
           ),
         ),
@@ -62,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context
           .read<MoodBloc>()
           .add(SetMoodEvent(Mood(date: selectedDay, mood: moodAsset)));
-      _goToJournal(selectedDay);
+      _goToJournal(selectedDay, moodAsset);
     }
 
     void _showMoodDialog(DateTime selectedDay) {
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final normalizedDate =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
       if (moodMap.containsKey(normalizedDate)) {
-        _goToJournal(selectedDay);
+        _goToJournal(selectedDay, moodMap[normalizedDate]!);
       } else {
         showDialog(
           context: context,
