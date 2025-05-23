@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
+import 'package:journal_app/utils/constants.dart';
 
 class PopupMenu2 extends StatefulWidget {
-  const PopupMenu2({super.key});
+  final String date;
+  final String selectedVal = 'None'; // Default selected value
+  const PopupMenu2({super.key, required this.date});
 
   @override
   PopupMenuState2 createState() => PopupMenuState2();
@@ -14,6 +19,7 @@ class PopupMenuState2 extends State<PopupMenu2> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      color: AppTheme.backgroundColor,
       position: PopupMenuPosition.under,
       popUpAnimationStyle: AnimationStyle.noAnimation,
       child: const HugeIcon(
@@ -21,11 +27,6 @@ class PopupMenuState2 extends State<PopupMenu2> {
         color: Colors.black,
         size: 18,
       ),
-      onSelected: (value) {
-        setState(() {
-          _selectedValue = value; // Update the selected value
-        });
-      },
       itemBuilder: (context) => [
         PopupMenuItem<String>(
           value: 'Edit',
@@ -49,50 +50,34 @@ class PopupMenuState2 extends State<PopupMenu2> {
           ),
         ),
         PopupMenuItem<String>(
-          value: 'Share',
-          child: Row(
-            spacing: 8,
-            children: [
-              HugeIcon(
-                icon: HugeIcons.strokeRoundedShare08,
-                color: _selectedValue == 'Share' ? Colors.grey : Colors.black,
-              ),
-              Text(
-                'Share',
-                style: TextStyle(
-                  fontFamily: 'Dovemayo',
-                  color: _selectedValue == 'Share'
-                      ? Colors.grey
-                      : Colors.black, // Change color if selected
-                ),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'Delete',
-          child: Row(
-            spacing: 8,
-            children: [
-              HugeIcon(
-                icon: HugeIcons.strokeRoundedDelete02,
-                color: _selectedValue == 'Delete'
-                    ? const Color.fromARGB(255, 165, 64, 64)
-                    : const Color.fromARGB(255, 105, 3, 3),
-              ),
-              Text(
-                'Delete',
-                style: TextStyle(
-                  fontFamily: 'Dovemayo',
+            value: 'Delete',
+            child: Row(
+              spacing: 8,
+              children: [
+                HugeIcon(
+                  icon: HugeIcons.strokeRoundedDelete02,
                   color: _selectedValue == 'Delete'
                       ? const Color.fromARGB(255, 165, 64, 64)
-                      : const Color.fromARGB(
-                          255, 105, 3, 3), // Change color if selected
+                      : const Color.fromARGB(255, 105, 3, 3),
                 ),
-              ),
-            ],
-          ),
-        ),
+                Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontFamily: 'Dovemayo',
+                    color: _selectedValue == 'Delete'
+                        ? const Color.fromARGB(255, 165, 64, 64)
+                        : const Color.fromARGB(
+                            255, 105, 3, 3), // Change color if selected
+                  ),
+                ),
+              ],
+            ),
+            onTap: () {
+              context.read<SetJournalBloc>().add(
+                    DeleteJournal(date: widget.date),
+                  );
+              Navigator.pop(context);
+            }),
       ],
     );
   }

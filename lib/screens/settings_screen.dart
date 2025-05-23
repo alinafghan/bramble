@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/screens/splash_screen.dart';
@@ -153,6 +154,53 @@ class SettingsScreen extends StatelessWidget {
                       );
                     },
                   );
+                },
+              ),
+              ListTile(
+                title: const Text('Delete Account',
+                    style: TextStyle(
+                      color: AppTheme.red,
+                      fontSize: 18,
+                    )),
+                leading: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedInformationCircle,
+                  color: AppTheme.red,
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: (const Text('Delete Account')),
+                        content: const Text(
+                            'Are you sure you want to delete your account? This action cannot be undone.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              //delete account logic
+                              context.read<MyAuthProvider>().deleteUser();
+                              if (context.mounted) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SplashScreen()),
+                                  (Route<dynamic> route) => false,
+                                );
+                              }
+                            },
+                            child: const Text('Delete'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  // Add your delete account logic here
                 },
               ),
             ]),

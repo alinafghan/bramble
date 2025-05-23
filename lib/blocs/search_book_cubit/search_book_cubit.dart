@@ -20,4 +20,8 @@ class SearchBookCubit extends Cubit<SearchBookState> {
       emit(SearchBookError(error: e.toString()));
     }
   }
+
+  void clearSearch() {
+    emit(SearchCleared()); // This tells the UI to stop showing search results
+  }
 }

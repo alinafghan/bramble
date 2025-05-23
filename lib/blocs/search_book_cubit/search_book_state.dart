@@ -31,3 +31,8 @@ final class SearchBookError extends SearchBookState {
   @override
   List<Object> get props => [error];
 }
+
+final class SearchCleared extends SearchBookState {
+  @override
+  List<Object> get props => [];
+}

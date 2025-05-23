@@ -1,3 +1,4 @@
+import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/repositories/journal_repository.dart';
 
@@ -9,9 +10,19 @@ class JournalProvider {
     return entry;
   }
 
+  Future<void> deleteJournal(String date) async {
+    await _journalRepository.deleteJournal(date);
+  }
+
   Future<Journal> setJournal(Journal entry) async {
     entry = await _journalRepository.setJournal(entry);
     return entry;
+  }
+
+  Future<List<Journal>> getMonthlyJournal(DateTime month) async {
+    List<Journal> monthlyJournals =
+        await _journalRepository.getMonthlyJournal(month);
+    return monthlyJournals;
   }
 
   Future<Journal> addImage(Journal journal, List<String> image) async {

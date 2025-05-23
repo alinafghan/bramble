@@ -16,3 +16,12 @@ class GetJournal extends GetJournalEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class GetMonthlyJournal extends GetJournalEvent {
+  final DateTime month;
+
+  const GetMonthlyJournal({required this.month});
+
+  @override
+  List<Object?> get props => [month];
+}

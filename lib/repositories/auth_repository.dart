@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:journal_app/models/user.dart';
+import 'package:journal_app/repositories/user_repository.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
@@ -136,6 +137,24 @@ class FirebaseAuthRepository {
       _logger.e("Error while fetching the email from username: $e");
     }
     return ""; // Return an empty string if no match is found
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      UserRepository userRepo = UserRepository();
+
+      Users currentUser = await userRepo.getCurrentUserFromFirebase();
+
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.userId)
+          .delete();
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e("Error deleting user: $e");
+    }
   }
 }
 

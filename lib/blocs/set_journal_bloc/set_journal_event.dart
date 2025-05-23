@@ -26,3 +26,12 @@ class AddImage extends SetJournalEvent {
   @override
   List<Object> get props => [image];
 }
+
+class DeleteJournal extends SetJournalEvent {
+  final String date;
+
+  const DeleteJournal({required this.date});
+
+  @override
+  List<Object> get props => [date];
+}

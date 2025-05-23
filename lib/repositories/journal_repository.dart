@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/journal.dart';
+import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/user_provider/user_provider.dart';
+import 'package:journal_app/repositories/user_repository.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 
 class JournalRepository {
   final Logger _logger = Logger();
+  final UserRepository _userRepository = UserRepository();
 
   final userJournalCollection =
       FirebaseFirestore.instance.collection('Journal');
@@ -27,22 +30,41 @@ class JournalRepository {
     }
   }
 
-  // Future<Journal> setJournal(Journal journal) async {
-  //   UserProvider provider = UserProvider();
-  //   try {
-  //     journal.user = await provider.getCurrentUser();
-  //     journal.id = journal.user.userId + journal.date;
-  //     await userJournalCollection.doc(journal.id).set(journal.toDocument());
-  //   } on SocketException {
-  //     _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
-  //     throw Exception('No internet connection. Please check your network.');
-  //   } catch (e) {
-  //     //log error
-  //     _logger.e('Error while setting journal: $e');
-  //     rethrow;
-  //   }
-  //   return journal;
-  // }
+  Future<List<Journal>> getMonthlyJournal(DateTime month) async {
+    final start = DateTime(month.year, month.month, 1);
+    final end =
+        DateTime(month.year, month.month + 1, 0, 23, 59, 59); // End of month
+
+    Users currentUser = await _userRepository.getCurrentUserFromFirebase();
+
+    final snapshot = await userJournalCollection
+        .where('date', isGreaterThanOrEqualTo: start.toIso8601String())
+        .where('date', isLessThanOrEqualTo: end.toIso8601String())
+        .where('user.userId', isEqualTo: currentUser.userId)
+        .get();
+    final journals = <Journal>[];
+    for (var doc in snapshot.docs) {
+      final journal = Journal.fromDocument(doc.data());
+      journals.add(journal);
+    }
+    return journals;
+  }
+
+  Future<void> deleteJournal(String date) async {
+    Users currUser = await _userRepository.getCurrentUserFromFirebase();
+    String id = currUser.userId + date;
+    print('Deleting journal with ID: $id');
+    try {
+      await userJournalCollection.doc(id).delete();
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e('Error while deleting journal: $e');
+      rethrow;
+    }
+  }
+
   Future<Journal> setJournal(Journal journal) async {
     UserProvider provider = UserProvider();
 

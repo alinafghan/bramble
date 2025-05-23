@@ -32,5 +32,14 @@ class SetJournalBloc extends Bloc<SetJournalEvent, SetJournalState> {
         emit(SetJournalFailure());
       }
     });
+    on<DeleteJournal>((event, emit) async {
+      emit(DeleteJournalLoading());
+      try {
+        await journalProvider.deleteJournal(event.date);
+        emit(DeleteJournalSuccess());
+      } catch (e) {
+        emit(DeleteJournalFailure());
+      }
+    });
   }
 }

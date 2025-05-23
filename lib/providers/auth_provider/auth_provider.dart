@@ -24,4 +24,8 @@ class MyAuthProvider {
   Future<void> saveUserToFirestore(Users user) async {
     return await _authRepository.saveUserToFirestore(user);
   }
+
+  Future<void> deleteUser() async {
+    return await _authRepository.deleteUser();
+  }
 }

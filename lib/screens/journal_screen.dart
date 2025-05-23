@@ -85,9 +85,9 @@ class _JournalScreenState extends State<JournalScreen> {
 
     return PopScope(
         canPop: true,
-        onPopInvokedWithResult: (bool canPop, dynamic result) async {
-          await _saveJournalEntry();
-        },
+        // onPopInvokedWithResult: (bool canPop, dynamic result) async {
+        //   await _saveJournalEntry();
+        // },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
@@ -100,10 +100,11 @@ class _JournalScreenState extends State<JournalScreen> {
                 color: AppTheme.text,
               ),
             ),
-            actions: const [
+            actions: [
               Padding(
-                padding: EdgeInsets.only(right: 12.0),
-                child: PopupMenu2(),
+                padding: const EdgeInsets.only(right: 12.0),
+                child: PopupMenu2(
+                    date: DateFormat('yyyy-MM-dd').format(widget.selectedDate)),
               )
             ],
           ),

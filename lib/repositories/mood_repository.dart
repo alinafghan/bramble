@@ -19,7 +19,7 @@ class MoodRepository {
     );
     try {
       await bookReviewCollection
-          .doc(mood.date.toIso8601String())
+          .doc(mood.date.toIso8601String() + currentUser.userId)
           .set(mood.toJson());
       return mood;
     } catch (e) {

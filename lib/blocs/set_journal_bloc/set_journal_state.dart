@@ -19,3 +19,12 @@ final class SetJournalSuccess extends SetJournalState {
   @override
   List<Object> get props => [journal];
 }
+
+final class DeleteJournalLoading extends SetJournalState {}
+
+final class DeleteJournalFailure extends SetJournalState {}
+
+final class DeleteJournalSuccess extends SetJournalState {
+  @override
+  List<Object> get props => [];
+}

@@ -29,14 +29,16 @@ class PopupMenuState extends State<PopupMenu> {
         color: AppTheme.backgroundColor,
         position: PopupMenuPosition.under,
         popUpAnimationStyle: AnimationStyle.noAnimation,
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             HugeIcon(
-              icon: HugeIcons.strokeRoundedHome05,
+              icon: _selectedValue == 'Book'
+                  ? HugeIcons.strokeRoundedBooks01
+                  : HugeIcons.strokeRoundedHome05,
               color: AppTheme.text,
             ),
-            HugeIcon(
+            const HugeIcon(
               icon: HugeIcons.strokeRoundedArrowDown01,
               color: Colors.black,
               size: 24,

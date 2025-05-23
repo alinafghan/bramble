@@ -27,14 +27,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      const SizedBox(
-        child: Image(
-          image: AssetImage('assets/white-paper-texture-background.jpg'),
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
-        ),
-      ),
+      // const SizedBox(
+      //   child: Image(
+      //     image: AssetImage('assets/white-paper-texture-background.jpg'),
+      //     fit: BoxFit.cover,
+      //     height: double.infinity,
+      //     width: double.infinity,
+      //   ),
+      // ),
       Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
@@ -43,6 +43,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: AnimatedSearchBar(
+                closeSearchOnSuffixTap: true,
                 boxShadow: false,
                 prefixIcon: null,
                 height: 50,
@@ -51,7 +52,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 textFieldColor: AppTheme.backgroundColor,
                 textController: searchText,
                 onSuffixTap: () {
-                  getLibrary();
+                  searchText.clear();
+                  context
+                      .read<SearchBookCubit>()
+                      .clearSearch(); // Reset to show cached data
                 },
                 rtl: false,
                 onSubmitted: (String value) {
@@ -75,12 +79,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
             builder: (context, searchState) {
               return BlocBuilder<GetLibraryBloc, GetLibraryState>(
                 builder: (context, libraryState) {
+                  List libraryBooks = [];
+                  List searchedBooks = [];
                   List books = [];
 
                   if (searchState is SearchBookLoaded) {
-                    books = searchState.books;
+                    searchedBooks = searchState.books;
+                    books = searchedBooks;
                   } else if (libraryState is GetLibraryLoaded) {
-                    books = libraryState.booklist;
+                    libraryBooks = libraryState.booklist;
+                    books = libraryBooks;
+                  } else if (searchState is SearchCleared) {
+                    books = libraryBooks;
                   }
 
                   if (books.isEmpty) {
