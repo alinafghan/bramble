@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/models/book.dart';
@@ -86,9 +86,8 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                     const SizedBox(width: 12),
                     IconButton(
                       icon: Icon(
-                        review.isLikedByCurrentUser
-                            ? CupertinoIcons.heart_fill // red heart
-                            : CupertinoIcons.heart, // outlined heart
+                        HugeIcons
+                            .strokeRoundedFavourite, // red heart // outlined heart
                         color: review.isLikedByCurrentUser
                             ? Colors.red
                             : Colors.grey,

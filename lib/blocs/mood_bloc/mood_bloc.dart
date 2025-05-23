@@ -24,8 +24,8 @@ class MoodBloc extends Bloc<MoodBlocEvent, MoodBlocState> {
     on<SetMoodEvent>((event, emit) async {
       emit(SetMoodLoading());
       try {
-        await moodProvider.setMood(event.mood);
-        emit(SetMoodLoaded(event.mood));
+        Mood mood = await moodProvider.setMood(event.moodAsset, event.date);
+        emit(SetMoodLoaded(mood));
       } catch (e) {
         emit(SetMoodFailed(e.toString()));
       }

@@ -76,8 +76,6 @@ class JournalRepository {
   }
 
   Future<Journal> addImage(Journal journal, List<String> image) async {
-    print('we are adding image');
-    print(image);
     UserProvider provider = UserProvider();
     try {
       journal.user = await provider.getCurrentUser();

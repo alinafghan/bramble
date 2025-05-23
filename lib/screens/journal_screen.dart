@@ -59,8 +59,6 @@ class _JournalScreenState extends State<JournalScreen> {
     String docId = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
 
     if (journal != null) {
-      print('Journal exists, updating...');
-      print('Saving journal entry: ${journal!.images}');
       journal = journal!.copyWith(
         content: text,
         date: docId,
@@ -79,7 +77,6 @@ class _JournalScreenState extends State<JournalScreen> {
   @override
   Widget build(BuildContext context) {
     double imageHeight = MediaQuery.of(context).size.height * 0.3;
-    double imageWidth = MediaQuery.of(context).size.width * 0.9;
 
     final String currentYear = DateFormat('yyyy').format(widget.selectedDate);
     final String currentMonth = DateFormat('MMMM').format(widget.selectedDate);
@@ -142,16 +139,12 @@ class _JournalScreenState extends State<JournalScreen> {
                           .read<GetJournalBloc>()
                           .add(GetJournal(id: setListenerState.journal.id));
                       journal = setListenerState.journal;
-                      print(
-                          'Updated journal from the set listener: ${journal!.images}');
                     }
                   },
                   child: BlocListener<GetJournalBloc, GetJournalState>(
                     listener: (context, getListenerState) {
                       if (getListenerState is GetJournalSuccess) {
                         journal = getListenerState.journal;
-                        print(
-                            'Updated journal from the get listener: ${journal!.images}');
                       }
                     },
                     child: BlocBuilder<GetJournalBloc, GetJournalState>(
@@ -262,6 +255,7 @@ class _JournalScreenState extends State<JournalScreen> {
     return Offstage(
       offstage: !isKeyboardVisible, // visually hide when false…
       child: BottomNav(
+        textController: journalController,
         onSave: _saveJournalEntry,
         journal: journal,
       ),

@@ -20,7 +20,7 @@ class SetReviewCubit extends Cubit<SetReviewState> {
       if (result != null) {
         emit(SetReviewSuccess(result));
       } else {
-        emit(SetReviewFailure('Failed to set review'));
+        emit(const SetReviewFailure('Failed to set review'));
       }
     } catch (e) {
       emit(SetReviewFailure(e.toString()));

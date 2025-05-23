@@ -8,12 +8,13 @@ abstract class MoodBlocEvent extends Equatable {
 }
 
 class SetMoodEvent extends MoodBlocEvent {
-  final Mood mood;
+  final String moodAsset;
+  final DateTime date;
 
-  const SetMoodEvent(this.mood);
+  const SetMoodEvent(this.date, this.moodAsset);
 
   @override
-  List<Object> get props => [mood];
+  List<Object> get props => [moodAsset, date];
 }
 
 class GetMonthlyMoodEvent extends MoodBlocEvent {

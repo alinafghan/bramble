@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -14,17 +13,20 @@ class BottomNav extends StatefulWidget {
   final VoidCallback onSave;
   final Future<void> Function()? onImagePick;
   final Journal? journal;
+  final TextEditingController textController;
 
   const BottomNav(
-      {super.key, required this.onSave, this.journal, this.onImagePick});
+      {super.key,
+      required this.onSave,
+      this.journal,
+      this.onImagePick,
+      required this.textController});
 
   @override
   State<BottomNav> createState() => _BottomNavState();
 }
 
 class _BottomNavState extends State<BottomNav> {
-  final TextEditingController textController = TextEditingController();
-
   Future<void> _pickImage(Journal journal) async {
     final ImagePicker picker = ImagePicker();
     final pickedImages = await picker.pickMultiImage();
@@ -83,7 +85,7 @@ class _BottomNavState extends State<BottomNav> {
                     DateTime timeStamp = DateTime.now();
                     String formattedTime = DateFormat.jm().format(timeStamp);
 
-                    textController.text += formattedTime;
+                    widget.textController.text += formattedTime;
                   },
                   icon: const Icon(
                     HugeIcons.strokeRoundedClock01,

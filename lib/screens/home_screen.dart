@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final DateTime now = DateTime.now();
     Map<DateTime, String> moodMap = {};
 
-    void _goToJournal(DateTime selectedDay, String mood) {
+    void goToJournal(DateTime selectedDay, String mood) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -61,14 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    void _onMoodSelected(String moodAsset, DateTime selectedDay) {
-      context
-          .read<MoodBloc>()
-          .add(SetMoodEvent(Mood(date: selectedDay, mood: moodAsset)));
-      _goToJournal(selectedDay, moodAsset);
+    void onMoodSelected(String moodAsset, DateTime selectedDay) {
+      context.read<MoodBloc>().add(SetMoodEvent(selectedDay, moodAsset));
+      goToJournal(selectedDay, moodAsset);
     }
 
-    void _showMoodDialog(DateTime selectedDay) {
+    void showMoodDialog(DateTime selectedDay) {
       final moods = [
         'assets/moods/sipping_mug.png',
         'assets/moods/cool_guy.png',
@@ -79,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final normalizedDate =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
       if (moodMap.containsKey(normalizedDate)) {
-        _goToJournal(selectedDay, moodMap[normalizedDate]!);
+        goToJournal(selectedDay, moodMap[normalizedDate]!);
       } else {
         showDialog(
           context: context,
@@ -99,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          _onMoodSelected(moodAsset, selectedDay);
+                          onMoodSelected(moodAsset, selectedDay);
                         },
                         child: Image.asset(
                           moodAsset,
@@ -210,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Do nothing or show a message that future journaling is not allowed
                               return;
                             } else {
-                              _showMoodDialog(selectedDay);
+                              showMoodDialog(selectedDay);
                             }
                           },
                           onPageChanged: (newFocusedMonth) {
@@ -300,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   foregroundColor: AppTheme.text,
                   backgroundColor: AppTheme.primary,
                   onPressed: () {
-                    _showMoodDialog(DateTime.now());
+                    showMoodDialog(DateTime.now());
                   },
                   child: const Icon(Icons.add),
                 )

@@ -189,6 +189,14 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar>
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   child: AnimatedBuilder(
+                    builder: (context, widget) {
+                      ///Using Transform.rotate to rotate the suffix icon when it gets expanded
+                      return Transform.rotate(
+                        angle: _con.value * 1.0 * pi,
+                        child: widget,
+                      );
+                    },
+                    animation: _con,
                     child: GestureDetector(
                       onTap: () {
                         try {
@@ -224,22 +232,13 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar>
                       },
 
                       ///suffixIcon is of type Icon
-                      child: widget.suffixIcon != null
-                          ? widget.suffixIcon
-                          : Icon(
-                              Icons.close,
-                              size: 20.0,
-                              color: widget.textFieldIconColor,
-                            ),
+                      child: widget.suffixIcon ??
+                          Icon(
+                            Icons.close,
+                            size: 20.0,
+                            color: widget.textFieldIconColor,
+                          ),
                     ),
-                    builder: (context, widget) {
-                      ///Using Transform.rotate to rotate the suffix icon when it gets expanded
-                      return Transform.rotate(
-                        angle: _con.value * 1.0 * pi,
-                        child: widget,
-                      );
-                    },
-                    animation: _con,
                   ),
                 ),
               ),
