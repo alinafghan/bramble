@@ -25,3 +25,12 @@ class GetMonthlyMoodEvent extends MoodBlocEvent {
   @override
   List<Object> get props => [];
 }
+
+class DeleteMoodEvent extends MoodBlocEvent {
+  final String date;
+
+  const DeleteMoodEvent(this.date);
+
+  @override
+  List<Object> get props => [date];
+}

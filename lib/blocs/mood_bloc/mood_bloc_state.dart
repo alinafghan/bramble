@@ -48,3 +48,23 @@ final class SetMoodFailed extends MoodBlocState {
   @override
   List<Object> get props => [error];
 }
+
+final class DeleteMoodLoading extends MoodBlocState {}
+
+final class DeleteMoodLoaded extends MoodBlocState {
+  final String date;
+
+  const DeleteMoodLoaded(this.date);
+
+  @override
+  List<Object> get props => [date];
+}
+
+final class DeleteMoodFailed extends MoodBlocState {
+  final String error;
+
+  const DeleteMoodFailed(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

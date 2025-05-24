@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
+import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
@@ -116,10 +117,46 @@ class _JournalScreenState extends State<JournalScreen> {
           body: Center(
             child: Column(
               children: <Widget>[
-                Image.asset(
-                  widget.mood,
-                  height: 100,
-                  width: 100,
+                GestureDetector(
+                  onLongPress: () async {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Delete Mood?'),
+                            content: const Text(
+                                'This will delete the mood and associated journal entry. Are you sure you want to proceed?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  String date = DateFormat('yyyy-MM-dd')
+                                      .format(widget.selectedDate);
+                                  context
+                                      .read<MoodBloc>()
+                                      .add(DeleteMoodEvent(date));
+                                  context
+                                      .read<SetJournalBloc>()
+                                      .add(DeleteJournal(date: date));
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Delete Mood'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: Image.asset(
+                    widget.mood,
+                    height: 100,
+                    width: 100,
+                  ),
                 ),
                 Text(
                   '$currentMonth $currentDate, $currentYear',

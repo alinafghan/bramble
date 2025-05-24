@@ -11,4 +11,8 @@ class MoodProvider {
   Future<Map<String, Mood>?> getMood(DateTime month) async {
     return _moodRepository.getMood(month);
   }
+
+  Future<void> deleteMood(String date) async {
+    return _moodRepository.deleteMood(date);
+  }
 }

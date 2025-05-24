@@ -27,6 +27,16 @@ class MoodRepository {
     }
   }
 
+  Future<void> deleteMood(String date) async {
+    Users currentUser = await userRepo.getCurrentUserFromFirebase();
+    try {
+      await bookReviewCollection.doc(date + currentUser.userId).delete();
+    } catch (e) {
+      _logger.e('Error deleting mood: $e');
+      throw Exception('Error deleting mood: $e');
+    }
+  }
+
   Future<Map<String, Mood>?> getMood(DateTime month) async {
     final start = DateTime(month.year, month.month, 1);
     final end =
