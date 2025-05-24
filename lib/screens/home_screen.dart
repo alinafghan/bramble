@@ -229,6 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                             onPageChanged: (newFocusedMonth) {
+                              context.read<GetJournalBloc>().add(
+                                  GetMonthlyJournal(month: newFocusedMonth));
                               context
                                   .read<CalendarBloc>()
                                   .add(ChangeFocusedMonth(newFocusedMonth));
