@@ -12,7 +12,7 @@ final class MoodBlocInitial extends MoodBlocState {}
 final class GetMonthlyMoodsLoading extends MoodBlocState {}
 
 final class GetMonthlyMoodsLoaded extends MoodBlocState {
-  final Map<DateTime, Mood>? moods;
+  final Map<String, Mood>? moods;
 
   const GetMonthlyMoodsLoaded(this.moods);
 

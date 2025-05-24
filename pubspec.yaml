@@ -73,11 +73,11 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/bramble_icon.png"
+  image_path: "assets/plant.json"
   min_sdk_android: 21 # android min sdk min:16, default 21
   windows:
     generate: true
-    image_path: "assets/bramble_icon.png"
+    image_path: "assets/plant.json"
     icon_size: 48 # min:48, max:256, default: 48
 
 # The following section is specific to Flutter packages.

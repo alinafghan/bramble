@@ -27,7 +27,7 @@ class GetJournalBloc extends Bloc<GetJournalEvent, GetJournalState> {
       try {
         List<Journal> journal =
             await journalProvider.getMonthlyJournal(event.month);
-        emit(GetMonthlyJournalSuccess(journal: journal));
+        emit(GetMonthlyJournalSuccess(journals: journal));
       } catch (e) {
         emit(GetMonthlyJournalError());
       }

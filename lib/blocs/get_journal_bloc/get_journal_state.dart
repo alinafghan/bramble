@@ -18,7 +18,7 @@ class GetMonthlyJournalLoading extends GetJournalState {}
 class GetMonthlyJournalError extends GetJournalState {}
 
 class GetMonthlyJournalSuccess extends GetJournalState {
-  final List<Journal> journal;
+  final List<Journal> journals;
 
-  GetMonthlyJournalSuccess({required this.journal});
+  GetMonthlyJournalSuccess({required this.journals});
 }

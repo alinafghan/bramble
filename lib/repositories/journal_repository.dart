@@ -47,6 +47,10 @@ class JournalRepository {
       final journal = Journal.fromDocument(doc.data());
       journals.add(journal);
     }
+    print('Fetched ${journals.length} journals for month: $month');
+    if (journals.isEmpty) {
+      _logger.w('No journals found for the specified month: $month');
+    }
     return journals;
   }
 

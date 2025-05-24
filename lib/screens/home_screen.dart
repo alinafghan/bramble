@@ -6,8 +6,9 @@ import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
-import 'package:journal_app/models/mood.dart';
+import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/providers/journal_provider/journal_provider.dart';
+import 'package:journal_app/screens/journal_list_screen.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -30,11 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // context.read<CalendarBloc>().add(ChangeFocusedMonth(DateTime.now()));
   }
 
+  final DateTime now = DateTime.now();
+  Map<String, String> moodMap = {};
+  final List<Journal> journals = [];
+
   @override
   Widget build(BuildContext context) {
-    final DateTime now = DateTime.now();
-    Map<DateTime, String> moodMap = {};
-
     void goToJournal(DateTime selectedDay, String mood) {
       Navigator.push(
         context,
@@ -62,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     void onMoodSelected(String moodAsset, DateTime selectedDay) {
-      context.read<MoodBloc>().add(SetMoodEvent(selectedDay, moodAsset));
+      final stringDate = DateFormat('yyyy-MM-dd').format(selectedDay);
+      context.read<MoodBloc>().add(SetMoodEvent(stringDate, moodAsset));
       goToJournal(selectedDay, moodAsset);
     }
 
@@ -74,10 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
         'assets/moods/listen_music.png',
         'assets/moods/sick.png'
       ]; // Add more moods here
-      final normalizedDate =
-          DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-      if (moodMap.containsKey(normalizedDate)) {
-        goToJournal(selectedDay, moodMap[normalizedDate]!);
+      final stringDate = DateFormat('yyyy-MM-dd').format(selectedDay);
+
+      if (moodMap.containsKey(stringDate)) {
+        goToJournal(selectedDay, moodMap[stringDate]!);
       } else {
         showDialog(
           context: context,
@@ -113,199 +116,216 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        leadingWidth:
-            64, // Ensures alignment of the leading widget with padding
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 12.0), // Add padding to the left
-          child: Row(
-            mainAxisSize: MainAxisSize
-                .min, // Ensures the Row takes only as much space as needed
-            children: [
-              PopupMenu(selectedVal: 'Diary'),
-            ],
-          ),
-        ),
-        actions: [
-          Padding(
-            padding:
-                const EdgeInsets.only(right: 8.0), // Add padding to the right
-            child: IconButton(
-              icon: const HugeIcon(
-                color: AppTheme.text,
-                icon: HugeIcons.strokeRoundedSettings02,
-              ),
-              color: AppTheme.text,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SettingsScreen()));
-              },
+    return GestureDetector(
+      onVerticalDragStart: (_) {
+        context
+            .read<GetJournalBloc>()
+            .add(GetMonthlyJournal(month: DateTime.now()));
+        for (var entry in moodMap.entries) {
+          print('Mood for ${entry.key}: ${entry.value}');
+        }
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => JournalListScreen(moodMap: moodMap)));
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 0,
+          leadingWidth:
+              64, // Ensures alignment of the leading widget with padding
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 12.0), // Add padding to the left
+            child: Row(
+              mainAxisSize: MainAxisSize
+                  .min, // Ensures the Row takes only as much space as needed
+              children: [
+                PopupMenu(selectedVal: 'Diary'),
+              ],
             ),
           ),
-        ],
-      ),
-      body: BlocBuilder<CalendarBloc, CalendarState>(
-        builder: (context, state) {
-          DateTime focusedDate = state.focusedDate;
+          actions: [
+            Padding(
+              padding:
+                  const EdgeInsets.only(right: 8.0), // Add padding to the right
+              child: IconButton(
+                icon: const HugeIcon(
+                  color: AppTheme.text,
+                  icon: HugeIcons.strokeRoundedSettings02,
+                ),
+                color: AppTheme.text,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SettingsScreen()));
+                },
+              ),
+            ),
+          ],
+        ),
+        body: BlocBuilder<CalendarBloc, CalendarState>(
+          builder: (context, state) {
+            DateTime focusedDate = state.focusedDate;
 
-          final String currentYear = DateFormat('yyyy').format(focusedDate);
-          final String currentMonth = DateFormat('MMMM').format(focusedDate);
+            final String currentYear = DateFormat('yyyy').format(focusedDate);
+            final String currentMonth = DateFormat('MMMM').format(focusedDate);
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Column(children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text(
-                        currentYear,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                        currentMonth.toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: BlocBuilder<MoodBloc, MoodBlocState>(
-                      builder: (context, moodState) {
-                        if (moodState is GetMonthlyMoodsLoaded) {
-                          moodMap = {
-                            for (var entry in moodState.moods!.entries)
-                              entry.key: entry.value.mood
-                          };
-                        }
-                        return TableCalendar(
-                          firstDay: DateTime.utc(2010, 10, 16),
-                          lastDay: DateTime.utc(2030, 3, 14),
-                          focusedDay: focusedDate,
-                          headerVisible: false,
-                          daysOfWeekVisible: false,
-                          onDaySelected: (selectedDay, focusedDay) {
-                            final now = DateTime.now();
-                            final normalizedSelectedDay = DateTime(
-                                selectedDay.year,
-                                selectedDay.month,
-                                selectedDay.day);
-                            final normalizedNow =
-                                DateTime(now.year, now.month, now.day);
-
-                            if (normalizedSelectedDay.isAfter(normalizedNow)) {
-                              // Do nothing or show a message that future journaling is not allowed
-                              return;
-                            } else {
-                              showMoodDialog(selectedDay);
-                            }
-                          },
-                          onPageChanged: (newFocusedMonth) {
-                            context
-                                .read<CalendarBloc>()
-                                .add(ChangeFocusedMonth(newFocusedMonth));
-                            context.read<MoodBloc>().add(GetMonthlyMoodEvent(
-                                  newFocusedMonth,
-                                ));
-                          },
-                          calendarStyle: const CalendarStyle(
-                            outsideDaysVisible:
-                                false, // Hides prev/next month days
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Column(children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          currentYear,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
                           ),
-                          calendarBuilders: CalendarBuilders(
-                            todayBuilder: (context, date, _) {
-                              final key =
-                                  DateTime(date.year, date.month, date.day);
-                              final mood = moodMap[key];
-                              if (mood != null) {
-                                // mood exists → show icon
-                                return Center(
-                                    child: Image.asset(mood,
-                                        height: 30, width: 30));
-                              }
-                              // no mood → draw today circle + day number
-                              return Center(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: AppTheme.primary,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '${date.day}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            },
-                            defaultBuilder: (context, date, _) {
-                              final normalizedDate =
-                                  DateTime(date.year, date.month, date.day);
-                              final mood = moodMap[normalizedDate];
+                        ),
+                        Text(
+                          currentMonth.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: BlocBuilder<MoodBloc, MoodBlocState>(
+                        builder: (context, moodState) {
+                          if (moodState is GetMonthlyMoodsLoaded) {
+                            moodMap = {
+                              for (var entry in moodState.moods!.entries)
+                                entry.key: entry.value.mood
+                            };
+                          }
+                          return TableCalendar(
+                            firstDay: DateTime.utc(2010, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: focusedDate,
+                            headerVisible: false,
+                            daysOfWeekVisible: false,
+                            onDaySelected: (selectedDay, focusedDay) {
+                              final now = DateTime.now();
+                              final normalizedSelectedDay = DateTime(
+                                  selectedDay.year,
+                                  selectedDay.month,
+                                  selectedDay.day);
+                              final normalizedNow =
+                                  DateTime(now.year, now.month, now.day);
 
-                              if (mood != null) {
-                                return Center(
-                                  child:
-                                      Image.asset(mood, height: 30, width: 30),
-                                );
+                              if (normalizedSelectedDay
+                                  .isAfter(normalizedNow)) {
+                                // Do nothing or show a message that future journaling is not allowed
+                                return;
+                              } else {
+                                showMoodDialog(selectedDay);
                               }
-                              if (date.weekday == DateTime.sunday ||
-                                  date.weekday == DateTime.saturday) {
+                            },
+                            onPageChanged: (newFocusedMonth) {
+                              context
+                                  .read<CalendarBloc>()
+                                  .add(ChangeFocusedMonth(newFocusedMonth));
+                              context.read<MoodBloc>().add(GetMonthlyMoodEvent(
+                                    newFocusedMonth,
+                                  ));
+                            },
+                            calendarStyle: const CalendarStyle(
+                              outsideDaysVisible:
+                                  false, // Hides prev/next month days
+                            ),
+                            calendarBuilders: CalendarBuilders(
+                              todayBuilder: (context, date, _) {
+                                final key =
+                                    DateTime(date.year, date.month, date.day);
+                                String docId =
+                                    DateFormat('yyyy-MM-dd').format(key);
+                                final mood = moodMap[docId];
+                                if (mood != null) {
+                                  // mood exists → show icon
+                                  return Center(
+                                      child: Image.asset(mood,
+                                          height: 30, width: 30));
+                                }
+                                // no mood → draw today circle + day number
                                 return Center(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: AppTheme.primary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    alignment: Alignment.center,
                                     child: Text(
-                                  '${date.day}',
-                                  style: TextStyle(
-                                    color: date.weekday == DateTime.sunday
-                                        ? AppTheme.red
-                                        : date.weekday == DateTime.saturday
-                                            ? AppTheme.blue
-                                            : null,
-                                  ),
-                                ));
-                              }
-                              if (date.isAfter(now)) {
-                                return Center(
-                                  //we overriding default, default wraps in center
-                                  child: Text(
-                                    '${date.day}',
-                                    style: TextStyle(
-                                      color: AppTheme
-                                          .text2, // Lighter color for future dates
+                                      '${date.day}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 );
-                              }
-                              return null;
-                            },
-                          ),
-                        );
-                      },
-                    ),
+                              },
+                              defaultBuilder: (context, date, _) {
+                                final stringDate =
+                                    DateFormat('yyyy-MM-dd').format(date);
+                                final mood = moodMap[stringDate];
+                                if (mood != null) {
+                                  return Center(
+                                    child: Image.asset(mood,
+                                        height: 30, width: 30),
+                                  );
+                                }
+                                if (date.weekday == DateTime.sunday ||
+                                    date.weekday == DateTime.saturday) {
+                                  return Center(
+                                      child: Text(
+                                    '${date.day}',
+                                    style: TextStyle(
+                                      color: date.weekday == DateTime.sunday
+                                          ? AppTheme.red
+                                          : date.weekday == DateTime.saturday
+                                              ? AppTheme.blue
+                                              : null,
+                                    ),
+                                  ));
+                                }
+                                if (date.isAfter(now)) {
+                                  return Center(
+                                    //we overriding default, default wraps in center
+                                    child: Text(
+                                      '${date.day}',
+                                      style: TextStyle(
+                                        color: AppTheme
+                                            .text2, // Lighter color for future dates
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return null;
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ]),
+                  FloatingActionButton(
+                    foregroundColor: AppTheme.text,
+                    backgroundColor: AppTheme.primary,
+                    onPressed: () {
+                      showMoodDialog(DateTime.now());
+                    },
+                    child: const Icon(Icons.add),
                   )
-                ]),
-                FloatingActionButton(
-                  foregroundColor: AppTheme.text,
-                  backgroundColor: AppTheme.primary,
-                  onPressed: () {
-                    showMoodDialog(DateTime.now());
-                  },
-                  child: const Icon(Icons.add),
-                )
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

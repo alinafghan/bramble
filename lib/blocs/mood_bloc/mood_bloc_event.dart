@@ -9,7 +9,7 @@ abstract class MoodBlocEvent extends Equatable {
 
 class SetMoodEvent extends MoodBlocEvent {
   final String moodAsset;
-  final DateTime date;
+  final String date;
 
   const SetMoodEvent(this.date, this.moodAsset);
 
