@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
@@ -25,6 +26,7 @@ class JournalScreen extends StatefulWidget {
 }
 
 class _JournalScreenState extends State<JournalScreen> {
+  bool _isEditable = false;
   Journal? journal;
   final TextEditingController journalController = TextEditingController();
   final List<String> _selectedImages = [];
@@ -104,6 +106,9 @@ class _JournalScreenState extends State<JournalScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 12.0),
                 child: PopupMenu2(
+                    onEdit: () {
+                      _isEditable = true;
+                    },
                     date: DateFormat('yyyy-MM-dd').format(widget.selectedDate)),
               )
             ],
@@ -187,13 +192,14 @@ class _JournalScreenState extends State<JournalScreen> {
                     child: BlocBuilder<GetJournalBloc, GetJournalState>(
                       builder: (context, state) {
                         if (state is GetJournalLoading) {
-                          return const TextField(
-                            style: TextStyle(
+                          return TextField(
+                            readOnly: !_isEditable,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                               color: AppTheme.text,
                             ),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               // The hint will be used only if the controller's text is empty.
                               hintText: 'Loading...',
                               hintStyle: TextStyle(
@@ -215,27 +221,34 @@ class _JournalScreenState extends State<JournalScreen> {
                           journalController.text = journal!.content;
                           _hasInitializedContent = true;
                         }
-                        return TextField(
-                          controller: journalController,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: AppTheme.text,
-                          ),
-                          decoration: const InputDecoration(
-                            // The hint will be used only if the controller's text is empty.
-                            hintText: 'What\'s on your mind?',
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          maxLines: null, // Allows multiline input
-                          textInputAction: TextInputAction.done,
-                          onSubmitted: (value) {
-                            _saveJournalEntry(); // Save on Enter key
+                        return BlocBuilder<TaskCubitCubit, TaskCubitState>(
+                          builder: (context, taskState) {
+                            final bool isEditable =
+                                taskState is EditTextfieldOn;
+                            return TextField(
+                              readOnly: !isEditable,
+                              controller: journalController,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: AppTheme.text,
+                              ),
+                              decoration: const InputDecoration(
+                                // The hint will be used only if the controller's text is empty.
+                                hintText: 'What\'s on your mind?',
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                              maxLines: null, // Allows multiline input
+                              textInputAction: TextInputAction.done,
+                              onSubmitted: (value) {
+                                _saveJournalEntry(); // Save on Enter key
+                              },
+                            );
                           },
                         );
                       },
