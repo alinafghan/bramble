@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/models/book.dart';
@@ -78,20 +79,14 @@ class _BookScreenState extends State<BookScreen> {
                         Column(children: [
                           IconButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return BookReviewsScreen(book: state.book);
-                                }));
+                                context.push('/book_review', extra: state.book);
                               },
                               icon: const HugeIcon(
                                   icon: HugeIcons.strokeRoundedEye,
                                   color: AppTheme.primary)),
                           IconButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return SetReviewScreen(book: state.book);
-                                }));
+                                context.push('/review', extra: state.book);
                               },
                               icon: const HugeIcon(
                                   icon: HugeIcons.strokeRoundedAddCircleHalfDot,

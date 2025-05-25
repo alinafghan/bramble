@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/screens/booklist_screen.dart';
 import 'package:journal_app/screens/home_screen.dart';
@@ -60,12 +61,7 @@ class PopupMenuState extends State<PopupMenu> {
               ),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              context.push('/home');
             },
           ),
           PopupMenuItem<String>(
@@ -82,12 +78,7 @@ class PopupMenuState extends State<PopupMenu> {
               ),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BooklistScreen(),
-                ),
-              );
+              context.push('/booklist');
             },
           ),
           PopupMenuItem<String>(

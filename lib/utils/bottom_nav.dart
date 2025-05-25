@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -105,7 +106,7 @@ class _BottomNavState extends State<BottomNav> {
             IconButton(
                 onPressed: () {
                   widget.onSave();
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 icon: const HugeIcon(
                   icon: HugeIcons.strokeRoundedTick02,

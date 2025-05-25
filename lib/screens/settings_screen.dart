@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
-import 'package:journal_app/screens/splash_screen.dart';
 import '../utils/constants.dart';
-import 'about_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.pop();
           },
           icon: const HugeIcon(
             icon: HugeIcons.strokeRoundedArrowLeft02,
@@ -103,12 +102,7 @@ class SettingsScreen extends StatelessWidget {
                   color: AppTheme.text,
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AboutScreen(),
-                    ),
-                  );
+                  context.push('/home/settings/about');
                 },
               ),
               ListTile(
@@ -132,7 +126,7 @@ class SettingsScreen extends StatelessWidget {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              context.pop();
                             },
                             child: const Text('Cancel'),
                           ),
@@ -140,12 +134,7 @@ class SettingsScreen extends StatelessWidget {
                             onPressed: () async {
                               await MyAuthProvider().signOut();
                               if (context.mounted) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SplashScreen()),
-                                  (Route<dynamic> route) => false,
-                                );
+                                context.go('/');
                               }
                             },
                             child: const Text('Sign Out'),
@@ -177,7 +166,7 @@ class SettingsScreen extends StatelessWidget {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              context.pop();
                             },
                             child: const Text('Cancel'),
                           ),
@@ -186,12 +175,7 @@ class SettingsScreen extends StatelessWidget {
                               //delete account logic
                               context.read<MyAuthProvider>().deleteUser();
                               if (context.mounted) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SplashScreen()),
-                                  (Route<dynamic> route) => false,
-                                );
+                                context.go('/');
                               }
                             },
                             child: const Text('Delete'),

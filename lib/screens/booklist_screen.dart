@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
 import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
@@ -56,10 +57,7 @@ class _BooklistScreenState extends State<BooklistScreen> {
               ),
               color: AppTheme.text,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LibraryScreen()));
+                context.push('/library');
               },
             ),
           ),

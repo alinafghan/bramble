@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
@@ -25,7 +26,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onVerticalDragDown: (_) {
-        Navigator.pop(context);
+        context.pop();
       },
       child: Scaffold(
         appBar: AppBar(),

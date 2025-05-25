@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/models/book.dart';
@@ -49,7 +50,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                 TextButton(
                     onPressed: () {
                       setReview(context, widget.book);
-                      Navigator.pop(context);
+                      context.pop(); // Navigate back after posting the review
                     },
                     child: const Text('Post Review')),
               ],

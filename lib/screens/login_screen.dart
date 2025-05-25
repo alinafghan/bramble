@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:journal_app/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,8 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     User? user = await _auth.emailLogin(emailOrusername, password);
 
     if (user != null && mounted) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      context.go('/home');
     }
   }
 

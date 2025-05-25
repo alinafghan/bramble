@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'signup_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -16,10 +15,7 @@ class SplashScreen extends StatelessWidget {
           const Text('Bramble', style: TextStyle(fontSize: 36)),
           TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+                context.go('/login');
               },
               child: const Text(
                 'Log In',
@@ -27,10 +23,7 @@ class SplashScreen extends StatelessWidget {
               )),
           TextButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SignupScreen()));
+              context.go('/signup');
             },
             child: const Text(
               'Sign up',

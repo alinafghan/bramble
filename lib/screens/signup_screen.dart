@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/screens/home_screen.dart';
@@ -39,8 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (user2 != null && mounted) {
       //TODO//add toast message
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
+      context.go('/home');
     }
   }
 
@@ -57,10 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
       await _provider.saveUserToFirestore(user2);
 
       if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        context.go('/home');
       }
     }
   }

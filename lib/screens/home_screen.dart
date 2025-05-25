@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // For formatting the date
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
-import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
-import 'package:journal_app/providers/journal_provider/journal_provider.dart';
-import 'package:journal_app/screens/journal_list_screen.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:hugeicons/hugeicons.dart';
 import '../utils/constants.dart';
-import 'journal_screen.dart';
-import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,29 +33,36 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     void goToJournal(DateTime selectedDay, String mood) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider<SetJournalBloc>(
-                create: (context) =>
-                    SetJournalBloc(provider: JournalProvider()),
-              ),
-              BlocProvider<GetJournalBloc>(
-                create: (context) =>
-                    GetJournalBloc(provider: JournalProvider()),
-              ),
-            ],
-            child: KeyboardVisibilityProvider(
-              child: JournalScreen(
-                selectedDate: selectedDay,
-                mood: mood,
-              ),
-            ),
-          ),
-        ),
+      final encodedMood = Uri.encodeComponent(mood);
+      final encodedDate = Uri.encodeComponent(selectedDay.toIso8601String());
+      print('Selected Day: $encodedDate, Mood: $encodedMood');
+      context.push(
+        '/home/journal/$encodedDate/$encodedMood',
       );
+      print('Navigating to journal with date: $selectedDay and mood: $mood');
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => MultiBlocProvider(
+      //       providers: [
+      //         BlocProvider<SetJournalBloc>(
+      //           create: (context) =>
+      //               SetJournalBloc(provider: JournalProvider()),
+      //         ),
+      //         BlocProvider<GetJournalBloc>(
+      //           create: (context) =>
+      //               GetJournalBloc(provider: JournalProvider()),
+      //         ),
+      //       ],
+      //       child: KeyboardVisibilityProvider(
+      //         child: JournalScreen(
+      //           selectedDate: selectedDay,
+      //           mood: mood,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
 
     void onMoodSelected(String moodAsset, DateTime selectedDay) {
@@ -99,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       final moodAsset = moods[i];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          context.pop();
                           onMoodSelected(moodAsset, selectedDay);
                         },
                         child: Image.asset(
@@ -124,10 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
         for (var entry in moodMap.entries) {
           print('Mood for ${entry.key}: ${entry.value}');
         }
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => JournalListScreen(moodMap: moodMap)));
+        context.push('/home/journal_list', extra: moodMap);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -155,10 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 color: AppTheme.text,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SettingsScreen()));
+                  context.push('/home/settings');
                 },
               ),
             ),

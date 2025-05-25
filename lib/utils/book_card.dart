@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/screens/book_screen.dart';
@@ -23,7 +24,7 @@ class BookCard extends StatelessWidget {
               TextButton(
                   onPressed: () {
                     context.read<AddBookCubit>().addBook(book);
-                    Navigator.pop(context);
+                    context.pop(); // Close the dialog
                   },
                   child: const Text('Add'))
             ],
@@ -36,8 +37,7 @@ class BookCard extends StatelessWidget {
     return Stack(clipBehavior: Clip.none, children: [
       GestureDetector(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BookScreen(book: book)));
+          context.push('/book', extra: book);
         },
         child: Card(
           // Remove shadow

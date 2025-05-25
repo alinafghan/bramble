@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart'; // For formatting the date
 import '../utils/constants.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -12,7 +13,7 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.pop();
           },
           icon: const HugeIcon(
             icon: HugeIcons.strokeRoundedArrowLeft02,
