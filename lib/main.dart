@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
-import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
-import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
-import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
-import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
+import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
 import 'package:journal_app/my_app_view.dart';
 import 'package:journal_app/providers/journal_provider/journal_provider.dart';
 import 'package:journal_app/providers/library_provider/library_provider.dart';
@@ -59,22 +57,16 @@ class MyApp extends StatelessWidget {
       BlocProvider<GetLibraryBloc>(
         create: (_) => GetLibraryBloc(provider: LibraryProvider()),
       ),
-      BlocProvider<GetReviewForBookCubit>(
-        create: (_) => GetReviewForBookCubit(provider: ReviewProvider()),
-      ),
-      BlocProvider<SetReviewCubit>(
-          create: (_) => SetReviewCubit(provider: ReviewProvider())),
+      BlocProvider<ReviewCubit>(
+          create: (_) => ReviewCubit(provider: ReviewProvider())),
       BlocProvider<AuthenticationBloc>(
           create: (_) =>
               AuthenticationBloc(authRepository: FirebaseAuthRepository())),
       BlocProvider<MoodBloc>(
         create: (_) => MoodBloc(provider: MoodProvider()),
       ),
-      BlocProvider<GetJournalBloc>(
-        create: (_) => GetJournalBloc(provider: JournalProvider()),
-      ),
-      BlocProvider<SetJournalBloc>(
-        create: (_) => SetJournalBloc(provider: JournalProvider()),
+      BlocProvider<JournalBloc>(
+        create: (_) => JournalBloc(provider: JournalProvider()),
       ),
     ], child: const MyAppView());
   }

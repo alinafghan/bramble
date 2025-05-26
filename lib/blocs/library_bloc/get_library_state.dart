@@ -75,8 +75,8 @@ final class SearchBookError extends LibraryState {
 }
 
 final class SearchCleared extends LibraryState {
-  List<Book> libraryBooks = [];
-  SearchCleared({required this.libraryBooks});
+  final List<Book> libraryBooks;
+  const SearchCleared({required this.libraryBooks});
   @override
   List<Object> get props => [libraryBooks];
 }

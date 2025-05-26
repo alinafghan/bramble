@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
-import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
+import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
@@ -19,7 +18,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GetReviewForBookCubit>().getReviewForBook(widget.book);
+    context.read<ReviewCubit>().getReviewForBook(widget.book);
   }
 
   @override
@@ -28,7 +27,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
       appBar: AppBar(
         title: Text('${widget.book.title} Reviews'),
       ),
-      body: BlocBuilder<GetReviewForBookCubit, GetReviewForBookState>(
+      body: BlocBuilder<ReviewCubit, ReviewState>(
         builder: (context, state) {
           if (state is GetReviewForBookLoading) {
             return const SizedBox.shrink();
@@ -102,15 +101,15 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                             : Colors.grey,
                       ),
                       onPressed: () {
-                        context.read<SetReviewCubit>().likeReview(review);
+                        context.read<ReviewCubit>().likeReview(review);
                       },
                     ),
-                    BlocListener<SetReviewCubit, SetReviewState>(
+                    BlocListener<ReviewCubit, ReviewState>(
                       listener: (context, state) {
                         if (state is SetReviewSuccess) {
                           // Update the review list after liking a review
                           context
-                              .read<GetReviewForBookCubit>()
+                              .read<ReviewCubit>()
                               .getReviewForBook(widget.book);
                         }
                       },

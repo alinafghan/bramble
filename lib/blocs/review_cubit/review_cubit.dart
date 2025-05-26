@@ -4,12 +4,12 @@ import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/providers/review_provider/review_provider.dart';
 
-part 'set_review_state.dart';
+part 'review_state.dart';
 
-class SetReviewCubit extends Cubit<SetReviewState> {
+class ReviewCubit extends Cubit<ReviewState> {
   ReviewProvider reviewProvider = ReviewProvider();
 
-  SetReviewCubit({required ReviewProvider provider})
+  ReviewCubit({required ReviewProvider provider})
       : reviewProvider = provider,
         super(SetReviewInitial());
 
@@ -39,6 +39,16 @@ class SetReviewCubit extends Cubit<SetReviewState> {
       }
     } catch (e) {
       emit(LikeReviewFailure(e.toString()));
+    }
+  }
+
+  void getReviewForBook(Book book) async {
+    emit(GetReviewForBookLoading());
+    try {
+      final result = await reviewProvider.getReviewsForBook(book);
+      emit(GetReviewForBookSuccess(result));
+    } catch (e) {
+      emit(GetReviewForBookFailure(e.toString()));
     }
   }
 }

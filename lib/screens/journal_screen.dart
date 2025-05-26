@@ -5,9 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
-import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
-import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/user_provider/user_provider.dart';
@@ -53,7 +52,7 @@ class _JournalScreenState extends State<JournalScreen> {
     String docId = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
     String id = user.userId + docId;
     if (mounted) {
-      context.read<GetJournalBloc>().add(GetJournal(id: id));
+      context.read<JournalBloc>().add(GetJournal(id: id));
     }
   }
 
@@ -75,7 +74,7 @@ class _JournalScreenState extends State<JournalScreen> {
         user: Users(userId: '', email: ''),
       );
     }
-    context.read<SetJournalBloc>().add(SetJournal(journal: journal!));
+    context.read<JournalBloc>().add(SetJournal(journal: journal!));
   }
 
   @override
@@ -142,7 +141,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                       .read<MoodBloc>()
                                       .add(DeleteMoodEvent(date));
                                   context
-                                      .read<SetJournalBloc>()
+                                      .read<JournalBloc>()
                                       .add(DeleteJournal(date: date));
 
                                   context.pop();
@@ -176,22 +175,22 @@ class _JournalScreenState extends State<JournalScreen> {
                   ),
                 ),
                 // Listen for SetJournalLoaded event
-                BlocListener<SetJournalBloc, SetJournalState>(
+                BlocListener<JournalBloc, JournalState>(
                   listener: (context, setListenerState) {
                     if (setListenerState is SetJournalSuccess) {
                       context
-                          .read<GetJournalBloc>()
+                          .read<JournalBloc>()
                           .add(GetJournal(id: setListenerState.journal.id));
                       journal = setListenerState.journal;
                     }
                   },
-                  child: BlocListener<GetJournalBloc, GetJournalState>(
+                  child: BlocListener<JournalBloc, JournalState>(
                     listener: (context, getListenerState) {
                       if (getListenerState is GetJournalSuccess) {
                         journal = getListenerState.journal;
                       }
                     },
-                    child: BlocBuilder<GetJournalBloc, GetJournalState>(
+                    child: BlocBuilder<JournalBloc, JournalState>(
                       builder: (context, state) {
                         if (state is GetJournalSuccess) {
                           // Rebuild the carousel if images are updated
@@ -227,7 +226,7 @@ class _JournalScreenState extends State<JournalScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 24.0, right: 24.0, bottom: 24.0),
-                    child: BlocBuilder<GetJournalBloc, GetJournalState>(
+                    child: BlocBuilder<JournalBloc, JournalState>(
                       builder: (context, state) {
                         if (state is GetJournalLoading) {
                           return TextField(

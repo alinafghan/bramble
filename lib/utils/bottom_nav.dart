@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,7 +51,7 @@ class _BottomNavState extends State<BottomNav> {
       }
 
       if (mounted) {
-        context.read<SetJournalBloc>().add(
+        context.read<JournalBloc>().add(
               AddImage(journal: journal, image: savedPaths),
             );
       }

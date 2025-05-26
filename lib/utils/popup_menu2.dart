@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
-import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/utils/constants.dart';
 
 class PopupMenu2 extends StatefulWidget {
@@ -17,7 +17,7 @@ class PopupMenu2 extends StatefulWidget {
 }
 
 class PopupMenuState2 extends State<PopupMenu2> {
-  String _selectedValue = 'None'; // To track the selected value
+  final String _selectedValue = 'None'; // To track the selected value
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class PopupMenuState2 extends State<PopupMenu2> {
               ],
             ),
             onTap: () {
-              context.read<SetJournalBloc>().add(
+              context.read<JournalBloc>().add(
                     DeleteJournal(date: widget.date),
                   );
               context.pop();

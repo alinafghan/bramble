@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // For formatting the date
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
-import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/utils/popup_menu.dart';
@@ -96,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onVerticalDragStart: (_) {
         final focusedMonth = context.read<CalendarBloc>().state.focusedDate;
-        context
-            .read<GetJournalBloc>()
-            .add(GetMonthlyJournal(month: focusedMonth));
+        context.read<JournalBloc>().add(GetMonthlyJournal(month: focusedMonth));
         context.push('/home/journal_list', extra: moodMap);
       },
       child: Scaffold(
@@ -198,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                             onPageChanged: (newFocusedMonth) {
-                              context.read<GetJournalBloc>().add(
+                              context.read<JournalBloc>().add(
                                   GetMonthlyJournal(month: newFocusedMonth));
                               context
                                   .read<CalendarBloc>()

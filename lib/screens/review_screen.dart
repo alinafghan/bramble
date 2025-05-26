@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
+import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/models/user.dart';
@@ -35,7 +35,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<SetReviewCubit, SetReviewState>(
+      body: BlocBuilder<ReviewCubit, ReviewState>(
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -85,7 +85,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
   }
 
   void setReview(BuildContext context, Book book) {
-    context.read<SetReviewCubit>().setReview(
+    context.read<ReviewCubit>().setReview(
           Review(
             id: '',
             user: Users(userId: '', email: ''), //current user,

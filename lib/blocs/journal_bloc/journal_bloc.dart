@@ -4,13 +4,13 @@ import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/providers/journal_provider/journal_provider.dart';
 import 'package:meta/meta.dart';
 
-part 'set_journal_event.dart';
-part 'set_journal_state.dart';
+part 'journal_event.dart';
+part 'journal_state.dart';
 
-class SetJournalBloc extends Bloc<SetJournalEvent, SetJournalState> {
+class JournalBloc extends Bloc<JournalEvent, JournalState> {
   JournalProvider journalProvider = JournalProvider();
 
-  SetJournalBloc({required JournalProvider provider})
+  JournalBloc({required JournalProvider provider})
       : journalProvider = provider,
         super(SetJournalLoading()) {
     on<SetJournal>((event, emit) async {
@@ -39,6 +39,25 @@ class SetJournalBloc extends Bloc<SetJournalEvent, SetJournalState> {
         emit(DeleteJournalSuccess());
       } catch (e) {
         emit(DeleteJournalFailure());
+      }
+    });
+    on<GetJournal>((event, emit) async {
+      emit(GetJournalLoading());
+      try {
+        Journal? journal = await journalProvider.getJournal(event.id);
+        emit(GetJournalSuccess(journal: journal!));
+      } catch (e) {
+        emit(GetJournalFailure());
+      }
+    });
+    on<GetMonthlyJournal>((event, emit) async {
+      emit(GetMonthlyJournalLoading());
+      try {
+        List<Journal> journal =
+            await journalProvider.getMonthlyJournal(event.month);
+        emit(GetMonthlyJournalSuccess(journals: journal));
+      } catch (e) {
+        emit(GetMonthlyJournalError());
       }
     });
   }

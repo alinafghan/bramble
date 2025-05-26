@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
-import 'package:journal_app/models/journal.dart';
+import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:lottie/lottie.dart';
 
 class JournalListScreen extends StatefulWidget {
@@ -30,14 +29,13 @@ class _JournalListScreenState extends State<JournalListScreen> {
       child: Scaffold(
         body: Padding(
             padding: const EdgeInsets.only(top: 20.0),
-            child: BlocBuilder<GetJournalBloc, GetJournalState>(
+            child: BlocBuilder<JournalBloc, JournalState>(
                 builder: (context, state) {
               if (state is GetMonthlyJournalSuccess) {
                 if (state.journals.isNotEmpty) {
                   return ListView.builder(
                     itemCount: state.journals.length,
                     itemBuilder: (context, index) {
-                      print('Building journal item at index: $index');
                       final journal = state.journals[index];
 
                       final DateTime parsedDate = DateTime.parse(journal.date);
@@ -47,9 +45,6 @@ class _JournalListScreenState extends State<JournalListScreen> {
                           DateFormat('d').format(parsedDate); // e.g., "1"
                       final String currentDay = DateFormat('EEEE')
                           .format(parsedDate); // e.g., "Wednesday"
-
-                      print('Journal date: ${journal.date}');
-                      print('Mood date: ${widget.moodMap[journal.date]}');
 
                       if (state.journals.isNotEmpty) {
                         return Column(

@@ -30,8 +30,8 @@ class SearchBook extends GetLibraryEvent {
 }
 
 class ClearSearch extends GetLibraryEvent {
-  List<Book> books;
-  ClearSearch({required this.books});
+  final List<Book> books;
+  const ClearSearch({required this.books});
   @override
   List<Object> get props => [books];
 }
