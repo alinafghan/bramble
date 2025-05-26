@@ -19,3 +19,19 @@ class GetBookDetails extends GetLibraryEvent {
   @override
   List<Object> get props => [input];
 }
+
+class SearchBook extends GetLibraryEvent {
+  final String keyword;
+
+  const SearchBook({required this.keyword});
+
+  @override
+  List<Object> get props => [keyword];
+}
+
+class ClearSearch extends GetLibraryEvent {
+  List<Book> books;
+  ClearSearch({required this.books});
+  @override
+  List<Object> get props => [books];
+}

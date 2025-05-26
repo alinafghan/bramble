@@ -8,7 +8,6 @@ import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
-import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/my_app_view.dart';
@@ -68,9 +67,6 @@ class MyApp extends StatelessWidget {
       BlocProvider<AuthenticationBloc>(
           create: (_) =>
               AuthenticationBloc(authRepository: FirebaseAuthRepository())),
-      BlocProvider<SearchBookCubit>(
-        create: (_) => SearchBookCubit(provider: LibraryProvider()),
-      ),
       BlocProvider<MoodBloc>(
         create: (_) => MoodBloc(provider: MoodProvider()),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
-import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
+import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
+import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/book_card.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/animated_searchbar.dart';
@@ -17,6 +17,7 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenState extends State<LibraryScreen> {
   final TextEditingController searchText = TextEditingController();
   bool isSearching = false;
+  List<Book> libraryBooks = [];
 
   @override
   void initState() {
@@ -27,14 +28,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      // const SizedBox(
-      //   child: Image(
-      //     image: AssetImage('assets/white-paper-texture-background.jpg'),
-      //     fit: BoxFit.cover,
-      //     height: double.infinity,
-      //     width: double.infinity,
-      //   ),
-      // ),
       Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
@@ -53,9 +46,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 textController: searchText,
                 onSuffixTap: () {
                   searchText.clear();
-                  context
-                      .read<SearchBookCubit>()
-                      .clearSearch(); // Reset to show cached data
+                  context.read<GetLibraryBloc>().add(ClearSearch(
+                      books: libraryBooks)); // Reset to show cached data
                 },
                 rtl: false,
                 onSubmitted: (String value) {
@@ -75,44 +67,39 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<SearchBookCubit, SearchBookState>(
-            builder: (context, searchState) {
-              return BlocBuilder<GetLibraryBloc, GetLibraryState>(
-                builder: (context, libraryState) {
-                  List libraryBooks = [];
-                  List searchedBooks = [];
-                  List books = [];
+          child: BlocBuilder<GetLibraryBloc, LibraryState>(
+            builder: (context, libraryState) {
+              List searchedBooks = [];
+              List books = [];
 
-                  if (searchState is SearchBookLoaded) {
-                    searchedBooks = searchState.books;
-                    books = searchedBooks;
-                  } else if (libraryState is GetLibraryLoaded) {
-                    libraryBooks = libraryState.booklist;
-                    books = libraryBooks;
-                  } else if (searchState is SearchCleared) {
-                    books = libraryBooks;
-                  }
+              if (libraryState is SearchBookLoaded) {
+                searchedBooks = libraryState.books; //searchedbooks are saved
+                books = searchedBooks; //displayed booksare the searched books
+              } else if (libraryState is GetLibraryLoaded) {
+                libraryBooks = libraryState.booklist; //all books are fetched
+                books = libraryBooks; //displayed books are all books
+              } else if (libraryState is SearchCleared) {
+                books =
+                    libraryState.libraryBooks; //sdisplayed books are all books?
+              }
 
-                  if (books.isEmpty) {
-                    return Center(
-                      child: Lottie.asset('assets/plant.json'),
-                    );
-                  }
+              if (books.isEmpty) {
+                return Center(
+                  child: Lottie.asset('assets/plant.json'),
+                );
+              }
 
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 0.5,
-                    ),
-                    itemCount: books.length,
-                    clipBehavior: Clip.none,
-                    itemBuilder: (context, i) {
-                      return BookCard(book: books[i]);
-                    },
-                  );
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 0.5,
+                ),
+                itemCount: books.length,
+                clipBehavior: Clip.none,
+                itemBuilder: (context, i) {
+                  return BookCard(book: books[i]);
                 },
               );
             },
@@ -129,6 +116,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   Future<void> searchLibrary(String value) async {
-    context.read<SearchBookCubit>().searchBooks(value);
+    context.read<GetLibraryBloc>().add(SearchBook(keyword: value));
   }
 }

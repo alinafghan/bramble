@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
+import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
@@ -27,7 +27,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<GetLibraryBloc, GetLibraryState>(
+      body: BlocBuilder<GetLibraryBloc, LibraryState>(
         builder: (context, state) {
           if (state is GetAllBooksLoaded) {
             return SingleChildScrollView(

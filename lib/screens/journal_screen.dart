@@ -4,7 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/get_review_for_book/cubit/task_cubit_cubit.dart';
+import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
