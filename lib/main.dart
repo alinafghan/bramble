@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:journal_app/blocs/get_review_for_book/cubit/task_cubit_cubit.dart';
+import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/blocs/get_review_for_book/get_review_for_book_cubit.dart';
-import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
-import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
+import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
+import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
-import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
 import 'package:journal_app/blocs/search_book_cubit/search_book_cubit.dart';
 import 'package:journal_app/blocs/set_journal_bloc/set_journal_bloc.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
@@ -53,14 +51,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider<RemoveBookCubit>(
-        create: (_) => RemoveBookCubit(provider: BookListProvider()),
-      ),
-      BlocProvider<GetSavedBooksCubit>(
-        create: (_) => GetSavedBooksCubit(provider: BookListProvider()),
-      ),
-      BlocProvider<AddBookCubit>(
-        create: (_) => AddBookCubit(provider: BookListProvider()),
+      BlocProvider<BookListCubit>(
+        create: (_) => BookListCubit(provider: BookListProvider()),
       ),
       BlocProvider<TaskCubitCubit>(
         create: (_) => TaskCubitCubit(),

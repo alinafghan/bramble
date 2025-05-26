@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/get_saved_books_cubit/get_saved_books_cubit.dart';
-import 'package:journal_app/blocs/remove_book_cubit/remove_book_cubit.dart';
+import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
@@ -31,7 +30,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      context.read<RemoveBookCubit>().removeBook(book);
+                      context.read<BookListCubit>().removeBook(book);
                       context.pop();
                     },
                     child: const Text('Yes')),
@@ -45,7 +44,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
           });
     }
 
-    return BlocBuilder<GetSavedBooksCubit, GetAllBooksState>(
+    return BlocBuilder<BookListCubit, SavedBooksState>(
       builder: (context, state) {
         List<Book> items = [];
         if (state is GetAllBooksLoaded) {

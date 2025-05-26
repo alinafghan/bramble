@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:journal_app/blocs/add_book_cubit/add_book_cubit.dart';
+import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/screens/book_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +22,7 @@ class BookCard extends StatelessWidget {
             children: [
               TextButton(
                   onPressed: () {
-                    context.read<AddBookCubit>().addBook(book);
+                    context.read<BookListCubit>().addBook(book);
                     context.pop(); // Close the dialog
                   },
                   child: const Text('Add'))
