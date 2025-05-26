@@ -80,6 +80,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
           );
         },
       ),
+      bottomNavigationBar: bottomNav(),
     );
   }
 
