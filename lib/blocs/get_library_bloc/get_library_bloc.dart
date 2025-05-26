@@ -21,5 +21,14 @@ class GetLibraryBloc extends Bloc<GetLibraryEvent, GetLibraryState> {
         emit(GetLibraryFailed());
       }
     });
+    on<GetBookDetails>((event, emit) async {
+      emit(GetBookDetailsInitial());
+      try {
+        Book book = await libraryProvider.getBookDetails(event.input);
+        emit(GetAllBooksLoaded(book: book));
+      } catch (e) {
+        emit(GetBookDetailsError(message: e.toString()));
+      }
+    });
   }
 }

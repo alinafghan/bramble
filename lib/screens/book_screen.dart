@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
+import 'package:journal_app/blocs/get_library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/screens/review_screen.dart';
-import 'package:journal_app/screens/reviews_book_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,7 +19,7 @@ class BookScreen extends StatefulWidget {
 class _BookScreenState extends State<BookScreen> {
   @override
   void initState() {
-    context.read<GetBookDetailsCubit>().getBookDetails(widget.book);
+    context.read<GetLibraryBloc>().add(GetBookDetails(input: widget.book));
     super.initState();
   }
 
@@ -29,7 +27,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<GetBookDetailsCubit, GetBookDetailsState>(
+      body: BlocBuilder<GetLibraryBloc, GetLibraryState>(
         builder: (context, state) {
           if (state is GetAllBooksLoaded) {
             return SingleChildScrollView(

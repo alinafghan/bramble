@@ -10,3 +10,12 @@ class GetLibraryEvent extends Equatable {
 class GetLibrary extends GetLibraryEvent {
   const GetLibrary();
 }
+
+class GetBookDetails extends GetLibraryEvent {
+  final Book input;
+
+  const GetBookDetails({required this.input});
+
+  @override
+  List<Object> get props => [input];
+}

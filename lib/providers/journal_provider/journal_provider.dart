@@ -1,4 +1,3 @@
-import 'package:journal_app/blocs/get_journal_bloc/get_journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/repositories/journal_repository.dart';
 

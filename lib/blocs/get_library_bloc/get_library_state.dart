@@ -18,3 +18,30 @@ class GetLibraryLoaded extends GetLibraryState {
 
   const GetLibraryLoaded({required this.booklist});
 }
+
+class GetBookDetailsInitial extends GetLibraryState {
+  @override
+  List<Object> get props => [];
+}
+
+class GetBookDetailsLoading extends GetLibraryState {
+  @override
+  List<Object> get props => [];
+}
+
+class GetBookDetailsError extends GetLibraryState {
+  final String message;
+
+  const GetBookDetailsError({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class GetAllBooksLoaded extends GetLibraryState {
+  final Book book;
+
+  const GetAllBooksLoaded({required this.book});
+
+  @override
+  List<Object> get props => [book];
+}
