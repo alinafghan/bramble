@@ -7,11 +7,9 @@ import 'package:journal_app/providers/review_provider/review_provider.dart';
 part 'review_state.dart';
 
 class ReviewCubit extends Cubit<ReviewState> {
-  ReviewProvider reviewProvider = ReviewProvider();
+  final ReviewProvider reviewProvider;
 
-  ReviewCubit({required ReviewProvider provider})
-      : reviewProvider = provider,
-        super(SetReviewInitial());
+  ReviewCubit({required this.reviewProvider}) : super(SetReviewInitial());
 
   void setReview(Review review, Book book) async {
     emit(SetReviewLoading());

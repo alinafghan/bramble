@@ -9,13 +9,12 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final FirebaseAuthRepository _authRepository;
+  final FirebaseAuthRepository authRepository;
   late final StreamSubscription<User?> _userSubscription;
 
-  AuthenticationBloc({required FirebaseAuthRepository authRepository})
-      : _authRepository = authRepository,
-        super(const AuthenticationState.unknown()) {
-    _userSubscription = _authRepository.user.listen((authUser) {
+  AuthenticationBloc({required this.authRepository})
+      : super(const AuthenticationState.unknown()) {
+    _userSubscription = authRepository.user.listen((authUser) {
       //authentication usre event
       add(AuthenticationUserChanged(authUser));
       // add(AuthenticationLogoutRequested()); cant do this here because havent created an event handler as below

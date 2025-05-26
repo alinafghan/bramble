@@ -49,24 +49,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider<BookListCubit>(
-        create: (_) => BookListCubit(provider: BookListProvider()),
+        create: (_) => BookListCubit(listProvider: BookListProvider()),
       ),
       BlocProvider<TaskCubitCubit>(
         create: (_) => TaskCubitCubit(),
       ),
       BlocProvider<GetLibraryBloc>(
-        create: (_) => GetLibraryBloc(provider: LibraryProvider()),
+        create: (_) => GetLibraryBloc(libraryProvider: LibraryProvider()),
       ),
       BlocProvider<ReviewCubit>(
-          create: (_) => ReviewCubit(provider: ReviewProvider())),
+          create: (_) => ReviewCubit(reviewProvider: ReviewProvider())),
       BlocProvider<AuthenticationBloc>(
           create: (_) =>
               AuthenticationBloc(authRepository: FirebaseAuthRepository())),
       BlocProvider<MoodBloc>(
-        create: (_) => MoodBloc(provider: MoodProvider()),
+        create: (_) => MoodBloc(moodProvider: MoodProvider()),
       ),
       BlocProvider<JournalBloc>(
-        create: (_) => JournalBloc(provider: JournalProvider()),
+        create: (_) => JournalBloc(journalProvider: JournalProvider()),
       ),
     ], child: const MyAppView());
   }

@@ -7,15 +7,13 @@ part 'get_library_event.dart';
 part 'get_library_state.dart';
 
 class GetLibraryBloc extends Bloc<GetLibraryEvent, LibraryState> {
-  LibraryProvider libraryProvider = LibraryProvider();
+  final LibraryProvider libraryProvider;
 
-  GetLibraryBloc({required LibraryProvider provider})
-      : libraryProvider = provider,
-        super(GetLibraryInitial()) {
+  GetLibraryBloc({required this.libraryProvider}) : super(GetLibraryInitial()) {
     on<GetLibrary>((event, emit) async {
       emit(GetLibraryLoading());
       try {
-        List<Book> library = await provider.getLibrary();
+        List<Book> library = await libraryProvider.getLibrary();
         emit(GetLibraryLoaded(booklist: library));
       } catch (e) {
         emit(GetLibraryFailed());

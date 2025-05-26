@@ -8,11 +8,9 @@ part 'journal_event.dart';
 part 'journal_state.dart';
 
 class JournalBloc extends Bloc<JournalEvent, JournalState> {
-  JournalProvider journalProvider = JournalProvider();
+  final JournalProvider journalProvider;
 
-  JournalBloc({required JournalProvider provider})
-      : journalProvider = provider,
-        super(SetJournalLoading()) {
+  JournalBloc({required this.journalProvider}) : super(SetJournalLoading()) {
     on<SetJournal>((event, emit) async {
       emit(SetJournalLoading());
       try {

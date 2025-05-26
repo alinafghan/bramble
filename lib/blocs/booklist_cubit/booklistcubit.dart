@@ -6,11 +6,9 @@ import 'package:journal_app/providers/book_provider/book_provider.dart';
 part 'booklist_state.dart';
 
 class BookListCubit extends Cubit<SavedBooksState> {
-  BookListProvider listProvider = BookListProvider();
+  final BookListProvider listProvider;
 
-  BookListCubit({required BookListProvider provider})
-      : listProvider = provider,
-        super(GetAllBooksInitial());
+  BookListCubit({required this.listProvider}) : super(GetAllBooksInitial());
 
   void getAllBooks() async {
     emit(GetAllBooksLoading());

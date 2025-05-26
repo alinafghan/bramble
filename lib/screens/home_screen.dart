@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Center(
                                   child: Container(
                                     decoration: const BoxDecoration(
-                                      color: AppTheme.palette1,
+                                      color: AppTheme.palette2,
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,

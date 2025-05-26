@@ -7,11 +7,9 @@ part 'mood_bloc_event.dart';
 part 'mood_bloc_state.dart';
 
 class MoodBloc extends Bloc<MoodBlocEvent, MoodBlocState> {
-  MoodProvider moodProvider = MoodProvider();
+  final MoodProvider moodProvider;
 
-  MoodBloc({required MoodProvider provider})
-      : moodProvider = provider,
-        super(MoodBlocInitial()) {
+  MoodBloc({required this.moodProvider}) : super(MoodBlocInitial()) {
     on<GetMonthlyMoodEvent>((event, emit) async {
       emit(GetMonthlyMoodsLoading());
       try {
