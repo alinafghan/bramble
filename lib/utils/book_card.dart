@@ -55,7 +55,7 @@ class BookCard extends StatelessWidget {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                     child: CircularProgressIndicator(
-                        color: AppTheme.primary,
+                        color: AppTheme.palette3,
                         value: downloadProgress.progress),
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -102,7 +102,7 @@ class BookCard extends StatelessWidget {
           },
           shape: const CircleBorder(),
           mini: true,
-          backgroundColor: AppTheme.primary,
+          backgroundColor: AppTheme.palette2,
           foregroundColor: AppTheme.text,
           child: const Icon(Icons.add),
         ),

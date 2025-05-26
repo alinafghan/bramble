@@ -35,34 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
     void goToJournal(DateTime selectedDay, String mood) {
       final encodedMood = Uri.encodeComponent(mood);
       final encodedDate = Uri.encodeComponent(selectedDay.toIso8601String());
-      print('Selected Day: $encodedDate, Mood: $encodedMood');
       context.push(
         '/home/journal/$encodedDate/$encodedMood',
       );
-      print('Navigating to journal with date: $selectedDay and mood: $mood');
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => MultiBlocProvider(
-      //       providers: [
-      //         BlocProvider<SetJournalBloc>(
-      //           create: (context) =>
-      //               SetJournalBloc(provider: JournalProvider()),
-      //         ),
-      //         BlocProvider<GetJournalBloc>(
-      //           create: (context) =>
-      //               GetJournalBloc(provider: JournalProvider()),
-      //         ),
-      //       ],
-      //       child: KeyboardVisibilityProvider(
-      //         child: JournalScreen(
-      //           selectedDate: selectedDay,
-      //           mood: mood,
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // );
     }
 
     void onMoodSelected(String moodAsset, DateTime selectedDay) {
@@ -120,12 +95,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GestureDetector(
       onVerticalDragStart: (_) {
+        final focusedMonth = context.read<CalendarBloc>().state.focusedDate;
         context
             .read<GetJournalBloc>()
-            .add(GetMonthlyJournal(month: DateTime.now()));
-        for (var entry in moodMap.entries) {
-          print('Mood for ${entry.key}: ${entry.value}');
-        }
+            .add(GetMonthlyJournal(month: focusedMonth));
         context.push('/home/journal_list', extra: moodMap);
       },
       child: Scaffold(
@@ -255,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Center(
                                   child: Container(
                                     decoration: const BoxDecoration(
-                                      color: AppTheme.primary,
+                                      color: AppTheme.palette1,
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,
@@ -284,9 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     '${date.day}',
                                     style: TextStyle(
                                       color: date.weekday == DateTime.sunday
-                                          ? AppTheme.red
+                                          ? AppTheme.palette5
                                           : date.weekday == DateTime.saturday
-                                              ? AppTheme.blue
+                                              ? AppTheme.palette3
                                               : null,
                                     ),
                                   ));
@@ -313,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
                   FloatingActionButton(
                     foregroundColor: AppTheme.text,
-                    backgroundColor: AppTheme.primary,
+                    backgroundColor: AppTheme.palette2,
                     onPressed: () {
                       showMoodDialog(DateTime.now());
                     },

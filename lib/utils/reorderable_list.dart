@@ -52,50 +52,69 @@ class _MyReorderableListState extends State<MyReorderableList> {
           if (state.bookList != null) {
             items = state.bookList!;
           }
-          return ReorderableListView(
-            onReorder: (int oldIndex, int newIndex) {
-              setState(() {
-                if (oldIndex < newIndex) {
-                  newIndex -= 1;
-                }
-                final item = items.removeAt(oldIndex);
-                items.insert(newIndex, item);
-              });
-            },
-            children: items
-                .map((item) => Dismissible(
-                      confirmDismiss: (DismissDirection direction) async {
-                        deleteBookDialog(item);
-                      },
-                      background: Container(color: Colors.red),
-                      key: ValueKey(item),
-                      dragStartBehavior: DragStartBehavior.start,
-                      onDismissed: (direction) {
-                        setState(() {
-                          items.remove(item);
-                        });
-                      },
-                      child: ListTile(
+          if (state.bookList!.isNotEmpty) {
+            return ReorderableListView(
+              onReorder: (int oldIndex, int newIndex) {
+                setState(() {
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  final item = items.removeAt(oldIndex);
+                  items.insert(newIndex, item);
+                });
+              },
+              children: items
+                  .map((item) => Dismissible(
+                        confirmDismiss: (DismissDirection direction) async {
+                          deleteBookDialog(item);
+                        },
+                        background: Container(color: Colors.red),
                         key: ValueKey(item),
-                        leading: ClipOval(
-                            child: Image.network(
-                          item.coverUrl!,
-                          fit: BoxFit.cover,
-                          height: 50,
-                          width: 50,
-                        )),
-                        trailing: const Icon(
-                          HugeIcons.strokeRoundedMenu09,
-                          color: AppTheme.text,
+                        dragStartBehavior: DragStartBehavior.start,
+                        onDismissed: (direction) {
+                          setState(() {
+                            items.remove(item);
+                          });
+                        },
+                        child: ListTile(
+                          key: ValueKey(item),
+                          leading: ClipOval(
+                              child: Image.network(
+                            item.coverUrl!,
+                            fit: BoxFit.cover,
+                            height: 50,
+                            width: 50,
+                          )),
+                          trailing: const Icon(
+                            HugeIcons.strokeRoundedMenu09,
+                            color: AppTheme.text,
+                          ),
+                          title: Text(item.title),
+                          subtitle: Text(item.author),
                         ),
-                        title: Text(item.title),
-                        subtitle: Text(item.author),
-                      ),
-                    ))
-                .toList(),
-          );
+                      ))
+                  .toList(),
+            );
+          } else {
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 200,
+                  child: OverflowBox(
+                    minHeight: 220,
+                    maxHeight: 220,
+                    child: Lottie.asset('assets/lottie/water_plants.json'),
+                  ),
+                ),
+                const Text('No books Yet'),
+              ],
+            ));
+          }
         } else {
-          return Center(child: Lottie.asset('assets/lottie/loading.json'));
+          return const SizedBox.shrink();
         }
       },
     );

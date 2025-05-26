@@ -95,7 +95,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
                   if (books.isEmpty) {
                     return Center(
-                      child: Lottie.asset('assets/lottie/loading.json'),
+                      child: Lottie.asset('assets/plant.json'),
                     );
                   }
 

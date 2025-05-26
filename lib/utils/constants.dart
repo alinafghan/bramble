@@ -10,4 +10,9 @@ class AppTheme {
   static Color text2 = Colors.grey.shade500;
   static const Color white = Color.fromARGB(255, 252, 252, 252);
   static const fontFamily = 'Dovemayo';
+  static const Color palette1 = Color.fromRGBO(0, 193, 162, 1.000);
+  static const Color palette2 = Color.fromRGBO(0, 125, 124, 1.000);
+  static const Color palette3 = Color.fromRGBO(1, 66, 66, 1.000);
+  static const Color palette4 = Color.fromRGBO(217, 38, 0, 1.000);
+  static const Color palette5 = Color.fromRGBO(175, 20, 0, 1.000);
 }

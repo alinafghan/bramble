@@ -262,7 +262,9 @@ class _JournalScreenState extends State<JournalScreen> {
                         return BlocBuilder<TaskCubitCubit, TaskCubitState>(
                           builder: (context, taskState) {
                             final bool isEditable =
-                                taskState is EditTextfieldOn;
+                                taskState is EditTextfieldOn ||
+                                    state is GetJournalFailure;
+
                             return TextField(
                               readOnly: !isEditable,
                               controller: journalController,

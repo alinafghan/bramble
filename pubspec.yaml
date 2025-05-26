@@ -46,13 +46,13 @@ dependencies:
   cached_network_image: ^3.4.1
   google_sign_in: ^6.3.0
   lottie: ^3.3.1
-  bloc: ^9.0.0
   meta: ^1.15.0
   logger: ^2.5.0
   flutter_dotenv: ^5.2.1
   path_provider: ^2.0.0
   supabase_flutter: ^2.9.0
   go_router: ^15.1.2
+  bloc_test: ^10.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.14.3"
@@ -74,11 +74,11 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/plant.json"
+  image_path: "assets/bramble_icon.png" # Path to your icon image
   min_sdk_android: 21 # android min sdk min:16, default 21
   windows:
     generate: true
-    image_path: "assets/plant.json"
+    image_path: "assets/bramble_icon.png" # Path to your icon image
     icon_size: 48 # min:48, max:256, default: 48
 
 # The following section is specific to Flutter packages.
@@ -104,6 +104,10 @@ flutter:
     - assets/moods/reading_book.png
     - assets/moods/listen_music.png
     - assets/moods/sick.png
+    - assets/plant.json
+    - assets/lottie/water_plants.json
+    - assets/lottie/typing_laptop.json
+    - assets/lottie/watch_film.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

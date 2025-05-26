@@ -31,7 +31,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
       body: BlocBuilder<GetReviewForBookCubit, GetReviewForBookState>(
         builder: (context, state) {
           if (state is GetReviewForBookLoading) {
-            return Center(child: Lottie.asset('assets/lottie/loading.json'));
+            return Center(child: Lottie.asset('assets/plant.json'));
           } else if (state is GetReviewForBookSuccess) {
             final reviews = state.reviews;
             if (reviews.isEmpty) {
@@ -59,7 +59,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                           (user.profileUrl == null || user.profileUrl!.isEmpty)
                               ? const Icon(
                                   Icons.person,
-                                  color: AppTheme.primary,
+                                  color: AppTheme.palette3,
                                 )
                               : null,
                     ),

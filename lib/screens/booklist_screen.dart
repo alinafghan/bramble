@@ -35,13 +35,6 @@ class _BooklistScreenState extends State<BooklistScreen> {
             mainAxisSize: MainAxisSize
                 .min, // Ensures the Row takes only as much space as needed
             children: [
-              // Padding(
-              //     padding:
-              //         EdgeInsets.only(left: 2.0), // Add padding to the right
-              //     child: Icon(
-              //       HugeIcons.strokeRoundedBooks01,
-              //       size: 21,
-              //     )), // Add spacing between the icon and the arrow
               PopupMenu(selectedVal: 'Book'),
             ],
           ),

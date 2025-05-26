@@ -83,14 +83,14 @@ class _BookScreenState extends State<BookScreen> {
                               },
                               icon: const HugeIcon(
                                   icon: HugeIcons.strokeRoundedEye,
-                                  color: AppTheme.primary)),
+                                  color: AppTheme.palette3)),
                           IconButton(
                               onPressed: () {
                                 context.push('/review', extra: state.book);
                               },
                               icon: const HugeIcon(
                                   icon: HugeIcons.strokeRoundedAddCircleHalfDot,
-                                  color: AppTheme.primary))
+                                  color: AppTheme.palette3))
                         ])
                       ],
                     ),
@@ -143,7 +143,7 @@ class _BookScreenState extends State<BookScreen> {
             );
           } else {
             return Center(
-              child: Lottie.asset('assets/lottie/loading.json'),
+              child: Lottie.asset('assets/plant.json'),
             );
           }
         },
