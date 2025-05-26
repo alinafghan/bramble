@@ -31,11 +31,20 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
       body: BlocBuilder<GetReviewForBookCubit, GetReviewForBookState>(
         builder: (context, state) {
           if (state is GetReviewForBookLoading) {
-            return Center(child: Lottie.asset('assets/plant.json'));
+            return const SizedBox.shrink();
           } else if (state is GetReviewForBookSuccess) {
             final reviews = state.reviews;
             if (reviews.isEmpty) {
-              return const Center(child: Text('No reviews yet.'));
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Lottie.asset('assets/lottie/watch_film.json',
+                      height: 200, width: 200),
+                  const Text('No reviews Yet.'),
+                ],
+              ));
             }
             return ListView.separated(
               padding: const EdgeInsets.all(12),

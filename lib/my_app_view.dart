@@ -137,8 +137,10 @@ class MyAppView extends StatelessWidget {
             GoRoute(
               path: 'review',
               builder: (BuildContext context, GoRouterState state) {
-                return SetReviewScreen(
-                  book: state.extra as Book,
+                return KeyboardVisibilityProvider(
+                  child: SetReviewScreen(
+                    book: state.extra as Book,
+                  ),
                 );
               },
             ),

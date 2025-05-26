@@ -37,8 +37,12 @@ class _BookScreenState extends State<BookScreen> {
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: [
-                    Image.network(state.book.coverUrl!,
-                        fit: BoxFit.cover, height: 300, width: 200),
+                    Image.network(
+                      state.book.coverUrl!,
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height / 4.7,
+                      width: MediaQuery.of(context).size.width / 3.2,
+                    ),
                     const SizedBox(
                       height: 40,
                     ),
@@ -46,15 +50,13 @@ class _BookScreenState extends State<BookScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 2,
                               child: Text(
                                 state.book.title,
-                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
+                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ),
                             const SizedBox(
@@ -62,17 +64,16 @@ class _BookScreenState extends State<BookScreen> {
                             ),
                             Text(
                               state.book.author,
-                              textAlign: TextAlign.justify,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                                  fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'First published in: ${state.book.publishYear}',
+                              '${state.book.publishYear}',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                                  fontWeight: FontWeight.bold, fontSize: 10),
                             ),
                           ],
                         ),

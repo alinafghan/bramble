@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/set_review_cubit/set_review_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/models/user.dart';
+import 'package:journal_app/utils/bottom_nav.dart';
+import 'package:journal_app/utils/constants.dart';
 
 class SetReviewScreen extends StatefulWidget {
   final Book book;
@@ -39,20 +42,39 @@ class _ReviewScreenState extends State<SetReviewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$currentDay, $currentDate  $currentMonth  $currentYear'),
-                TextField(
-                  controller: reviewTextController,
-                  decoration: const InputDecoration(
-                    hintText: 'Write your review here...',
-                    border: OutlineInputBorder(),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppTheme.palette3),
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height / 6),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '$currentDay, $currentDate  $currentMonth  $currentYear'),
+                          TextField(
+                            maxLines: null,
+                            controller: reviewTextController,
+                            cursorColor: AppTheme.text,
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintText: 'Typing...',
+                                focusColor: AppTheme.palette2,
+                                hoverColor: AppTheme.palette2),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                TextButton(
-                    onPressed: () {
-                      setReview(context, widget.book);
-                      context.pop(); // Navigate back after posting the review
-                    },
-                    child: const Text('Post Review')),
               ],
             ),
           );
@@ -74,5 +96,21 @@ class _ReviewScreenState extends State<SetReviewScreen> {
           ),
           book,
         );
+  }
+
+  Widget bottomNav() {
+    final bool isKeyboardVisible =
+        KeyboardVisibilityProvider.isKeyboardVisible(context);
+
+    return Offstage(
+      offstage: !isKeyboardVisible, // visually hide when false…
+      child: BottomNav(
+        textController: reviewTextController,
+        onSave: () {
+          setReview(context, widget.book);
+          context.pop(); // Navigate back after posting the review
+        },
+      ),
+    );
   }
 }
