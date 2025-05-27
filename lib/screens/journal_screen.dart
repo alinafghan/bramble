@@ -88,9 +88,6 @@ class _JournalScreenState extends State<JournalScreen> {
 
     return PopScope(
         canPop: true,
-        // onPopInvokedWithResult: (bool canPop, dynamic result) async {
-        //   await _saveJournalEntry();
-        // },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(

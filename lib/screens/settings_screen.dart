@@ -31,21 +31,8 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
             // child: Column(
             children: [
-              Container(
-                width: 360,
-                height: 140,
-                padding: const EdgeInsets.all(50),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppTheme.backgroundColor,
-                ),
-                child: const Text(
-                  'Hey, there!',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 225, 225, 225),
-                      fontSize: 18,
-                      fontFamily: AppTheme.fontFamily),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
               ),
               const ListTile(
                 title: Text('Reminder',
