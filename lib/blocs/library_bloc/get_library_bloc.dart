@@ -6,10 +6,10 @@ import 'package:journal_app/providers/library_provider/library_provider.dart';
 part 'get_library_event.dart';
 part 'get_library_state.dart';
 
-class GetLibraryBloc extends Bloc<GetLibraryEvent, LibraryState> {
+class LibraryBloc extends Bloc<GetLibraryEvent, LibraryState> {
   final LibraryProvider libraryProvider;
 
-  GetLibraryBloc({required this.libraryProvider}) : super(GetLibraryInitial()) {
+  LibraryBloc({required this.libraryProvider}) : super(GetLibraryInitial()) {
     on<GetLibrary>((event, emit) async {
       emit(GetLibraryLoading());
       try {
@@ -37,7 +37,7 @@ class GetLibraryBloc extends Bloc<GetLibraryEvent, LibraryState> {
         emit(SearchBookError(error: e.toString()));
       }
     });
-    on<ClearSearch>((event, emit) {
+    on<ClearSearch>((event, emit) async {
       emit(SearchCleared(libraryBooks: event.books));
     });
   }

@@ -54,8 +54,8 @@ class MyApp extends StatelessWidget {
       BlocProvider<TaskCubitCubit>(
         create: (_) => TaskCubitCubit(),
       ),
-      BlocProvider<GetLibraryBloc>(
-        create: (_) => GetLibraryBloc(libraryProvider: LibraryProvider()),
+      BlocProvider<LibraryBloc>(
+        create: (_) => LibraryBloc(libraryProvider: LibraryProvider()),
       ),
       BlocProvider<ReviewCubit>(
           create: (_) => ReviewCubit(reviewProvider: ReviewProvider())),

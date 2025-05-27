@@ -46,7 +46,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 textController: searchText,
                 onSuffixTap: () {
                   searchText.clear();
-                  context.read<GetLibraryBloc>().add(ClearSearch(
+                  context.read<LibraryBloc>().add(ClearSearch(
                       books: libraryBooks)); // Reset to show cached data
                 },
                 rtl: false,
@@ -67,7 +67,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<GetLibraryBloc, LibraryState>(
+          child: BlocBuilder<LibraryBloc, LibraryState>(
             builder: (context, libraryState) {
               List searchedBooks = [];
               List books = [];
@@ -112,10 +112,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Future<void> getLibrary() async {
     searchText.clear();
     isSearching = false;
-    context.read<GetLibraryBloc>().add(const GetLibrary());
+    context.read<LibraryBloc>().add(const GetLibrary());
   }
 
   Future<void> searchLibrary(String value) async {
-    context.read<GetLibraryBloc>().add(SearchBook(keyword: value));
+    context.read<LibraryBloc>().add(SearchBook(keyword: value));
   }
 }

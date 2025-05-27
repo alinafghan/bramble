@@ -19,7 +19,7 @@ class BookScreen extends StatefulWidget {
 class _BookScreenState extends State<BookScreen> {
   @override
   void initState() {
-    context.read<GetLibraryBloc>().add(GetBookDetails(input: widget.book));
+    context.read<LibraryBloc>().add(GetBookDetails(input: widget.book));
     super.initState();
   }
 
@@ -27,7 +27,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<GetLibraryBloc, LibraryState>(
+      body: BlocBuilder<LibraryBloc, LibraryState>(
         builder: (context, state) {
           if (state is GetAllBooksLoaded) {
             return SingleChildScrollView(
