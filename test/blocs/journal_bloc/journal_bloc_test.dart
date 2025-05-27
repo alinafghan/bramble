@@ -28,6 +28,7 @@ void main() {
       skip: 1, //skip loading
       expect: () => <JournalState>[GetJournalSuccess(journal: journal)],
     );
+
     blocTest<JournalBloc, JournalState>(
       'fails on getjournal successfully',
       build: () => JournalBloc(journalProvider: mockProvider),

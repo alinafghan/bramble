@@ -139,7 +139,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                       .format(widget.selectedDate);
                                   context
                                       .read<MoodBloc>()
-                                      .add(DeleteMoodEvent(date));
+                                      .add(DeleteMoodEvent(date: date));
                                   context
                                       .read<JournalBloc>()
                                       .add(DeleteJournal(date: date));

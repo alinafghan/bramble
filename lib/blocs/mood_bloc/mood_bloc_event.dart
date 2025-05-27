@@ -11,7 +11,7 @@ class SetMoodEvent extends MoodBlocEvent {
   final String moodAsset;
   final String date;
 
-  const SetMoodEvent(this.date, this.moodAsset);
+  const SetMoodEvent({required this.date, required this.moodAsset});
 
   @override
   List<Object> get props => [moodAsset, date];
@@ -20,16 +20,16 @@ class SetMoodEvent extends MoodBlocEvent {
 class GetMonthlyMoodEvent extends MoodBlocEvent {
   final DateTime month;
 
-  const GetMonthlyMoodEvent(this.month);
+  const GetMonthlyMoodEvent({required this.month});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [month];
 }
 
 class DeleteMoodEvent extends MoodBlocEvent {
   final String date;
 
-  const DeleteMoodEvent(this.date);
+  const DeleteMoodEvent({required this.date});
 
   @override
   List<Object> get props => [date];

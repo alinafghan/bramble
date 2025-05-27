@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<MoodBloc>().add(GetMonthlyMoodEvent(DateTime.now()));
+    context.read<MoodBloc>().add(GetMonthlyMoodEvent(month: DateTime.now()));
     // context.read<CalendarBloc>().add(ChangeFocusedMonth(DateTime.now()));
   }
 
@@ -42,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     void onMoodSelected(String moodAsset, DateTime selectedDay) {
       final stringDate = DateFormat('yyyy-MM-dd').format(selectedDay);
-      context.read<MoodBloc>().add(SetMoodEvent(stringDate, moodAsset));
+      context
+          .read<MoodBloc>()
+          .add(SetMoodEvent(date: stringDate, moodAsset: moodAsset));
       goToJournal(selectedDay, moodAsset);
     }
 
@@ -202,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<CalendarBloc>()
                                   .add(ChangeFocusedMonth(newFocusedMonth));
                               context.read<MoodBloc>().add(GetMonthlyMoodEvent(
-                                    newFocusedMonth,
+                                    month: newFocusedMonth,
                                   ));
                             },
                             calendarStyle: const CalendarStyle(

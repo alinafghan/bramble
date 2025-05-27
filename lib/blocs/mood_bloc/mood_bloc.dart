@@ -7,7 +7,7 @@ part 'mood_bloc_event.dart';
 part 'mood_bloc_state.dart';
 
 class MoodBloc extends Bloc<MoodBlocEvent, MoodBlocState> {
-  final MoodProvider moodProvider;
+  MoodProvider moodProvider;
 
   MoodBloc({required this.moodProvider}) : super(MoodBlocInitial()) {
     on<GetMonthlyMoodEvent>((event, emit) async {

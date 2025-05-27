@@ -17,7 +17,6 @@ class BookListCubit extends Cubit<SavedBooksState> {
       emit(GetAllBooksLoaded(bookList: list));
     } catch (e) {
       emit(GetAllBooksFailed());
-      throw Exception('failture in getting all books $e');
     }
   }
 
