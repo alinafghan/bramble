@@ -36,6 +36,7 @@ class Review {
       username: doc['user']['username'] as String,
       email: doc['user']['email'] as String,
       profileUrl: doc['user']['profileUrl'] as String?,
+      mod: doc['user']['mod'] as bool,
     );
     Book book = Book(
       key: doc['book']['key'] as String,

@@ -17,7 +17,7 @@ void main() {
       text: 'Great book!',
       numLikes: 5,
       createdAt: 'just now',
-      user: Users(userId: '1', email: 'test@gmail.com'),
+      user: Users(userId: '1', email: 'test@gmail.com', mod: false),
       book: Book(
           key: '1',
           bookId: 1,

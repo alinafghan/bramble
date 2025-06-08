@@ -13,13 +13,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final MyAuthProvider _auth = MyAuthProvider();
 
-  TextEditingController usernameController = TextEditingController();
   TextEditingController emailOrUsernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
     emailOrUsernameController.dispose();
     passwordController.dispose();
     super.dispose();

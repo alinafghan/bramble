@@ -41,11 +41,11 @@ class MyAppView extends StatelessWidget {
         final isUnAuthenticated =
             authBloc.state.status == AuthenticationStatus.unauthenticated;
 
-        final loggingIn = state.matchedLocation == '/login' ||
-            state.matchedLocation == '/signup';
+        final loggingIn =
+            state.matchedLocation == '/' || state.matchedLocation == '/';
 
         if (isUnAuthenticated && !loggingIn) {
-          return '/login';
+          return '/';
         }
         if (isAuthenticated && (state.matchedLocation == '/' || loggingIn)) {
           return '/home';

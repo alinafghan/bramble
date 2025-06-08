@@ -71,7 +71,7 @@ class _JournalScreenState extends State<JournalScreen> {
         content: text,
         date: docId,
         id: '',
-        user: Users(userId: '', email: ''),
+        user: Users(userId: '', email: '', mod: false),
       );
     }
     context.read<JournalBloc>().add(SetJournal(journal: journal!));

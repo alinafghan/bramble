@@ -15,13 +15,13 @@ void main() {
     Mood mood = Mood(
         date: '2024-10-01',
         mood: 'happy',
-        user: Users(userId: '1', email: 'test@gmail.com'));
+        user: Users(userId: '1', email: 'test@gmail.com', mod: false));
 
     Map<String, Mood>? moodList = {
       '1-1-1': Mood(
           date: '2024-10-01',
           mood: 'happy',
-          user: Users(userId: '1', email: 'test@gmail.com')),
+          user: Users(userId: '1', email: 'test@gmail.com', mod: false)),
     };
 
     blocTest<MoodBloc, MoodBlocState>(

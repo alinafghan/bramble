@@ -160,7 +160,7 @@ class FirebaseAuthRepository {
 
 extension on User {
   /// Maps a [firebase_auth.User] into a [User].
-  Users toUser(String userName) {
-    return Users(userId: uid, email: email!, username: userName);
+  Users toUser(String userName, bool mod) {
+    return Users(userId: uid, email: email!, username: userName, mod: mod);
   }
 }

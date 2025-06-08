@@ -88,7 +88,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
     context.read<ReviewCubit>().setReview(
           Review(
             id: '',
-            user: Users(userId: '', email: ''), //current user,
+            user: Users(userId: '', email: '', mod: false), //current user,
             book: book,
             text: reviewTextController.text,
             numLikes: 0,

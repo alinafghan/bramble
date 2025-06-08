@@ -38,6 +38,7 @@ class Journal {
       userId: doc['user']['userId'] as String,
       username: doc['user']['username'] as String,
       email: doc['user']['email'] as String,
+      mod: doc['user']['mod'] as bool,
     );
 
     return Journal(

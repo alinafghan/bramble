@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
-import 'package:journal_app/screens/home_screen.dart';
-import 'package:journal_app/screens/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -33,8 +31,12 @@ class _SignupScreenState extends State<SignupScreen> {
     String email = emailController.text;
     String password = passwordController.text;
 
-    Users user =
-        Users(userId: '', username: username, email: email, savedBooks: []);
+    Users user = Users(
+        userId: '',
+        mod: false,
+        username: username,
+        email: email,
+        savedBooks: []);
 
     Users? user2 = await _provider.emailSignUp(user, password);
 
@@ -52,6 +54,7 @@ class _SignupScreenState extends State<SignupScreen> {
         username: user.user!.displayName,
         email: user.user!.email!,
         profileUrl: user.user!.photoURL,
+        mod: false,
       );
 
       await _provider.saveUserToFirestore(user2);
@@ -59,6 +62,26 @@ class _SignupScreenState extends State<SignupScreen> {
       if (mounted) {
         context.go('/home');
       }
+    }
+  }
+
+  void signUpAsModerator() async {
+    String username = usernameController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    Users user = Users(
+        userId: '',
+        mod: true,
+        username: username,
+        email: email,
+        savedBooks: []);
+
+    Users? user2 = await _provider.emailSignUp(user, password);
+
+    if (user2 != null && mounted) {
+      //TODO//add toast message
+      context.go('/home');
     }
   }
 
@@ -133,6 +156,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   signUp();
                 },
                 child: const Text('Sign Up')),
+            TextButton(
+                onPressed: () {},
+                child: const Text('Sign up to be a moderator.')),
             TextButton(
                 onPressed: () {
                   signUpWithGoogle();

@@ -24,6 +24,7 @@ migrate_working_dir/
 #.vscode/
 .env
 C:\Users\alina\Documents\flutter apps\journal_app\lib\firebase_options.dart
+coverage/
 
 # Flutter/Dart/Pub related
 **/doc/api/

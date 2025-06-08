@@ -15,7 +15,7 @@ void main() {
         id: '123',
         date: '2023-10-01',
         content: 'Test content',
-        user: Users(userId: 'user123', email: 'user@gmail.com'));
+        user: Users(userId: 'user123', email: 'user@gmail.com', mod: false));
 
     blocTest<JournalBloc, JournalState>(
       'handles getjournal successfully',

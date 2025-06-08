@@ -7,11 +7,13 @@ class Users {
   String email;
   String? profileUrl;
   List<Book>? savedBooks = [];
+  bool mod; //true is moderator false is user
 
   Users({
     required this.userId,
     this.username,
     required this.email,
+    required this.mod,
     this.savedBooks,
     this.profileUrl,
   });
@@ -21,6 +23,7 @@ class Users {
       'userId': userId,
       'username': username,
       'email': email,
+      'mod': mod,
       'savedBooks': savedBooks?.map((book) => book.toJson()).toList(),
       'profileUrl': profileUrl,
     };
@@ -32,6 +35,7 @@ class Users {
       email: firebaseUser.email!,
       username: username,
       profileUrl: firebaseUser.photoURL,
+      mod: false,
       savedBooks: [],
     );
   }
@@ -42,6 +46,7 @@ class Users {
       username: doc['username'],
       email: doc['email'],
       profileUrl: doc['profileUrl'],
+      mod: doc['mod'],
       savedBooks: (doc['savedBooks'] as List<dynamic>?)
           ?.map((book) => Book.fromFirebase(book))
           .toList(),
@@ -58,6 +63,7 @@ class Users {
       username: username ?? this.username,
       email: email ?? this.email,
       savedBooks: savedBooks,
+      mod: mod,
     );
   }
 
