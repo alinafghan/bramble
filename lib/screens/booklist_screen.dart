@@ -32,7 +32,10 @@ class _BooklistScreenState extends State<BooklistScreen> {
             mainAxisSize: MainAxisSize
                 .min, // Ensures the Row takes only as much space as needed
             children: [
-              PopupMenu(selectedVal: 'Book'),
+              PopupMenu(
+                selectedVal: 'Book',
+                isModerator: false,
+              ),
             ],
           ),
         ),

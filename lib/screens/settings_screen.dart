@@ -93,6 +93,20 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               ListTile(
+                title: const Text('Edit Profile',
+                    style: TextStyle(
+                        color: AppTheme.text,
+                        fontSize: 18,
+                        fontFamily: AppTheme.fontFamily)),
+                leading: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedInformationCircle,
+                  color: AppTheme.text,
+                ),
+                onTap: () {
+                  context.push('/home/settings/profile');
+                },
+              ),
+              ListTile(
                 title: const Text('Sign Out',
                     style: TextStyle(
                       color: AppTheme.text,

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
-import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
-import 'package:journal_app/providers/user_provider/user_provider.dart';
+import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/utils/bottom_nav.dart';
 import '../utils/popup_menu2.dart';
 import '../utils/constants.dart';
@@ -48,9 +45,10 @@ class _JournalScreenState extends State<JournalScreen> {
 
   // Fetch the journal content from the backend via the GetJournalBloc.
   void _fetchJournal() async {
-    Users user = await UserProvider().getCurrentUser();
+    Users user = await MyAuthProvider().getCurrentUser();
     String docId = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
     String id = user.userId + docId;
+    _hasInitializedContent = false;
     if (mounted) {
       context.read<JournalBloc>().add(GetJournal(id: id));
     }
@@ -79,7 +77,7 @@ class _JournalScreenState extends State<JournalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double imageHeight = MediaQuery.of(context).size.height * 0.3;
+    double imageHeight = MediaQuery.of(context).size.height * 0.25;
 
     final String currentYear = DateFormat('yyyy').format(widget.selectedDate);
     final String currentMonth = DateFormat('MMMM').format(widget.selectedDate);
@@ -88,18 +86,14 @@ class _JournalScreenState extends State<JournalScreen> {
 
     return PopScope(
         canPop: true,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            context.read<TaskCubitCubit>().closeTextfield();
+          }
+        },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                context.pop();
-              },
-              icon: const HugeIcon(
-                icon: HugeIcons.strokeRoundedArrowLeft02,
-                color: AppTheme.text,
-              ),
-            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 12.0),
@@ -114,46 +108,10 @@ class _JournalScreenState extends State<JournalScreen> {
           body: Center(
             child: Column(
               children: <Widget>[
-                GestureDetector(
-                  onLongPress: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Delete Mood?'),
-                            content: const Text(
-                                'This will delete the mood and associated journal entry. Are you sure you want to proceed?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  context.pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  String date = DateFormat('yyyy-MM-dd')
-                                      .format(widget.selectedDate);
-                                  context
-                                      .read<MoodBloc>()
-                                      .add(DeleteMoodEvent(date: date));
-                                  context
-                                      .read<JournalBloc>()
-                                      .add(DeleteJournal(date: date));
-
-                                  context.pop();
-                                },
-                                child: const Text('Delete Mood'),
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                  child: Image.asset(
-                    widget.mood,
-                    height: 100,
-                    width: 100,
-                  ),
+                Image.asset(
+                  widget.mood,
+                  height: 100,
+                  width: 100,
                 ),
                 Text(
                   '$currentMonth $currentDate, $currentYear',
@@ -172,122 +130,134 @@ class _JournalScreenState extends State<JournalScreen> {
                   ),
                 ),
                 // Listen for SetJournalLoaded event
-                BlocListener<JournalBloc, JournalState>(
-                  listener: (context, setListenerState) {
-                    if (setListenerState is SetJournalSuccess) {
-                      context
-                          .read<JournalBloc>()
-                          .add(GetJournal(id: setListenerState.journal.id));
-                      journal = setListenerState.journal;
-                    }
-                  },
-                  child: BlocListener<JournalBloc, JournalState>(
-                    listener: (context, getListenerState) {
-                      if (getListenerState is GetJournalSuccess) {
-                        journal = getListenerState.journal;
-                      }
-                    },
-                    child: BlocBuilder<JournalBloc, JournalState>(
-                      builder: (context, state) {
-                        if (state is GetJournalSuccess) {
-                          // Rebuild the carousel if images are updated
-                          if (state.journal.images != null &&
-                              state.journal.images!.isNotEmpty) {
-                            _selectedImages.clear();
-                            _selectedImages.addAll(
-                                state.journal.images?.whereType<String>() ??
-                                    []);
-                            return Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: CarouselSlider(
-                                options: CarouselOptions(
-                                  height: imageHeight,
-                                  enableInfiniteScroll: false,
-                                  viewportFraction: 1.0,
-                                ),
-                                items: state.journal.images!
-                                    .map((url) =>
-                                        Image.network(url!, fit: BoxFit.cover))
-                                    .toList(),
-                              ),
-                            );
-                          }
-                        }
-                        return const SizedBox
-                            .shrink(); // Return an empty widget if no images are present
-                      },
-                    ),
-                  ),
-                ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24.0, right: 24.0, bottom: 24.0),
-                    child: BlocBuilder<JournalBloc, JournalState>(
-                      builder: (context, state) {
-                        if (state is GetJournalLoading) {
-                          return TextField(
-                            readOnly: !_isEditable,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: AppTheme.text,
-                            ),
-                            decoration: const InputDecoration(
-                              // The hint will be used only if the controller's text is empty.
-                              hintText: 'Loading...',
-                              hintStyle: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                            maxLines: null, // Allows multiline input
-                            textInputAction: TextInputAction.done,
-                          );
-                        }
-                        if (state is GetJournalSuccess) {
-                          journal = state.journal;
-                        }
-                        // When the journal is loaded, set the text controller only once.
-                        if (!_hasInitializedContent && journal != null) {
-                          journalController.text = journal!.content;
-                          _hasInitializedContent = true;
-                        }
-                        return BlocBuilder<TaskCubitCubit, TaskCubitState>(
-                          builder: (context, taskState) {
-                            final bool isEditable =
-                                taskState is EditTextfieldOn ||
-                                    state is GetJournalFailure;
-
-                            return TextField(
-                              readOnly: !isEditable,
-                              controller: journalController,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: AppTheme.text,
-                              ),
-                              decoration: const InputDecoration(
-                                // The hint will be used only if the controller's text is empty.
-                                hintText: 'What\'s on your mind?',
-                                hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                              maxLines: null, // Allows multiline input
-                              textInputAction: TextInputAction.done,
-                              onSubmitted: (value) {
-                                _saveJournalEntry(); // Save on Enter key
-                              },
-                            );
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Column(
+                      children: [
+                        BlocListener<JournalBloc, JournalState>(
+                          listener: (context, setListenerState) {
+                            if (setListenerState is SetJournalSuccess) {
+                              //for seeing the added image
+                              context.read<JournalBloc>().add(
+                                  GetJournal(id: setListenerState.journal.id));
+                              journal = setListenerState.journal;
+                            }
                           },
-                        );
-                      },
+                          child: BlocListener<JournalBloc, JournalState>(
+                            listener: (context, getListenerState) {
+                              if (getListenerState is GetJournalSuccess) {
+                                journal = getListenerState.journal;
+                              }
+                            },
+                            child: BlocBuilder<JournalBloc, JournalState>(
+                              builder: (context, state) {
+                                if (state is GetJournalSuccess) {
+                                  // Rebuild the carousel if images are updated
+                                  if (state.journal.images != null &&
+                                      state.journal.images!.isNotEmpty) {
+                                    _selectedImages.clear();
+                                    _selectedImages.addAll(state.journal.images
+                                            ?.whereType<String>() ??
+                                        []);
+                                    return Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: CarouselSlider(
+                                        options: CarouselOptions(
+                                          height: imageHeight,
+                                          enableInfiniteScroll: false,
+                                          viewportFraction: 1.0,
+                                        ),
+                                        items: state.journal.images!
+                                            .map((url) => Image.network(url!,
+                                                fit: BoxFit.cover))
+                                            .toList(),
+                                      ),
+                                    );
+                                  }
+                                }
+                                return const SizedBox
+                                    .shrink(); // Return an empty widget if no images are present
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 24.0, right: 24.0, bottom: 24.0),
+                          child: BlocBuilder<JournalBloc, JournalState>(
+                            builder: (context, state) {
+                              if (state is GetJournalLoading) {
+                                return TextField(
+                                  readOnly: !_isEditable,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppTheme.text,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    // The hint will be used only if the controller's text is empty.
+                                    hintText: 'Loading...',
+                                    hintStyle: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey,
+                                    ),
+                                    border: InputBorder.none,
+                                  ),
+                                  maxLines: null, // Allows multiline input
+                                  textInputAction: TextInputAction.done,
+                                );
+                              }
+                              if (state is GetJournalSuccess) {
+                                journal = state.journal;
+                              }
+                              // When the journal is loaded, set the text controller only once.
+                              if (!_hasInitializedContent && journal != null) {
+                                journalController.text = journal!.content;
+                                _hasInitializedContent = true;
+                              }
+                              return BlocBuilder<TaskCubitCubit,
+                                  TaskCubitState>(
+                                builder: (context, taskState) {
+                                  bool isEditable =
+                                      taskState is EditTextfieldOn ||
+                                          state is GetJournalFailure ||
+                                          (state is SetJournalSuccess &&
+                                              state.journal.content == '') ||
+                                          (state is GetJournalSuccess &&
+                                              state.journal.content == '');
+                                  return TextField(
+                                    readOnly: !isEditable,
+                                    controller: journalController,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppTheme.text,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      // The hint will be used only if the controller's text is empty.
+                                      hintText: 'What\'s on your mind?',
+                                      hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    maxLines: null, // Allows multiline input
+                                    textInputAction: TextInputAction.done,
+                                    onSubmitted: (value) {
+                                      _saveJournalEntry(); // Save on Enter key
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -301,6 +271,13 @@ class _JournalScreenState extends State<JournalScreen> {
   Widget bottomNav() {
     final bool isKeyboardVisible =
         KeyboardVisibilityProvider.isKeyboardVisible(context);
+
+    journal ??= Journal(
+      content: '',
+      date: DateFormat('yyyy-MM-dd').format(widget.selectedDate),
+      id: '',
+      user: Users(userId: '', email: '', mod: false),
+    );
 
     return Offstage(
       offstage: !isKeyboardVisible, // visually hide when false…

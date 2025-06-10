@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/providers/book_provider/book_provider.dart';
 

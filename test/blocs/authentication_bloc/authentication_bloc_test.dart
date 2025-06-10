@@ -5,7 +5,7 @@ import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAuthRepository extends Mock implements FirebaseAuthRepository {}
+class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockUser extends Mock implements User {}
 

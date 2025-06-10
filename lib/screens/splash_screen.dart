@@ -172,14 +172,16 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 80.0),
+                padding: const EdgeInsets.only(
+                  top: 80.0,
+                ),
                 child: Image.asset(
                   'assets/bramble_icon.png',
                   height: MediaQuery.of(context).size.height / 5,
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 2.5),
+                padding: EdgeInsets.symmetric(vertical: 3),
                 child: Text('Bramble', style: TextStyle(fontSize: 36)),
               ),
               TabBar(
@@ -281,7 +283,37 @@ class _SplashScreenState extends State<SplashScreen> {
                                 'Log In',
                                 style:
                                     TextStyle(color: AppTheme.backgroundColor),
-                              ))
+                              )),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Divider(
+                                  indent: 20,
+                                )),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text('OR'),
+                                ),
+                                Expanded(
+                                    child: Divider(
+                                  endIndent: 20,
+                                )),
+                              ],
+                            ),
+                          ),
+                          OutlinedButton.icon(
+                              icon: Image.asset('assets/google_icon.png',
+                                  height: 24, width: 24),
+                              onPressed: () {
+                                signUpWithGoogle();
+                              },
+                              label: const Text(
+                                'Continue With Google',
+                                style: TextStyle(color: AppTheme.text),
+                              )),
                         ],
                       ),
                     ),

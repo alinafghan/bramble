@@ -1,15 +1,15 @@
 import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final FirebaseAuthRepository authRepository;
+  final AuthRepository authRepository;
   late final StreamSubscription<User?> _userSubscription;
 
   AuthenticationBloc({required this.authRepository})
@@ -26,6 +26,16 @@ class AuthenticationBloc
         emit(AuthenticationState.authenticated(event.user!));
       } else {
         emit(const AuthenticationState.unauthenticated());
+      }
+    });
+
+    on<GetUserEvent>((event, emit) async {
+      emit(GetUserLoading());
+      try {
+        Users user = await authRepository.getCurrentUserFromFirebase();
+        emit(GetUserLoaded(myUser: user));
+      } catch (e) {
+        emit(GetUserFailed(message: e.toString()));
       }
     });
   }

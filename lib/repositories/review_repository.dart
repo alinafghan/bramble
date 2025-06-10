@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/models/user.dart';
-import 'package:journal_app/providers/user_provider/user_provider.dart';
-import 'package:journal_app/repositories/user_repository.dart';
+import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 
@@ -12,12 +11,11 @@ class ReviewRepository {
 
   final bookReviewCollection = FirebaseFirestore.instance.collection('Reviews');
   final likeCollection = FirebaseFirestore.instance.collection('Likes');
-  UserRepository userRepo = UserRepository();
+  AuthRepository userRepo = AuthRepository();
 
   Future<Review> setReview(Review review, Book book) async {
-    UserProvider provider = UserProvider();
     try {
-      review.user = await provider.getCurrentUser();
+      review.user = await userRepo.getCurrentUser();
       review.id = review.user.userId + review.book.bookId.toString();
       await bookReviewCollection.doc(review.id).set(review.toDocument());
       return review;

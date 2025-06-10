@@ -30,6 +30,7 @@ class Journal {
       'userId': user.userId,
       'username': user.username,
       'email': user.email,
+      'mod': user.mod,
     };
   }
 
@@ -40,7 +41,6 @@ class Journal {
       email: doc['user']['email'] as String,
       mod: doc['user']['mod'] as bool,
     );
-
     return Journal(
       id: doc['id'] as String,
       user: user,

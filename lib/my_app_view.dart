@@ -15,6 +15,8 @@ import 'package:journal_app/screens/journal_list_screen.dart';
 import 'package:journal_app/screens/journal_screen.dart';
 import 'package:journal_app/screens/library_screen.dart';
 import 'package:journal_app/screens/login_screen.dart';
+import 'package:journal_app/screens/moderate_reviews_screen.dart';
+import 'package:journal_app/screens/profile_screen.dart';
 import 'package:journal_app/screens/review_screen.dart';
 import 'package:journal_app/screens/reviews_book_screen.dart';
 import 'package:journal_app/screens/settings_screen.dart';
@@ -29,7 +31,7 @@ class MyAppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthenticationBloc authBloc = AuthenticationBloc(
-      authRepository: FirebaseAuthRepository(),
+      authRepository: AuthRepository(),
     );
 
     final GoRouter router = GoRouter(
@@ -69,6 +71,12 @@ class MyAppView extends StatelessWidget {
               },
             ),
             GoRoute(
+              path: 'reviews',
+              builder: (BuildContext context, GoRouterState state) {
+                return const ModerateReviewsScreen();
+              },
+            ),
+            GoRoute(
                 path: 'home',
                 builder: (BuildContext context, GoRouterState state) {
                   return const HomeScreen();
@@ -84,6 +92,12 @@ class MyAppView extends StatelessWidget {
                         path: 'about',
                         builder: (BuildContext context, GoRouterState state) {
                           return const AboutScreen();
+                        },
+                      ),
+                      GoRoute(
+                        path: 'profile',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const ProfileScreen();
                         },
                       ),
                     ],

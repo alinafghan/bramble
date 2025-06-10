@@ -3,7 +3,7 @@ import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 
 class MyAuthProvider {
-  final FirebaseAuthRepository _authRepository = FirebaseAuthRepository();
+  final AuthRepository _authRepository = AuthRepository();
 
   Future<Users?> emailSignUp(Users user, String password) async {
     return await _authRepository.emailSignUp(user, password);
@@ -27,5 +27,14 @@ class MyAuthProvider {
 
   Future<void> deleteUser() async {
     return await _authRepository.deleteUser();
+  }
+
+  Future<Users> getCurrentUser() async {
+    Users user = await _authRepository.getCurrentUserFromFirebase();
+    return user;
+  }
+
+  Future<void> setUser(Users user) async {
+    await _authRepository.setUser(user);
   }
 }

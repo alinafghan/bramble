@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
-import 'package:journal_app/providers/user_provider/user_provider.dart';
-import 'package:journal_app/repositories/user_repository.dart';
+import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
 
 class JournalRepository {
   final Logger _logger = Logger();
-  final UserRepository _userRepository = UserRepository();
+  final AuthRepository _userRepository = AuthRepository();
 
   final userJournalCollection =
       FirebaseFirestore.instance.collection('Journal');
@@ -20,7 +19,7 @@ class JournalRepository {
         return Journal.fromDocument(doc.data() as Map<String, dynamic>);
       } else {
         _logger.e('Document does not exist');
-        return null; // Document doesn't exist
+        return null;
       }
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
@@ -68,10 +67,8 @@ class JournalRepository {
   }
 
   Future<Journal> setJournal(Journal journal) async {
-    UserProvider provider = UserProvider();
-
     try {
-      journal.user = await provider.getCurrentUser();
+      journal.user = await _userRepository.getCurrentUserFromFirebase();
       journal.id = journal.user.userId + journal.date;
 
       final docRef = userJournalCollection.doc(journal.id);
@@ -82,7 +79,7 @@ class JournalRepository {
         await docRef.update({
           'content': journal.content,
           'images': journal.images,
-          'updatedAt': FieldValue.serverTimestamp(), // optional
+          // 'updatedAt': FieldValue.serverTimestamp(), // optional
         });
       } else {
         // Create new document
@@ -100,13 +97,23 @@ class JournalRepository {
   }
 
   Future<Journal> addImage(Journal journal, List<String> image) async {
-    UserProvider provider = UserProvider();
     try {
-      journal.user = await provider.getCurrentUser();
+      journal.user = await _userRepository.getCurrentUserFromFirebase();
       journal.id = journal.user.userId + journal.date;
       journal.images = journal.images ?? [];
       journal.images!.addAll(image);
-      await userJournalCollection.doc(journal.id).update(journal.toDocument());
+
+      final docRef = userJournalCollection.doc(journal.id);
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        // Document exists, update it
+        await docRef.update(journal.toDocument());
+      } else {
+        // Document does not exist, create it
+        await docRef.set(journal.toDocument());
+      }
+
       return journal;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');

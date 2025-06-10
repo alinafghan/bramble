@@ -29,13 +29,14 @@ class Users {
     };
   }
 
-  factory Users.fromFirebaseUser(User firebaseUser, {String? username}) {
+  factory Users.fromFirebaseUser(User firebaseUser,
+      {String? username, bool mod = false}) {
     return Users(
       userId: firebaseUser.uid,
       email: firebaseUser.email!,
       username: username,
       profileUrl: firebaseUser.photoURL,
-      mod: false,
+      mod: mod,
       savedBooks: [],
     );
   }

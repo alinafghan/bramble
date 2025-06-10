@@ -60,8 +60,7 @@ class MyApp extends StatelessWidget {
       BlocProvider<ReviewCubit>(
           create: (_) => ReviewCubit(reviewProvider: ReviewProvider())),
       BlocProvider<AuthenticationBloc>(
-          create: (_) =>
-              AuthenticationBloc(authRepository: FirebaseAuthRepository())),
+          create: (_) => AuthenticationBloc(authRepository: AuthRepository())),
       BlocProvider<MoodBloc>(
         create: (_) => MoodBloc(moodProvider: MoodProvider()),
       ),

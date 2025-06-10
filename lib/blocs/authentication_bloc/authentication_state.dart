@@ -22,3 +22,17 @@ class AuthenticationState extends Equatable {
   @override
   List<Object?> get props => [status, user];
 }
+
+class GetUserLoading extends AuthenticationState {}
+
+class GetUserLoaded extends AuthenticationState {
+  final Users myUser;
+
+  const GetUserLoaded({required this.myUser});
+}
+
+class GetUserFailed extends AuthenticationState {
+  final String message;
+
+  const GetUserFailed({required this.message});
+}

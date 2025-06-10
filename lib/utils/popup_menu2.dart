@@ -79,6 +79,7 @@ class PopupMenuState2 extends State<PopupMenu2> {
               ],
             ),
             onTap: () {
+              //TODO//add dialog to confirm delete
               context.read<JournalBloc>().add(
                     DeleteJournal(date: widget.date),
                   );

@@ -39,3 +39,5 @@ class AuthenticationSignUpRequested extends AuthenticationEvent {
   @override
   List<Object> get props => [email, password, username];
 }
+
+class GetUserEvent extends AuthenticationEvent {}

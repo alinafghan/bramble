@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:journal_app/models/mood.dart';
 import 'package:journal_app/models/user.dart';
-import 'package:journal_app/repositories/user_repository.dart';
+import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:logger/logger.dart';
 
 class MoodRepository {
   final Logger _logger = Logger();
   final bookReviewCollection = FirebaseFirestore.instance.collection('Moods');
-  UserRepository userRepo = UserRepository();
+  AuthRepository userRepo = AuthRepository();
 
   Future<Mood> setMood(String moodAsset, String date) async {
     Users currentUser = await userRepo.getCurrentUserFromFirebase();
@@ -42,19 +42,24 @@ class MoodRepository {
     final end =
         DateTime(month.year, month.month + 1, 0, 23, 59, 59); // End of month
 
-    Users currentUser = await userRepo.getCurrentUserFromFirebase();
+    try {
+      Users currentUser = await userRepo.getCurrentUserFromFirebase();
 
-    final snapshot = await bookReviewCollection
-        .where('date', isGreaterThanOrEqualTo: start.toIso8601String())
-        .where('date', isLessThanOrEqualTo: end.toIso8601String())
-        .where('user.userId', isEqualTo: currentUser.userId)
-        .get();
+      final snapshot = await bookReviewCollection
+          .where('date', isGreaterThanOrEqualTo: start.toIso8601String())
+          .where('date', isLessThanOrEqualTo: end.toIso8601String())
+          .where('user.userId', isEqualTo: currentUser.userId)
+          .get();
 
-    final moods = <String, Mood>{};
-    for (var doc in snapshot.docs) {
-      final mood = Mood.fromJson(doc.data());
-      moods[mood.date] = mood;
+      final moods = <String, Mood>{};
+      for (var doc in snapshot.docs) {
+        final mood = Mood.fromJson(doc.data());
+        moods[mood.date] = mood;
+      }
+      return moods;
+    } catch (e) {
+      _logger.e('Error getting monthly mood: $e');
+      throw Exception('Error getting monthly mood: $e');
     }
-    return moods;
   }
 }

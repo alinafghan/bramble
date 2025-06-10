@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; // For formatting the date
+import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
@@ -23,12 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<MoodBloc>().add(GetMonthlyMoodEvent(month: DateTime.now()));
-    // context.read<CalendarBloc>().add(ChangeFocusedMonth(DateTime.now()));
+    context.read<AuthenticationBloc>().add(GetUserEvent());
   }
 
   final DateTime now = DateTime.now();
   Map<String, String> moodMap = {};
   final List<Journal> journals = [];
+  final bool isModerator = false;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize
                   .min, // Ensures the Row takes only as much space as needed
               children: [
-                PopupMenu(selectedVal: 'Diary'),
+                PopupMenu(
+                  selectedVal: 'Diary',
+                  isModerator: false,
+                ),
               ],
             ),
           ),
@@ -219,12 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     DateFormat('yyyy-MM-dd').format(key);
                                 final mood = moodMap[docId];
                                 if (mood != null) {
-                                  // mood exists → show icon
-                                  return Center(
-                                      child: Image.asset(mood,
-                                          height: 30, width: 30));
+                                  //mood exts
+                                  return deleteMoodDialog(context, mood, docId);
                                 }
-                                // no mood → draw today circle + day number
+                                //no mood
                                 return Center(
                                   child: Container(
                                     decoration: const BoxDecoration(
@@ -245,10 +248,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     DateFormat('yyyy-MM-dd').format(date);
                                 final mood = moodMap[stringDate];
                                 if (mood != null) {
-                                  return Center(
-                                    child: Image.asset(mood,
-                                        height: 30, width: 30),
-                                  );
+                                  return deleteMoodDialog(
+                                      context, mood, stringDate);
                                 }
                                 if (date.weekday == DateTime.sunday ||
                                     date.weekday == DateTime.saturday) {
@@ -300,4 +301,48 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
+  return GestureDetector(
+      onLongPress: () async {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Delete Mood?'),
+                content: const Text(
+                    'This will delete the mood and associated journal entry. Are you sure you want to proceed?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context
+                          .read<MoodBloc>()
+                          .add(DeleteMoodEvent(date: docId));
+                      context
+                          .read<JournalBloc>()
+                          .add(DeleteJournal(date: docId));
+
+                      final currentMonth =
+                          context.read<CalendarBloc>().state.focusedDate;
+
+                      context
+                          .read<MoodBloc>()
+                          .add(GetMonthlyMoodEvent(month: currentMonth));
+
+                      context.pop();
+                    },
+                    child: const Text('Delete Mood'),
+                  ),
+                ],
+              );
+            });
+      },
+      child: Center(child: Image.asset(mood, height: 30, width: 30)));
 }
