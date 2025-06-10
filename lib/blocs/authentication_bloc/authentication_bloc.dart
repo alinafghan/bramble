@@ -44,8 +44,7 @@ class AuthenticationBloc
       try {
         Users? user = await authRepository.addProfilePic(event.profileUrl);
         emit(AddProfilePicLoaded(myUser: user!));
-        final updatedUser =
-            await authRepository.getCurrentUser(); // Fetch latest
+        final updatedUser = await authRepository.getCurrentUserFromFirebase();
         emit(GetUserLoaded(myUser: updatedUser));
       } catch (e) {
         emit(AddProfilePicFailure(message: e.toString()));
