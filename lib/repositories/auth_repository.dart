@@ -75,6 +75,29 @@ class AuthRepository {
     }
   }
 
+  Future<Users?> addProfilePic(String profileUrl) async {
+    try {
+      Users? user = await getCurrentUserFromFirebase();
+      if (user == null) {
+        throw Exception("App user not found.");
+      }
+
+      final userDocRef = usersCollection.doc(user.userId);
+      await userDocRef.update({
+        'profileUrl': profileUrl,
+      });
+
+      final updatedDoc = await userDocRef.get();
+      return Users.fromDocument(updatedDoc.data() as Map<String, dynamic>);
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e("Failed to update profile picture: $e");
+      throw Exception("Failed to update profile picture: $e");
+    }
+  }
+
   Future<Users?> emailSignUp(Users user, String password) async {
     try {
       user.userId = const Uuid().v4(); //generate random user id

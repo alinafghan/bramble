@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,6 +22,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     context.read<AuthenticationBloc>().add(GetUserEvent());
     super.initState();
+  }
+
+  Future<void> _updateProfileImage() async {
+    final ImagePicker picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      final file = File(pickedImage.path);
+      final fileName =
+          '${DateTime.now().millisecondsSinceEpoch}_${pickedImage.name}';
+
+      final supabase = Supabase.instance.client;
+      final response =
+          await supabase.storage.from('images').upload(fileName, file);
+
+      if (response.isNotEmpty) {
+        final publicUrl =
+            supabase.storage.from('images').getPublicUrl(fileName);
+
+        // Dispatch update user event
+        context
+            .read<AuthenticationBloc>()
+            .add(AddProfilePicEvent(profileUrl: publicUrl));
+      }
+    }
   }
 
   @override
@@ -89,20 +118,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: AppTheme.palette3,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
+                        child: GestureDetector(
+                          onTap: _updateProfileImage,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.palette3,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt_outlined,
-                            color: Colors.white,
-                            size: 16,
+                            child: const Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                           ),
                         ),
                       ),

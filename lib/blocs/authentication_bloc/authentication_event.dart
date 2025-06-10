@@ -1,6 +1,6 @@
 part of 'authentication_bloc.dart';
 
-sealed class AuthenticationEvent extends Equatable {
+abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
 
   @override
@@ -41,3 +41,9 @@ class AuthenticationSignUpRequested extends AuthenticationEvent {
 }
 
 class GetUserEvent extends AuthenticationEvent {}
+
+class AddProfilePicEvent extends AuthenticationEvent {
+  final String profileUrl;
+
+  const AddProfilePicEvent({required this.profileUrl});
+}

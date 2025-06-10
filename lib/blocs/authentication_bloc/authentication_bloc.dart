@@ -38,6 +38,19 @@ class AuthenticationBloc
         emit(GetUserFailed(message: e.toString()));
       }
     });
+
+    on<AddProfilePicEvent>((event, emit) async {
+      emit(AddProfilePicLoading());
+      try {
+        Users? user = await authRepository.addProfilePic(event.profileUrl);
+        emit(AddProfilePicLoaded(myUser: user!));
+        final updatedUser =
+            await authRepository.getCurrentUser(); // Fetch latest
+        emit(GetUserLoaded(myUser: updatedUser));
+      } catch (e) {
+        emit(AddProfilePicFailure(message: e.toString()));
+      }
+    });
   }
   @override
   Future<void> close() {

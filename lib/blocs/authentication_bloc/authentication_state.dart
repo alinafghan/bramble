@@ -36,3 +36,17 @@ class GetUserFailed extends AuthenticationState {
 
   const GetUserFailed({required this.message});
 }
+
+class AddProfilePicLoading extends AuthenticationState {}
+
+class AddProfilePicLoaded extends AuthenticationState {
+  final Users myUser;
+
+  const AddProfilePicLoaded({required this.myUser});
+}
+
+class AddProfilePicFailure extends AuthenticationState {
+  final String message;
+
+  const AddProfilePicFailure({required this.message});
+}
