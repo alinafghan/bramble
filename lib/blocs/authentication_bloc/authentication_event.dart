@@ -2,9 +2,6 @@ part of 'authentication_bloc.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class AuthenticationUserChanged extends AuthenticationEvent {
@@ -12,11 +9,14 @@ class AuthenticationUserChanged extends AuthenticationEvent {
 
   const AuthenticationUserChanged(this.user);
 
-  // @override
-  // List<Object> get props => [user!]; //cant be sure user wont be null
+  @override
+  List<Object?> get props => [user];
 }
 
-class AuthenticationLogoutRequested extends AuthenticationEvent {}
+class AuthenticationLogoutRequested extends AuthenticationEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class AuthenticationLoginRequested extends AuthenticationEvent {
   final String email;
@@ -40,10 +40,16 @@ class AuthenticationSignUpRequested extends AuthenticationEvent {
   List<Object> get props => [email, password, username];
 }
 
-class GetUserEvent extends AuthenticationEvent {}
+class GetUserEvent extends AuthenticationEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class AddProfilePicEvent extends AuthenticationEvent {
   final String profileUrl;
 
   const AddProfilePicEvent({required this.profileUrl});
+
+  @override
+  List<Object?> get props => [profileUrl];
 }

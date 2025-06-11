@@ -8,6 +8,12 @@ void main() {
         build: () => TaskCubitCubit(),
         act: (cubit) => cubit.editTextfield(),
         expect: () => [EditTextfieldOn()]);
+
+    blocTest<TaskCubitCubit, TaskCubitState>(
+        'test the task cubit closing text field',
+        build: () => TaskCubitCubit(),
+        act: (cubit) => cubit.closeTextfield(),
+        expect: () => [EditTextfieldOff()]);
     // Add your tests here
   });
 }

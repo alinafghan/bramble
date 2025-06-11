@@ -10,6 +10,11 @@ void main() {
         build: () => CalendarBloc(),
         act: (bloc) => bloc.add(ChangeFocusedMonth(testDate)),
         expect: () => <CalendarState>[CalendarLoaded(focusedDate: testDate)]);
-    // Add your tests here
+  });
+  group('CalendarEvent', () {
+    test('ChangeFocusedMonth value comparison', () {
+      final date = DateTime(2023, 10, 1);
+      expect(ChangeFocusedMonth(date), ChangeFocusedMonth(date));
+    });
   });
 }

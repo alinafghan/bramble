@@ -9,10 +9,6 @@ abstract class CalendarState extends Equatable {
   List<Object> get props => [focusedDate];
 }
 
-class CalendarLoading extends CalendarState {
-  const CalendarLoading({required super.focusedDate});
-}
-
 class CalendarLoaded extends CalendarState {
   const CalendarLoaded({required super.focusedDate});
 }
