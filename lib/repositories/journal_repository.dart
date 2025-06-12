@@ -7,10 +7,17 @@ import 'dart:io';
 
 class JournalRepository {
   final Logger _logger = Logger();
-  final AuthRepository _userRepository = AuthRepository();
+  final AuthRepository _userRepository;
+  final FirebaseFirestore _firestore;
 
-  final userJournalCollection =
-      FirebaseFirestore.instance.collection('Journal');
+  JournalRepository({
+    AuthRepository? repo,
+    FirebaseFirestore? firestore,
+  })  : _firestore = firestore ?? FirebaseFirestore.instance,
+        _userRepository = repo ?? AuthRepository();
+
+  CollectionReference get userJournalCollection =>
+      _firestore.collection('Journal');
 
   Future<Journal?> getJournalFromFirebase(String id) async {
     try {
@@ -25,7 +32,7 @@ class JournalRepository {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
       throw Exception('No internet connection. Please check your network.');
     } catch (e) {
-      return null; // Error while fetching the document
+      throw Exception(e); // Error while fetching the document
     }
   }
 
@@ -43,8 +50,11 @@ class JournalRepository {
         .get();
     final journals = <Journal>[];
     for (var doc in snapshot.docs) {
-      final journal = Journal.fromDocument(doc.data());
-      journals.add(journal);
+      final data = doc.data();
+      if (data != null) {
+        final journal = Journal.fromDocument(data as Map<String, dynamic>);
+        journals.add(journal);
+      }
     }
     if (journals.isEmpty) {
       _logger.w('No journals found for the specified month: $month');

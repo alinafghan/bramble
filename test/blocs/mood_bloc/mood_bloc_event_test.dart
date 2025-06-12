@@ -71,7 +71,7 @@ void main() {
       'delete mood successfully',
       build: () => MoodBloc(moodProvider: mockProvider),
       setUp: () => when(() => mockProvider.deleteMood('2024-10-01'))
-          .thenAnswer((_) async => null),
+          .thenAnswer((_) async {}),
       act: (bloc) => bloc.add(const DeleteMoodEvent(date: '2024-10-01')),
       skip: 1, //skip loading
       expect: () => <MoodBlocState>[const DeleteMoodLoaded('2024-10-01')],

@@ -8,10 +8,16 @@ import 'dart:io';
 
 class ReviewRepository {
   final Logger _logger = Logger();
+  AuthRepository userRepo;
+  final FirebaseFirestore _firestore;
 
-  final bookReviewCollection = FirebaseFirestore.instance.collection('Reviews');
-  final likeCollection = FirebaseFirestore.instance.collection('Likes');
-  AuthRepository userRepo = AuthRepository();
+  ReviewRepository({AuthRepository? repo, FirebaseFirestore? firestore})
+      : userRepo = repo ?? AuthRepository(),
+        _firestore = firestore ?? FirebaseFirestore.instance;
+
+  CollectionReference get bookReviewCollection =>
+      _firestore.collection('Reviews');
+  CollectionReference get likeCollection => _firestore.collection('Likes');
 
   Future<Review> setReview(Review review, Book book) async {
     try {

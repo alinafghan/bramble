@@ -36,7 +36,7 @@ class BookListRepository {
     }
   }
 
-  void saveBook(Book book) async {
+  Future<void> saveBook(Book book) async {
     try {
       _logger.d(book);
       Users? currentUser = await repo.getCurrentUserFromFirebase();
@@ -56,10 +56,11 @@ class BookListRepository {
       throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       _logger.e('error saving book $e');
+      throw Exception('Unexpected error occurred while saving the book');
     }
   }
 
-  void removeBook(Book book) async {
+  Future<void> removeBook(Book book) async {
     try {
       Users? currentUser = await repo.getCurrentUserFromFirebase();
       currentUser.savedBooks?.remove(book);
@@ -71,6 +72,7 @@ class BookListRepository {
       throw Exception('No internet connection. Please check your network.');
     } catch (e) {
       _logger.e('error deleting book $e');
+      throw Exception('Unexpected error occurred while removing the book');
     }
   }
 }

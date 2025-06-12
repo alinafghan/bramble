@@ -9,11 +9,14 @@ class LibraryRepository {
   List<Book> allBooks = [];
   List<Book> searchedBooks = [];
   final Logger _logger = Logger();
+  final http.Client client;
+
+  LibraryRepository({http.Client? client}) : client = client ?? http.Client();
 
   Future<List<Book>> getLibrary() async {
     var url = 'https://openlibrary.org/subjects/fiction.json?limit=30';
     try {
-      var response = await http.get(Uri.parse(url));
+      var response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         List<dynamic> listData =
@@ -37,7 +40,7 @@ class LibraryRepository {
   Future<List<Book>> searchBook(String keyword) async {
     var url = "https://openlibrary.org/search.json?q=$keyword&limit=30";
     try {
-      var response = await http.get(Uri.parse(url));
+      var response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         List<dynamic> listData =
@@ -65,7 +68,7 @@ class LibraryRepository {
     final String url = 'https://openlibrary.org${book.key}.json';
 
     try {
-      var response = await http.get(Uri.parse(url));
+      var response = await client.get(Uri.parse(url));
       Map<String, dynamic> data = json.decode(response.body);
       book = Book.addJson(book, data);
       return book;

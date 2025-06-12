@@ -64,6 +64,13 @@ void main() {
 
       expect(() => bookListRepo.returnBookList(), throwsException);
     });
+
+    test('throws generic Exception on unknown error', () async {
+      when(() => mockAuthRepo.getCurrentUserFromFirebase())
+          .thenThrow(Exception('Unexpected error'));
+
+      expect(() => bookListRepo.returnBookList(), throwsException);
+    });
   });
 
   group('saveBook', () {
@@ -74,7 +81,9 @@ void main() {
       when(() => mockCollection.doc(testUser.userId)).thenReturn(mockDoc);
       when(() => mockDoc.update(any())).thenAnswer((_) async => {});
 
-      bookListRepo.saveBook(testBook);
+      print(
+          'savedBooks contains testBook? ${testUser.savedBooks!.contains(testBook)}');
+      await bookListRepo.saveBook(testBook);
 
       verify(() => mockDoc.update(any())).called(1);
       expect(testUser.savedBooks!.contains(testBook), isTrue);
@@ -85,7 +94,7 @@ void main() {
       when(() => mockAuthRepo.getCurrentUserFromFirebase())
           .thenAnswer((_) async => testUser);
 
-      bookListRepo.saveBook(testBook);
+      await bookListRepo.saveBook(testBook);
 
       verifyNever(() => mockDoc.update(any()));
     });
@@ -93,6 +102,13 @@ void main() {
     test('throws Exception on SocketException', () async {
       when(() => mockAuthRepo.getCurrentUserFromFirebase())
           .thenThrow(const SocketException('no connection'));
+
+      expect(() => bookListRepo.saveBook(testBook), throwsException);
+    });
+
+    test('throws generic Exception on unknown error', () async {
+      when(() => mockAuthRepo.getCurrentUserFromFirebase())
+          .thenThrow(Exception('something went wrong'));
 
       expect(() => bookListRepo.saveBook(testBook), throwsException);
     });
@@ -106,7 +122,7 @@ void main() {
       when(() => mockCollection.doc(testUser.userId)).thenReturn(mockDoc);
       when(() => mockDoc.update(any())).thenAnswer((_) async => {});
 
-      bookListRepo.removeBook(testBook);
+      await bookListRepo.removeBook(testBook);
 
       verify(() => mockDoc.update(any())).called(1);
       expect(testUser.savedBooks!.contains(testBook), isFalse);
@@ -115,6 +131,13 @@ void main() {
     test('throws Exception on SocketException', () async {
       when(() => mockAuthRepo.getCurrentUserFromFirebase())
           .thenThrow(const SocketException('no connection'));
+
+      expect(() => bookListRepo.removeBook(testBook), throwsException);
+    });
+
+    test('throws generic Exception on unknown error', () async {
+      when(() => mockAuthRepo.getCurrentUserFromFirebase())
+          .thenThrow(Exception('Unexpected'));
 
       expect(() => bookListRepo.removeBook(testBook), throwsException);
     });

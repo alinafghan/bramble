@@ -6,8 +6,15 @@ import 'package:logger/logger.dart';
 
 class MoodRepository {
   final Logger _logger = Logger();
-  final bookReviewCollection = FirebaseFirestore.instance.collection('Moods');
-  AuthRepository userRepo = AuthRepository();
+  AuthRepository userRepo;
+  final FirebaseFirestore _firestore;
+
+  MoodRepository({AuthRepository? repo, FirebaseFirestore? firestore})
+      : userRepo = repo ?? AuthRepository(),
+        _firestore = firestore ?? FirebaseFirestore.instance;
+
+  CollectionReference get bookReviewCollection =>
+      _firestore.collection('Moods');
 
   Future<Mood> setMood(String moodAsset, String date) async {
     Users currentUser = await userRepo.getCurrentUserFromFirebase();
@@ -53,7 +60,8 @@ class MoodRepository {
 
       final moods = <String, Mood>{};
       for (var doc in snapshot.docs) {
-        final mood = Mood.fromJson(doc.data());
+        final data = doc.data();
+        final mood = Mood.fromJson(data as Map<String, dynamic>);
         moods[mood.date] = mood;
       }
       return moods;
