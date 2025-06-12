@@ -4,7 +4,10 @@ import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/review_repository.dart';
 
 class ReviewProvider {
-  final ReviewRepository reviewRepository = ReviewRepository();
+  final ReviewRepository reviewRepository;
+
+  ReviewProvider({ReviewRepository? repo})
+      : reviewRepository = repo ?? ReviewRepository();
 
   Future<List<Review?>> getReviewsForBook(Book book) async {
     return reviewRepository.getReviewsForBook(book);

@@ -2,7 +2,10 @@ import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/repositories/journal_repository.dart';
 
 class JournalProvider {
-  final JournalRepository journalRepository = JournalRepository();
+  final JournalRepository journalRepository;
+
+  JournalProvider({JournalRepository? repo})
+      : journalRepository = repo ?? JournalRepository();
 
   Future<Journal?> getJournal(String id) async {
     Journal? entry = await journalRepository.getJournalFromFirebase(id);

@@ -64,7 +64,7 @@ class ReviewRepository {
       final currentUser = await userRepo.getCurrentUserFromFirebase();
 
       for (final review in reviews) {
-        final likeDoc = await FirebaseFirestore.instance
+        final likeDoc = await _firestore
             .collection('Likes')
             .doc('${review.id}_${currentUser.userId}')
             .get();
@@ -85,8 +85,7 @@ class ReviewRepository {
       Users? user = await userRepo.getCurrentUserFromFirebase();
       final likeDoc = likeCollection.doc('${review.id}_${user.userId}');
       final likeSnapshot = await likeDoc.get();
-      final reviewDoc =
-          FirebaseFirestore.instance.collection('Reviews').doc(review.id);
+      final reviewDoc = _firestore.collection('Reviews').doc(review.id);
 
       if (likeSnapshot.exists) {
         // Already liked → UNLIKE

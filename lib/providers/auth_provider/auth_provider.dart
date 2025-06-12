@@ -3,7 +3,10 @@ import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 
 class MyAuthProvider {
-  final AuthRepository _authRepository = AuthRepository();
+  final AuthRepository _authRepository;
+
+  MyAuthProvider({AuthRepository? repo})
+      : _authRepository = repo ?? AuthRepository();
 
   Future<Users?> emailSignUp(Users user, String password) async {
     return await _authRepository.emailSignUp(user, password);

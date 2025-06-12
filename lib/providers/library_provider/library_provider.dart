@@ -2,7 +2,10 @@ import 'package:journal_app/models/book.dart';
 import 'package:journal_app/repositories/library_repository.dart';
 
 class LibraryProvider {
-  final LibraryRepository libraryRepository = LibraryRepository();
+  final LibraryRepository libraryRepository;
+
+  LibraryProvider({LibraryRepository? repo})
+      : libraryRepository = repo ?? LibraryRepository();
 
   Future<List<Book>> getLibrary() async {
     return await libraryRepository.getLibrary();

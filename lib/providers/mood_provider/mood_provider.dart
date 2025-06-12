@@ -2,7 +2,10 @@ import 'package:journal_app/models/mood.dart';
 import 'package:journal_app/repositories/mood_repository.dart';
 
 class MoodProvider {
-  final MoodRepository _moodRepository = MoodRepository();
+  final MoodRepository _moodRepository;
+
+  MoodProvider({MoodRepository? repo})
+      : _moodRepository = repo ?? MoodRepository();
 
   Future<Mood> setMood(String moodAsset, String date) async {
     return _moodRepository.setMood(moodAsset, date);
