@@ -7,8 +7,15 @@ import 'dart:io';
 
 class BookListRepository {
   final Logger _logger = Logger();
-  final usersCollection = FirebaseFirestore.instance.collection('Users');
-  AuthRepository repo = AuthRepository();
+  final CollectionReference usersCollection;
+  final AuthRepository repo;
+
+  BookListRepository({
+    CollectionReference? usersCollection,
+    AuthRepository? repo,
+  })  : usersCollection =
+            usersCollection ?? FirebaseFirestore.instance.collection('Users'),
+        repo = repo ?? AuthRepository();
 
   Future<List<Book>?> returnBookList() async {
     try {

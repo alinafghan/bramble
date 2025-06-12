@@ -7,14 +7,29 @@ import 'package:logger/logger.dart';
 import 'dart:io';
 
 class AuthRepository {
+  // final Logger _logger = Logger();
+  // final usersCollection = FirebaseFirestore.instance.collection('Users');
+
+  // AuthRepository({
+  //   FirebaseAuth? firebaseAuth,
+  // }) : _auth = firebaseAuth ?? FirebaseAuth.instance;
+
+  // final FirebaseAuth _auth;
   final Logger _logger = Logger();
-  final usersCollection = FirebaseFirestore.instance.collection('Users');
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+  final GoogleSignIn googleSignIn;
 
   AuthRepository({
     FirebaseAuth? firebaseAuth,
-  }) : _auth = firebaseAuth ?? FirebaseAuth.instance;
+    FirebaseFirestore? firestore,
+    GoogleSignIn? googleSignIn,
+  })  : _auth = firebaseAuth ?? FirebaseAuth.instance,
+        googleSignIn =
+            googleSignIn ?? GoogleSignIn(), // fallback for production
+        _firestore = firestore ?? FirebaseFirestore.instance;
 
-  final FirebaseAuth _auth;
+  CollectionReference get usersCollection => _firestore.collection('Users');
 
   Stream<User?> get user {
     return _auth.authStateChanges().map((firebaseUser) {
@@ -78,9 +93,6 @@ class AuthRepository {
   Future<Users?> addProfilePic(String profileUrl) async {
     try {
       Users? user = await getCurrentUserFromFirebase();
-      if (user == null) {
-        throw Exception("App user not found.");
-      }
 
       final userDocRef = usersCollection.doc(user.userId);
       await userDocRef.update({
@@ -91,7 +103,7 @@ class AuthRepository {
       return Users.fromDocument(updatedDoc.data() as Map<String, dynamic>);
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
-      throw Exception('No internet connection. Please check your network.');
+      throw Exception('No internet connection');
     } catch (e) {
       _logger.e("Failed to update profile picture: $e");
       throw Exception("Failed to update profile picture: $e");
@@ -103,10 +115,7 @@ class AuthRepository {
       user.userId = const Uuid().v4(); //generate random user id
       UserCredential credentials = await _auth.createUserWithEmailAndPassword(
           email: user.email, password: password);
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.userId)
-          .set(user.toDocument());
+      _firestore.collection('Users').doc(user.userId).set(user.toDocument());
       //copywith method
       return user.copyWith(userId: credentials.user!.uid);
     } on SocketException {
@@ -121,7 +130,7 @@ class AuthRepository {
   Future<void> saveUserToFirestore(Users user) async {
     user.savedBooks = []; // Initialize savedBooks to an empty list
 
-    await FirebaseFirestore.instance
+    await _firestore
         .collection('Users')
         .doc(user.userId)
         .set(user.toDocument());
@@ -166,7 +175,7 @@ class AuthRepository {
 
   Future<UserCredential> signUpWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -186,11 +195,11 @@ class AuthRepository {
   //helper functions
   Future<String> getEmailFromUsername(String username) async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore
-          .instance //set trules to ensure that users can access this.
-          .collection("Users")
-          .where("username", isEqualTo: username)
-          .get();
+      QuerySnapshot snapshot =
+          await _firestore //set trules to ensure that users can access this.
+              .collection("Users")
+              .where("username", isEqualTo: username)
+              .get();
 
       if (snapshot.docs.isNotEmpty) {
         return snapshot.docs.first.get("email") as String;
@@ -205,10 +214,7 @@ class AuthRepository {
     try {
       Users currentUser = await getCurrentUserFromFirebase();
 
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser.userId)
-          .delete();
+      await _firestore.collection('Users').doc(currentUser.userId).delete();
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
       throw Exception('No internet connection. Please check your network.');
