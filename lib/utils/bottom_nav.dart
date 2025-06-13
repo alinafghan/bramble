@@ -15,13 +15,15 @@ class BottomNav extends StatefulWidget {
   final Future<void> Function()? onImagePick;
   final Journal? journal;
   final TextEditingController textController;
+  final bool allowImagePick;
 
   const BottomNav(
       {super.key,
       required this.onSave,
       this.journal,
       this.onImagePick,
-      required this.textController});
+      required this.textController,
+      this.allowImagePick = true});
 
   @override
   State<BottomNav> createState() => _BottomNavState();
@@ -93,14 +95,16 @@ class _BottomNavState extends State<BottomNav> {
                     size: 32,
                   ),
                 ),
-                IconButton(
+                if (widget.allowImagePick)
+                  IconButton(
                     onPressed: () async {
                       _pickImage(widget.journal!);
                     },
                     icon: const Icon(
                       HugeIcons.strokeRoundedAlbum02,
                       size: 32,
-                    ))
+                    ),
+                  ),
               ],
             ),
             IconButton(

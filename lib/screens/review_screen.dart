@@ -107,6 +107,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
       offstage: !isKeyboardVisible, // visually hide when false…
       child: BottomNav(
         textController: reviewTextController,
+        allowImagePick: false,
         onSave: () {
           setReview(context, widget.book);
           context.pop(); // Navigate back after posting the review
