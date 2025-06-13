@@ -5,6 +5,7 @@ part 'task_cubit_state.dart';
 
 class TaskCubitCubit extends Cubit<TaskCubitState> {
   TaskCubitCubit() : super(TaskCubitInitial());
+  final Map<String, bool> _expandedMap = {};
 
   void editTextfield() {
     emit(EditTextfieldOn());
@@ -12,5 +13,14 @@ class TaskCubitCubit extends Cubit<TaskCubitState> {
 
   void closeTextfield() {
     emit(EditTextfieldOff());
+  }
+
+  void toggleExpand(String key) {
+    _expandedMap[key] = !(_expandedMap[key] ?? false);
+    emit(ToggleExpandState({..._expandedMap}));
+  }
+
+  bool isExpanded(String key) {
+    return _expandedMap[key] ?? false;
   }
 }
