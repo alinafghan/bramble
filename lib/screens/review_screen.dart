@@ -65,7 +65,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                                   maxLines: null,
                                   controller: reviewTextController,
                                   cursorColor: AppTheme.text,
-                                  // maxLength: 360,
+                                  maxLength: 500,
                                   decoration: const InputDecoration(
                                     counterText: '', // hides built-in counter
                                     border: InputBorder.none,
@@ -91,7 +91,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                       valueListenable: reviewTextController,
                       builder: (context, value, _) {
                         return Text(
-                          '${value.text.length}/360',
+                          '${value.text.length}/500',
                           style: const TextStyle(
                               fontSize: 12, color: AppTheme.text),
                         );
