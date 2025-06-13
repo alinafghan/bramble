@@ -40,41 +40,77 @@ class _ReviewScreenState extends State<SetReviewScreen> {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppTheme.palette3),
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height / 6),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              '$currentDay, $currentDate  $currentMonth  $currentYear'),
-                          TextField(
-                            maxLines: null,
-                            controller: reviewTextController,
-                            cursorColor: AppTheme.text,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: 'Typing...',
-                                focusColor: AppTheme.palette2,
-                                hoverColor: AppTheme.palette2),
-                          ),
-                        ],
+                Stack(children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppTheme.palette3),
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height / 3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                '$currentDay, $currentDate  $currentMonth  $currentYear'),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 3.6,
+                              child: SingleChildScrollView(
+                                child: TextField(
+                                  maxLines: null,
+                                  controller: reviewTextController,
+                                  cursorColor: AppTheme.text,
+                                  // maxLength: 360,
+                                  decoration: const InputDecoration(
+                                    counterText: '', // hides built-in counter
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    hintText: 'Typing...',
+                                    focusColor: AppTheme.palette2,
+                                    hoverColor: AppTheme.palette2,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    bottom: 4,
+                    right: 4,
+                    child: ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: reviewTextController,
+                      builder: (context, value, _) {
+                        return Text(
+                          '${value.text.length}/360',
+                          style: const TextStyle(
+                              fontSize: 12, color: AppTheme.text),
+                        );
+                      },
+                    ),
+                  ),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          backgroundColor: AppTheme.palette3),
+                      onPressed: () {
+                        setReview(context, widget.book);
+                      },
+                      child: const Text('Publish Review',
+                          style: TextStyle(color: AppTheme.backgroundColor))),
+                )
               ],
             ),
           );
