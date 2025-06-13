@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/providers/library_provider/library_provider.dart';
@@ -37,27 +38,27 @@ void main() {
       skip: 1, //skip loading
       expect: () => <LibraryState>[GetLibraryFailed()],
     );
-    blocTest<LibraryBloc, LibraryState>(
+    blocTest<GetBookDetailsCubit, GetBookDetailsState>(
       'getbookdetails works successfully',
-      build: () => LibraryBloc(libraryProvider: mockProvider),
+      build: () => GetBookDetailsCubit(provider: mockProvider),
       setUp: () {
         when(() => mockProvider.getBookDetails(book))
             .thenAnswer((_) async => book);
       },
-      act: (bloc) => bloc.add(GetBookDetails(input: book)),
+      act: (bloc) => bloc.getBookDetails(book),
       skip: 1, //skip loading
-      expect: () => <LibraryState>[GetAllBooksLoaded(book: book)],
+      expect: () => <GetBookDetailsState>[GetAllBooksLoaded(book: book)],
     );
-    blocTest<LibraryBloc, LibraryState>(
+    blocTest<GetBookDetailsCubit, GetBookDetailsState>(
       'getbookdetails fails',
-      build: () => LibraryBloc(libraryProvider: mockProvider),
+      build: () => GetBookDetailsCubit(provider: mockProvider),
       setUp: () {
         when(() => mockProvider.getBookDetails(book))
             .thenThrow(Exception('Failed to get book details'));
       },
-      act: (bloc) => bloc.add(GetBookDetails(input: book)),
+      act: (bloc) => bloc.getBookDetails(book),
       skip: 1, //skip loading
-      expect: () => <LibraryState>[
+      expect: () => <GetBookDetailsState>[
         const GetBookDetailsError(
             message: 'Exception: Failed to get book details')
       ],

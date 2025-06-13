@@ -17,15 +17,19 @@ class BookCard extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return SimpleDialog(
+            backgroundColor: AppTheme.backgroundColor,
             insetPadding: const EdgeInsets.all(50),
-            title: const Text('Save book to your book list?'),
+            title: const Text('Add book to your book list?'),
             children: [
               TextButton(
                   onPressed: () {
                     context.read<BookListCubit>().addBook(book);
-                    context.pop(); // Close the dialog
+                    context.pop();
                   },
-                  child: const Text('Add'))
+                  child: const Text(
+                    'Add',
+                    style: TextStyle(color: AppTheme.palette2),
+                  ))
             ],
           );
         });

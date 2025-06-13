@@ -81,6 +81,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               } else if (libraryState is SearchCleared) {
                 books =
                     libraryState.libraryBooks; //sdisplayed books are all books?
+              } else {
+                books = books;
               }
 
               if (books.isEmpty) {

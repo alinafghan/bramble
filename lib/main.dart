@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
+import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
       ),
       BlocProvider<LibraryBloc>(
         create: (_) => LibraryBloc(libraryProvider: LibraryProvider()),
+      ),
+      BlocProvider<GetBookDetailsCubit>(
+        create: (_) => GetBookDetailsCubit(provider: LibraryProvider()),
       ),
       BlocProvider<ReviewCubit>(
           create: (_) => ReviewCubit(reviewProvider: ReviewProvider())),
