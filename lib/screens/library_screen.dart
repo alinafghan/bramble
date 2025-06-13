@@ -94,8 +94,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 0,
                   childAspectRatio: 0.5,
                 ),
                 itemCount: books.length,

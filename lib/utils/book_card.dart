@@ -43,28 +43,31 @@ class BookCard extends StatelessWidget {
           context.push('/book', extra: book);
         },
         child: Card(
-          // Remove shadow
           surfaceTintColor: Colors.transparent,
           color: Colors.transparent,
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(4.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CachedNetworkImage(
-                  imageUrl: book.coverUrl ??
-                      'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: CircularProgressIndicator(
-                        color: AppTheme.palette3,
-                        value: downloadProgress.progress),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CachedNetworkImage(
+                    imageUrl: book.coverUrl ??
+                        'https://publications.iarc.fr/uploads/media/default/0001/02/thumb_1296_default_publication.jpeg',
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          color: AppTheme.palette3,
+                          value: downloadProgress.progress),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height / 5.4,
+                    width: double.infinity,
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height / 5.4,
-                  width: double.infinity,
                 ),
                 const SizedBox(
                   height: 10,

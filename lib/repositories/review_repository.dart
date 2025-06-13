@@ -127,6 +127,11 @@ class ReviewRepository {
           'numLikes': FieldValue.increment(1),
         });
       }
+      if (review.isLikedByCurrentUser == true) {
+        review.isLikedByCurrentUser = false;
+      } else {
+        review.isLikedByCurrentUser = true;
+      }
       return review;
     } on SocketException {
       throw Exception('Please connect your wifi');

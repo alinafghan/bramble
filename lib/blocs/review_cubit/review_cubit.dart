@@ -8,6 +8,7 @@ part 'review_state.dart';
 
 class ReviewCubit extends Cubit<ReviewState> {
   final ReviewProvider reviewProvider;
+  List<Review?> _currentReviews = [];
 
   ReviewCubit({required this.reviewProvider}) : super(SetReviewInitial());
 
@@ -28,10 +29,15 @@ class ReviewCubit extends Cubit<ReviewState> {
   void likeReview(Review review) async {
     emit(LikeReviewLoading());
     try {
-      final result =
-          await reviewProvider.likeReview(review); //sends back updated review
+      final result = await reviewProvider.likeReview(review);
       if (result != null) {
-        emit(SetReviewSuccess(result)); //testing
+        final index = _currentReviews.indexWhere((r) => r?.id == result?.id);
+        print(review);
+        if (index != -1) {
+          _currentReviews[index] = result;
+        }
+        print('check');
+        emit(GetReviewForBookSuccess(_currentReviews));
       } else {
         emit(const LikeReviewFailure('Failed to like review'));
       }
@@ -44,6 +50,7 @@ class ReviewCubit extends Cubit<ReviewState> {
     emit(GetReviewForBookLoading());
     try {
       final result = await reviewProvider.getReviewsForBook(book);
+      _currentReviews = result;
       emit(GetReviewForBookSuccess(result));
     } catch (e) {
       emit(GetReviewForBookFailure(e.toString()));

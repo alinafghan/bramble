@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/report.dart';
 import 'package:journal_app/models/user.dart';
 
-class Review {
+class Review extends Equatable {
   String id;
   Users user;
   Book book;
@@ -11,6 +12,18 @@ class Review {
   int numLikes;
   bool isLikedByCurrentUser = false;
   List<Report>? reports;
+
+  @override
+  List<Object?> get props => [
+        id,
+        user,
+        book,
+        text,
+        createdAt,
+        numLikes,
+        isLikedByCurrentUser,
+        reports
+      ];
 
   Review({
     required this.text,
