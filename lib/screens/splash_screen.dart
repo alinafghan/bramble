@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:toastification/toastification.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -80,10 +79,10 @@ class _SplashScreenState extends State<SplashScreen> {
       description: Text(message),
       alignment: Alignment.bottomCenter,
       autoCloseDuration: const Duration(seconds: 3),
-      primaryColor: AppTheme.backgroundColor,
-      foregroundColor: AppTheme.backgroundColor,
+      primaryColor: Theme.of(context).colorScheme.surface,
+      foregroundColor: Theme.of(context).colorScheme.surface,
       icon: const Icon(HugeIcons.strokeRoundedAlert01),
-      backgroundColor: AppTheme.palette2,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       borderRadius: BorderRadius.circular(20.0),
     );
   }
@@ -186,18 +185,18 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               TabBar(
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
-                indicatorColor: AppTheme.palette3,
+                indicatorColor: Theme.of(context).colorScheme.primary,
                 dividerColor: Colors.transparent,
                 dividerHeight: 0,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorPadding:
                     const EdgeInsets.symmetric(horizontal: 60.0, vertical: 4.0),
                 indicator: BoxDecoration(
-                    color: AppTheme.palette3,
+                    color: Theme.of(context).colorScheme.primary,
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20.0)),
-                labelColor: AppTheme.white,
-                unselectedLabelColor: AppTheme.text,
+                labelColor: Colors.white,
+                unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 tabs: const [
                   Tab(
                     text: 'Log In',
@@ -218,23 +217,25 @@ class _SplashScreenState extends State<SplashScreen> {
                             padding: const EdgeInsets.all(20.0),
                             child: TextField(
                               controller: emailOrUsernameController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: BorderRadius.all(
+                                        const Radius.circular(12)),
                                     borderSide: BorderSide(
-                                      color: AppTheme.palette3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )),
-                                floatingLabelStyle:
-                                    TextStyle(color: AppTheme.palette3),
-                                label: Text('Email/Username'),
+                                floatingLabelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                label: const Text('Email/Username'),
                                 hintText: 'Awesome Possum',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -250,23 +251,25 @@ class _SplashScreenState extends State<SplashScreen> {
                             child: TextField(
                               controller: loginPasswordController,
                               obscureText: true,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     borderSide: BorderSide(
-                                      color: AppTheme.palette3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )),
-                                floatingLabelStyle:
-                                    TextStyle(color: AppTheme.palette3),
-                                label: Text('Password'),
+                                floatingLabelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                label: const Text('Password'),
                                 hintText: '',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -275,14 +278,16 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                           TextButton(
                               style: TextButton.styleFrom(
-                                  backgroundColor: AppTheme.palette3),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary),
                               onPressed: () {
                                 logIn();
                               },
-                              child: const Text(
+                              child: Text(
                                 'Log In',
-                                style:
-                                    TextStyle(color: AppTheme.backgroundColor),
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.surface),
                               )),
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -310,9 +315,12 @@ class _SplashScreenState extends State<SplashScreen> {
                               onPressed: () {
                                 signUpWithGoogle();
                               },
-                              label: const Text(
+                              label: Text(
                                 'Continue With Google',
-                                style: TextStyle(color: AppTheme.text),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               )),
                         ],
                       ),
@@ -327,23 +335,25 @@ class _SplashScreenState extends State<SplashScreen> {
                             padding: const EdgeInsets.all(20.0),
                             child: TextField(
                               controller: usernameController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     borderSide: BorderSide(
-                                      color: AppTheme.palette3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )),
-                                floatingLabelStyle:
-                                    TextStyle(color: AppTheme.palette3),
-                                label: Text('Username'),
+                                floatingLabelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                label: const Text('Username'),
                                 hintText: 'Awesome Possum',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -355,23 +365,25 @@ class _SplashScreenState extends State<SplashScreen> {
                                 left: 20.0, right: 20.0, bottom: 20.0),
                             child: TextField(
                               controller: emailController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     borderSide: BorderSide(
-                                      color: AppTheme.palette3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )),
-                                floatingLabelStyle:
-                                    TextStyle(color: AppTheme.palette3),
-                                label: Text('Email'),
+                                floatingLabelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                label: const Text('Email'),
                                 hintText: 'abc@xyz.com',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -384,24 +396,26 @@ class _SplashScreenState extends State<SplashScreen> {
                             child: TextField(
                               controller: passwordController,
                               obscureText: true,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     borderSide: BorderSide(
-                                      color: AppTheme.palette3,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )),
-                                floatingLabelStyle:
-                                    TextStyle(color: AppTheme.palette3),
-                                label: Text('Password'),
+                                floatingLabelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                label: const Text('Password'),
                                 hintText: '',
                                 helperText: 'Must have atleast six characters',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.grey,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -415,26 +429,33 @@ class _SplashScreenState extends State<SplashScreen> {
                                   style: TextButton.styleFrom(
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
-                                      backgroundColor: AppTheme.palette3),
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   onPressed: () {
                                     signUp();
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     'Sign Up',
                                     style: TextStyle(
-                                        color: AppTheme.backgroundColor),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface),
                                   )),
                               OutlinedButton(
                                   // style: TextButton.styleFrom(
                                   //     tapTargetSize:
                                   //         MaterialTapTargetSize.shrinkWrap,
-                                  //     backgroundColor: AppTheme.palette3),
+                                  //     backgroundColor: Theme.of(context).colorScheme.primary),
                                   onPressed: () {
                                     signUpAsModerator();
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     'Sign Up As Moderator',
-                                    style: TextStyle(color: AppTheme.text),
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
                                   )),
                             ],
                           ),
@@ -464,9 +485,12 @@ class _SplashScreenState extends State<SplashScreen> {
                               onPressed: () {
                                 signUpWithGoogle();
                               },
-                              label: const Text(
+                              label: Text(
                                 'Continue With Google',
-                                style: TextStyle(color: AppTheme.text),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               )),
                         ],
                       ),

@@ -9,6 +9,7 @@ import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
+import 'package:journal_app/blocs/theme_cubit/theme_cubit.dart';
 import 'package:journal_app/my_app_view.dart';
 import 'package:journal_app/providers/journal_provider/journal_provider.dart';
 import 'package:journal_app/providers/library_provider/library_provider.dart';
@@ -70,6 +71,9 @@ class MyApp extends StatelessWidget {
       ),
       BlocProvider<JournalBloc>(
         create: (_) => JournalBloc(journalProvider: JournalProvider()),
+      ),
+      BlocProvider<ThemeCubit>(
+        create: (_) => ThemeCubit(),
       ),
     ], child: const MyAppView());
   }

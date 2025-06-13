@@ -5,6 +5,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:journal_app/blocs/theme_cubit/theme_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:journal_app/screens/about_screen.dart';
@@ -177,21 +178,19 @@ class MyAppView extends StatelessWidget {
         ),
         BlocProvider(create: (context) => authBloc),
       ],
-      child: MaterialApp.router(
-        theme: ThemeData(
-          scaffoldBackgroundColor: AppTheme.backgroundColor,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: AppTheme.backgroundColor,
-            elevation: 0,
-            iconTheme: IconThemeData(color: AppTheme.text),
-          ),
-          fontFamily: 'Dovemayo',
-        ),
-        debugShowCheckedModeBanner: false,
-        // routeInformationProvider: router.routeInformationProvider,
-        // routerDelegate: router.routerDelegate,
-        // routeInformationParser: router.routeInformationParser,
-        routerConfig: router,
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp.router(
+            theme: AppThemes.lightTheme, // Light mode
+            darkTheme: AppThemes.darkTheme, // Dark mode
+            themeMode: themeMode,
+            debugShowCheckedModeBanner: false,
+            // routeInformationProvider: router.routeInformationProvider,
+            // routerDelegate: router.routerDelegate,
+            // routeInformationParser: router.routeInformationParser,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }

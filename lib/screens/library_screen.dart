@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/utils/book_card.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/animated_searchbar.dart';
 import 'package:lottie/lottie.dart';
 
@@ -29,7 +28,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Scaffold(
-        backgroundColor: AppTheme.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           actions: [
@@ -42,7 +41,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 height: 50,
                 width: MediaQuery.of(context).size.width - 20,
                 color: Colors.transparent,
-                textFieldColor: AppTheme.backgroundColor,
+                textFieldColor: Theme.of(context).colorScheme.surface,
                 textController: searchText,
                 onSuffixTap: () {
                   searchText.clear();

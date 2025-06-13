@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:journal_app/utils/constants.dart';
 
 class PopupMenu extends StatefulWidget {
   final String selectedVal;
@@ -25,7 +24,7 @@ class PopupMenuState extends State<PopupMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: AppTheme.backgroundColor,
+      color: Theme.of(context).colorScheme.surface,
       position: PopupMenuPosition.under,
       popUpAnimationStyle: AnimationStyle.noAnimation,
       child: Row(
@@ -35,11 +34,11 @@ class PopupMenuState extends State<PopupMenu> {
             icon: _selectedValue == 'Book'
                 ? HugeIcons.strokeRoundedBooks01
                 : HugeIcons.strokeRoundedHome05,
-            color: AppTheme.text,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
-          const HugeIcon(
+          HugeIcon(
             icon: HugeIcons.strokeRoundedArrowDown01,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onSurface,
             size: 24,
           ),
         ],
@@ -52,11 +51,13 @@ class PopupMenuState extends State<PopupMenu> {
               child: Text(
                 'Diary',
                 style: TextStyle(
-                  fontFamily: 'Dovemayo',
-                  color: _selectedValue == 'Diary'
-                      ? Colors.grey
-                      : Colors.black, // Change color if selected
-                ),
+                    fontFamily: 'Dovemayo',
+                    color: _selectedValue == 'Diary'
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurfaceVariant // Change color if selected
+                    ),
               ),
             ),
             onTap: () {
@@ -69,11 +70,13 @@ class PopupMenuState extends State<PopupMenu> {
               child: Text(
                 'Book',
                 style: TextStyle(
-                  fontFamily: 'Dovemayo',
-                  color: _selectedValue == 'Book'
-                      ? Colors.grey
-                      : Colors.black, // Change color if selected
-                ),
+                    fontFamily: 'Dovemayo',
+                    color: _selectedValue == 'Book'
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurfaceVariant // Change color if selected
+                    ),
               ),
             ),
             onTap: () {
@@ -92,11 +95,13 @@ class PopupMenuState extends State<PopupMenu> {
                 child: Text(
                   'Reviews',
                   style: TextStyle(
-                    fontFamily: 'Dovemayo',
-                    color: _selectedValue == 'Reviews'
-                        ? Colors.grey
-                        : Colors.black, // Change color if selected
-                  ),
+                      fontFamily: 'Dovemayo',
+                      color: _selectedValue == 'Reviews'
+                          ? Theme.of(context).colorScheme.onSurface
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant // Change color if selected
+                      ),
                 ),
               ),
             ),

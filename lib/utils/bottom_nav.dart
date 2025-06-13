@@ -66,7 +66,7 @@ class _BottomNavState extends State<BottomNav> {
       reverse: true,
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.backgroundColor,
+          color: Theme.of(context).colorScheme.surface,
           border: Border(
             top: BorderSide(
               color: Colors.grey.withValues(),
@@ -112,9 +112,9 @@ class _BottomNavState extends State<BottomNav> {
                   widget.onSave();
                   context.pop();
                 },
-                icon: const HugeIcon(
+                icon: HugeIcon(
                   icon: HugeIcons.strokeRoundedTick02,
-                  color: AppTheme.text,
+                  color: Theme.of(context).colorScheme.onSurface,
                   size: 32,
                 ))
           ]),

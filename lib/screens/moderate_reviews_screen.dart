@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:lottie/lottie.dart';
 
@@ -91,9 +90,9 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ListTile(
-                              leading: const Icon(
+                              leading: Icon(
                                 Icons.report,
-                                color: AppTheme.palette5,
+                                color: Theme.of(context).colorScheme.error,
                               ),
                               title: Text('${review.user} • $formattedDate'),
                               subtitle: Text(

@@ -22,7 +22,7 @@ class PopupMenuState2 extends State<PopupMenu2> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: AppTheme.backgroundColor,
+      color: Theme.of(context).colorScheme.surface,
       position: PopupMenuPosition.under,
       popUpAnimationStyle: AnimationStyle.noAnimation,
       child: const HugeIcon(

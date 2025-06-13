@@ -24,7 +24,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: AppTheme.backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               insetPadding: const EdgeInsets.all(30),
               title: Text(
                   'Are you sure you want to remove ${book.title} from your saved?'),
@@ -34,17 +34,19 @@ class _MyReorderableListState extends State<MyReorderableList> {
                       context.read<BookListCubit>().removeBook(book);
                       context.pop();
                     },
-                    child: const Text(
+                    child: Text(
                       'Yes',
-                      style: TextStyle(color: AppTheme.palette5),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     )),
                 TextButton(
                     onPressed: () {
                       context.pop();
                     },
-                    child: const Text(
+                    child: Text(
                       'Cancel',
-                      style: TextStyle(color: AppTheme.palette2),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
                     ))
               ],
             );
@@ -91,12 +93,16 @@ class _MyReorderableListState extends State<MyReorderableList> {
                             height: 50,
                             width: 50,
                           )),
-                          trailing: const Icon(
+                          trailing: Icon(
                             HugeIcons.strokeRoundedMenu09,
-                            color: AppTheme.text,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           title: Text(item.title),
                           subtitle: Text(item.author),
+                          subtitleTextStyle: TextStyle(
+                            fontFamily: 'DoveMayo',
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                       ))
                   .toList(),

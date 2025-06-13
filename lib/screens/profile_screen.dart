@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -62,8 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            icon: const HugeIcon(
-              color: AppTheme.text,
+            icon: HugeIcon(
+              color: Theme.of(context).colorScheme.onSurface,
               icon: HugeIcons.strokeRoundedEdit01,
             ),
             onPressed: () {
@@ -88,10 +87,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: AppTheme.palette2.withOpacity(0.4),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.4),
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppTheme.palette2,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 2,
                           ),
                         ),
@@ -107,10 +109,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Text(
                                   state.myUser.username?[0].toUpperCase() ??
                                       'U',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
-                                    color: AppTheme.palette3,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -123,16 +126,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: AppTheme.palette3,
+                              color: Theme.of(context).colorScheme.primary,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.surface,
                                 width: 2,
                               ),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.camera_alt_outlined,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.surface,
                               size: 16,
                             ),
                           ),
@@ -152,17 +155,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 4),
                 Text(
                   state.myUser.email,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: AppTheme.text,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   state.myUser.mod == true ? 'Moderator' : 'User',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: AppTheme.text,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -182,10 +185,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           context.go('/booklist');
                         },
-                        child: const Text(
+                        child: Text(
                           'See All',
                           style: TextStyle(
-                            color: AppTheme.palette2,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ),
@@ -211,7 +214,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Text(
                             'No saved books yet',
                             style: TextStyle(
-                              color: AppTheme.text.withOpacity(0.5),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.5),
                             ),
                           ),
                         ),
@@ -245,10 +251,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 : Container(
                     height: 120,
                     width: 120,
-                    color: AppTheme.palette3.withOpacity(0.2),
-                    child: const Icon(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    child: Icon(
                       Icons.book,
-                      color: AppTheme.palette3,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
           ),
@@ -266,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             book.author,
             style: TextStyle(
               fontSize: 12,
-              color: AppTheme.text.withOpacity(0.6),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

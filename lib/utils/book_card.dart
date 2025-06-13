@@ -17,7 +17,7 @@ class BookCard extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return SimpleDialog(
-            backgroundColor: AppTheme.backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             insetPadding: const EdgeInsets.all(50),
             title: const Text('Add book to your book list?'),
             children: [
@@ -26,9 +26,10 @@ class BookCard extends StatelessWidget {
                     context.read<BookListCubit>().addBook(book);
                     context.pop();
                   },
-                  child: const Text(
+                  child: Text(
                     'Add',
-                    style: TextStyle(color: AppTheme.palette2),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
                   ))
             ],
           );
@@ -59,7 +60,7 @@ class BookCard extends StatelessWidget {
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                       child: CircularProgressIndicator(
-                          color: AppTheme.palette3,
+                          color: Theme.of(context).colorScheme.primary,
                           value: downloadProgress.progress),
                     ),
                     errorWidget: (context, url, error) =>
@@ -108,8 +109,8 @@ class BookCard extends StatelessWidget {
           },
           shape: const CircleBorder(),
           mini: true,
-          backgroundColor: AppTheme.palette2,
-          foregroundColor: AppTheme.text,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          foregroundColor: Colors.black,
           child: const Icon(Icons.add),
         ),
       ),

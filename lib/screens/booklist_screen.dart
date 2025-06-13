@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/reorderable_list.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 
@@ -51,11 +50,11 @@ class _BooklistScreenState extends State<BooklistScreen> {
             padding:
                 const EdgeInsets.only(right: 8.0), // Add padding to the right
             child: IconButton(
-              icon: const HugeIcon(
-                color: AppTheme.text,
+              icon: HugeIcon(
+                color: Theme.of(context).colorScheme.onSurface,
                 icon: HugeIcons.strokeRoundedPlusSign,
               ),
-              color: AppTheme.text,
+              color: Theme.of(context).colorScheme.onSurface,
               onPressed: () {
                 context.push('/library');
               },

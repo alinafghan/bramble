@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
 
 class BookReviewsScreen extends StatefulWidget {
@@ -27,15 +26,15 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: const Text("Report Review"),
         content: const Text("Are you sure you want to report this review?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               "Cancel",
-              style: TextStyle(color: AppTheme.palette2),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
           TextButton(
@@ -46,9 +45,9 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                   );
               Navigator.pop(context);
             },
-            child: const Text(
+            child: Text(
               "Report",
-              style: TextStyle(color: AppTheme.palette5),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],
@@ -99,7 +98,7 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                 return Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.backgroundColor,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -109,7 +108,8 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundColor: AppTheme.white,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
                             radius: 20,
                             backgroundImage: (user.profileUrl != null &&
                                     user.profileUrl!.isNotEmpty)
@@ -117,8 +117,9 @@ class _BookReviewsScreenState extends State<BookReviewsScreen> {
                                 : null,
                             child: (user.profileUrl == null ||
                                     user.profileUrl!.isEmpty)
-                                ? const Icon(Icons.person,
-                                    color: AppTheme.palette3)
+                                ? Icon(Icons.person,
+                                    color:
+                                        Theme.of(context).colorScheme.primary)
                                 : null,
                           ),
                           const SizedBox(width: 12),

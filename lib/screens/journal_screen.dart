@@ -9,7 +9,6 @@ import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:journal_app/utils/bottom_nav.dart';
 import '../utils/popup_menu2.dart';
-import '../utils/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class JournalScreen extends StatefulWidget {
@@ -115,18 +114,18 @@ class _JournalScreenState extends State<JournalScreen> {
                 ),
                 Text(
                   '$currentMonth $currentDate, $currentYear',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: AppTheme.text,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 Text(
                   currentDay,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 // Listen for SetJournalLoaded event
@@ -191,18 +190,21 @@ class _JournalScreenState extends State<JournalScreen> {
                               if (state is GetJournalLoading) {
                                 return TextField(
                                   readOnly: !_isEditable,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
-                                    color: AppTheme.text,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                   ),
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     // The hint will be used only if the controller's text is empty.
                                     hintText: 'Loading...',
                                     hintStyle: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.grey,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
                                     ),
                                     border: InputBorder.none,
                                   ),
@@ -231,10 +233,12 @@ class _JournalScreenState extends State<JournalScreen> {
                                   return TextField(
                                     readOnly: !isEditable,
                                     controller: journalController,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
-                                      color: AppTheme.text,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
                                     ),
                                     decoration: const InputDecoration(
                                       // The hint will be used only if the controller's text is empty.

@@ -8,7 +8,6 @@ import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/utils/bottom_nav.dart';
-import 'package:journal_app/utils/constants.dart';
 
 class SetReviewScreen extends StatefulWidget {
   final Book book;
@@ -45,7 +44,8 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                 Stack(children: [
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppTheme.palette3),
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.primary),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     child: Padding(
@@ -64,17 +64,20 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                                 child: TextField(
                                   maxLines: null,
                                   controller: reviewTextController,
-                                  cursorColor: AppTheme.text,
+                                  cursorColor:
+                                      Theme.of(context).colorScheme.onSurface,
                                   maxLength: 500,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     counterText: '', // hides built-in counter
                                     border: InputBorder.none,
                                     focusedBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     disabledBorder: InputBorder.none,
                                     hintText: 'Typing...',
-                                    focusColor: AppTheme.palette2,
-                                    hoverColor: AppTheme.palette2,
+                                    focusColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    hoverColor:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
@@ -92,8 +95,9 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                       builder: (context, value, _) {
                         return Text(
                           '${value.text.length}/500',
-                          style: const TextStyle(
-                              fontSize: 12, color: AppTheme.text),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.onSurface),
                         );
                       },
                     ),
@@ -104,12 +108,14 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                   child: TextButton(
                       style: TextButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          backgroundColor: AppTheme.palette3),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         setReview(context, widget.book);
                       },
-                      child: const Text('Publish Review',
-                          style: TextStyle(color: AppTheme.backgroundColor))),
+                      child: Text('Publish Review',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.surface))),
                 )
               ],
             ),

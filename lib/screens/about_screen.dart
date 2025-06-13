@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:intl/intl.dart'; // For formatting the date
-import '../utils/constants.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -15,27 +13,27 @@ class AboutScreen extends StatelessWidget {
           onPressed: () {
             context.pop();
           },
-          icon: const HugeIcon(
+          icon: HugeIcon(
             icon: HugeIcons.strokeRoundedArrowLeft02,
-            color: AppTheme.text,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         centerTitle: true,
-        title: const Text('About Us',
-            style: TextStyle(
-                color: AppTheme.text, fontFamily: AppTheme.fontFamily)),
+        title: Text(
+          'About Us',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Align(
             alignment: Alignment.topCenter,
             child: Text(
               'Hello. We\'re happy to have you here. This is an app made for fun by Alina, inspired by the Haema journalling app. Happy journalling!',
               style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
                 fontSize: 18,
-                color: AppTheme.text,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

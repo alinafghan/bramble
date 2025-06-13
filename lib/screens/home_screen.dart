@@ -10,7 +10,6 @@ import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:hugeicons/hugeicons.dart';
-import '../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              backgroundColor: AppTheme.backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               title: const Text('Select Mood'),
               content: SizedBox(
                 height: MediaQuery.of(context).size.width * .4,
@@ -139,11 +138,11 @@ class _HomeScreenState extends State<HomeScreen> {
               padding:
                   const EdgeInsets.only(right: 8.0), // Add padding to the right
               child: IconButton(
-                icon: const HugeIcon(
-                  color: AppTheme.text,
+                icon: HugeIcon(
+                  color: Theme.of(context).colorScheme.onSurface,
                   icon: HugeIcons.strokeRoundedSettings02,
                 ),
-                color: AppTheme.text,
+                color: Theme.of(context).colorScheme.onSurface,
                 onPressed: () {
                   context.push('/home/settings');
                 },
@@ -243,8 +242,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //no mood
                                 return Center(
                                   child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: AppTheme.palette2,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,
@@ -271,9 +272,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     '${date.day}',
                                     style: TextStyle(
                                       color: date.weekday == DateTime.sunday
-                                          ? AppTheme.palette5
+                                          ? Theme.of(context).colorScheme.error
                                           : date.weekday == DateTime.saturday
-                                              ? AppTheme.palette3
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
                                               : null,
                                     ),
                                   ));
@@ -284,8 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text(
                                       '${date.day}',
                                       style: TextStyle(
-                                        color: AppTheme
-                                            .text2, // Lighter color for future dates
+                                        color: Colors.grey
+                                            .shade500, // Lighter color for future dates
                                       ),
                                     ),
                                   );
@@ -299,8 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ]),
                   FloatingActionButton(
-                    foregroundColor: AppTheme.text,
-                    backgroundColor: AppTheme.palette2,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     onPressed: () {
                       showMoodDialog(DateTime.now());
                     },
@@ -323,7 +326,7 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
             context: context,
             builder: (context) {
               return AlertDialog(
-                backgroundColor: AppTheme.backgroundColor,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 title: const Text('Delete Mood?'),
                 content: const Text(
                     'This will delete the mood and associated journal entry. Are you sure you want to proceed?'),
@@ -332,9 +335,10 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
                     onPressed: () {
                       context.pop();
                     },
-                    child: const Text(
+                    child: Text(
                       'Cancel',
-                      style: TextStyle(color: AppTheme.palette2),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ),
                   TextButton(
@@ -355,9 +359,10 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
 
                       context.pop();
                     },
-                    child: const Text(
+                    child: Text(
                       'Delete Mood',
-                      style: TextStyle(color: AppTheme.palette5),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                   ),
                 ],

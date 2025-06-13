@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:journal_app/blocs/theme_cubit/theme_cubit.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
-import '../utils/constants.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -11,20 +11,19 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
             context.pop();
           },
-          icon: const HugeIcon(
+          icon: HugeIcon(
             icon: HugeIcons.strokeRoundedArrowLeft02,
-            color: AppTheme.text,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         centerTitle: true,
-        title: const Text('Settings',
-            style: TextStyle(
-                color: AppTheme.text, fontFamily: AppTheme.fontFamily)),
+        title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -34,94 +33,107 @@ class SettingsScreen extends StatelessWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
-              const ListTile(
+              ListTile(
+                // tileColor: Theme.of(context).colorScheme.surface,
                 title: Text('Reminder',
                     style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                    )),
                 leading: HugeIcon(
                   icon: HugeIcons.strokeRoundedNotification01,
-                  color: AppTheme.text,
-                ),
-              ),
-              const ListTile(
-                title: Text('Font',
-                    style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
-                leading: HugeIcon(
-                  icon: HugeIcons.strokeRoundedText,
-                  color: AppTheme.text,
-                ),
-              ),
-              const ListTile(
-                title: Text('Dark Mode',
-                    style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
-                leading: HugeIcon(
-                  icon: HugeIcons.strokeRoundedMoon02,
-                  color: AppTheme.text,
-                ),
-              ),
-              const ListTile(
-                title: Text('Export Data',
-                    style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
-                leading: HugeIcon(
-                  icon: HugeIcons.strokeRoundedFolder01,
-                  color: AppTheme.text,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               ListTile(
-                title: const Text('About Us',
+                title: Text('Font',
                     style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
-                leading: const HugeIcon(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                    )),
+                leading: HugeIcon(
+                  icon: HugeIcons.strokeRoundedText,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              BlocBuilder<ThemeCubit, ThemeMode>(
+                builder: (context, themeMode) {
+                  final isDarkMode = themeMode == ThemeMode.dark;
+                  return ListTile(
+                    title: Text('Dark Mode',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 18,
+                        )),
+                    leading: HugeIcon(
+                      icon: HugeIcons.strokeRoundedMoon02,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    trailing: Switch(
+                      value: isDarkMode,
+                      onChanged: (val) {
+                        context.read<ThemeCubit>().toggleTheme();
+                      },
+                      activeColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Export Data',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                    )),
+                leading: HugeIcon(
+                  icon: HugeIcons.strokeRoundedFolder01,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              ListTile(
+                title: Text('About Us',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                    )),
+                leading: HugeIcon(
                   icon: HugeIcons.strokeRoundedInformationCircle,
-                  color: AppTheme.text,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 onTap: () {
                   context.push('/home/settings/about');
                 },
               ),
               ListTile(
-                title: const Text('Edit Profile',
+                title: Text('Edit Profile',
                     style: TextStyle(
-                        color: AppTheme.text,
-                        fontSize: 18,
-                        fontFamily: AppTheme.fontFamily)),
-                leading: const HugeIcon(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                    )),
+                leading: HugeIcon(
                   icon: HugeIcons.strokeRoundedUser,
-                  color: AppTheme.text,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 onTap: () {
                   context.push('/home/settings/profile');
                 },
               ),
               ListTile(
-                title: const Text('Sign Out',
+                title: Text('Sign Out',
                     style: TextStyle(
-                      color: AppTheme.text,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 18,
                     )),
-                leading: const HugeIcon(
+                leading: HugeIcon(
                   icon: HugeIcons.strokeRoundedLogout01,
-                  color: AppTheme.text,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 onTap: () async {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        backgroundColor: AppTheme.backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                         title: (const Text('Sign Out')),
                         content:
                             const Text('Are you sure you want to sign out?'),
@@ -130,9 +142,11 @@ class SettingsScreen extends StatelessWidget {
                             onPressed: () {
                               context.pop();
                             },
-                            child: const Text(
+                            child: Text(
                               'Cancel',
-                              style: TextStyle(color: AppTheme.palette2),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                             ),
                           ),
                           TextButton(
@@ -142,9 +156,10 @@ class SettingsScreen extends StatelessWidget {
                                 context.go('/');
                               }
                             },
-                            child: const Text(
+                            child: Text(
                               'Sign Out',
-                              style: TextStyle(color: AppTheme.palette5),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error),
                             ),
                           ),
                         ],
@@ -154,21 +169,21 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: const Text('Delete Account',
+                title: Text('Delete Account',
                     style: TextStyle(
-                      color: AppTheme.red,
+                      color: Theme.of(context).colorScheme.error,
                       fontSize: 18,
                     )),
-                leading: const HugeIcon(
+                leading: HugeIcon(
                   icon: HugeIcons.strokeRoundedDelete01,
-                  color: AppTheme.red,
+                  color: Theme.of(context).colorScheme.error,
                 ),
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        backgroundColor: AppTheme.backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                         title: (const Text('Delete Account')),
                         content: const Text(
                             'Are you sure you want to delete your account? This action cannot be undone.'),
@@ -177,9 +192,11 @@ class SettingsScreen extends StatelessWidget {
                             onPressed: () {
                               context.pop();
                             },
-                            child: const Text(
+                            child: Text(
                               'Cancel',
-                              style: TextStyle(color: AppTheme.palette2),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
                             ),
                           ),
                           TextButton(
@@ -190,9 +207,10 @@ class SettingsScreen extends StatelessWidget {
                                 context.go('/');
                               }
                             },
-                            child: const Text(
+                            child: Text(
                               'Delete',
-                              style: TextStyle(color: AppTheme.palette5),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error),
                             ),
                           ),
                         ],

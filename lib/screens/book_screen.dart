@@ -6,7 +6,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
 
 class BookScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _BookScreenState extends State<BookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(),
       body: BlocBuilder<GetBookDetailsCubit, GetBookDetailsState>(
         builder: (context, state) {
@@ -54,8 +53,9 @@ class _BookScreenState extends State<BookScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppTheme.backgroundColor,
-                      border: Border.all(color: AppTheme.palette3),
+                      color: Theme.of(context).colorScheme.surface,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.primary),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -96,17 +96,17 @@ class _BookScreenState extends State<BookScreen> {
                             IconButton(
                               onPressed: () =>
                                   context.push('/book_review', extra: book),
-                              icon: const HugeIcon(
+                              icon: HugeIcon(
                                 icon: HugeIcons.strokeRoundedComment01,
-                                color: AppTheme.palette3,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             IconButton(
                               onPressed: () =>
                                   context.push('/review', extra: book),
-                              icon: const HugeIcon(
+                              icon: HugeIcon(
                                 icon: HugeIcons.strokeRoundedEdit01,
-                                color: AppTheme.palette3,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ],
@@ -140,11 +140,12 @@ class _BookScreenState extends State<BookScreen> {
                             if (book.description != null)
                               Text.rich(
                                 TextSpan(
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
-                                    fontFamily: AppTheme
-                                        .fontFamily, // Don't forget this!
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    // fontFamily: AppTheme
+                                    //     .fontFamily, // Don't forget this!
                                   ),
                                   children: [
                                     TextSpan(
@@ -156,8 +157,10 @@ class _BookScreenState extends State<BookScreen> {
                                     ),
                                     TextSpan(
                                       text: expanded ? 'See less' : 'See more',
-                                      style: const TextStyle(
-                                        color: AppTheme.palette2,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       recognizer: TapGestureRecognizer()
@@ -176,10 +179,11 @@ class _BookScreenState extends State<BookScreen> {
                             if (book.excerpt != null)
                               Text.rich(
                                 TextSpan(
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
-                                    fontFamily: AppTheme.fontFamily,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    // fontFamily: AppTheme.fontFamily,
                                   ),
                                   children: [
                                     TextSpan(
@@ -193,8 +197,10 @@ class _BookScreenState extends State<BookScreen> {
                                       text: expandedExcerpt
                                           ? 'See less'
                                           : 'See more',
-                                      style: const TextStyle(
-                                        color: AppTheme.palette2,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       recognizer: TapGestureRecognizer()
