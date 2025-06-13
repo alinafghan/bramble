@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:journal_app/models/book.dart';
+import 'package:journal_app/models/report.dart';
 import 'package:journal_app/models/review.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
@@ -18,6 +20,25 @@ class ReviewRepository {
   CollectionReference get bookReviewCollection =>
       _firestore.collection('Reviews');
   CollectionReference get likeCollection => _firestore.collection('Likes');
+
+  Future<void> deleteReview(Review review) async {
+    try {
+      // Delete the review document
+      await bookReviewCollection.doc(review.id).delete();
+      // Delete associated likes (if any)
+      final likeQuery =
+          await likeCollection.where('reviewId', isEqualTo: review.id).get();
+
+      for (final doc in likeQuery.docs) {
+        await doc.reference.delete();
+      }
+      _logger.i('Review and associated likes deleted successfully.');
+    } on SocketException {
+      throw Exception('Please connect your WiFi');
+    } catch (e) {
+      throw Exception('Error deleting review: $e');
+    }
+  }
 
   Future<Review> setReview(Review review, Book book) async {
     try {
@@ -111,6 +132,71 @@ class ReviewRepository {
       throw Exception('Please connect your wifi');
     } catch (e) {
       throw Exception('Error liking review: $e');
+    }
+  }
+
+  Future<List<Review>> getReportedReviews() async {
+    try {
+      QuerySnapshot snapshot = await bookReviewCollection.get();
+
+      List<Review> reportedReviews = [];
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        // Check if reports field exists and is not empty
+        if (data.containsKey('reports') &&
+            data['reports'] is List &&
+            (data['reports'] as List).isNotEmpty) {
+          Review review = Review.fromDocument(data);
+          reportedReviews.add(review);
+        }
+      }
+
+      return reportedReviews;
+    } on SocketException {
+      throw Exception('Please connect your WiFi');
+    } catch (e) {
+      throw Exception('Error fetching reported reviews: $e');
+    }
+  } // for formatting date
+
+  Future<void> reportReview({
+    required Review review,
+    required String reason,
+  }) async {
+    try {
+      Users currentUser = await userRepo.getCurrentUserFromFirebase();
+
+      // Create a new report object
+      Report newReport = Report(
+        user: currentUser,
+        reason: reason,
+        reportedAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+      );
+
+      DocumentReference reviewDocRef = bookReviewCollection.doc(review.id);
+      DocumentSnapshot docSnapshot = await reviewDocRef.get();
+
+      if (!docSnapshot.exists) {
+        throw Exception('Review not found.');
+      }
+
+      // Get current reports list or empty
+      List<dynamic> existingReports =
+          (docSnapshot.data() as Map<String, dynamic>)['reports'] ?? [];
+
+      // Add new report
+      existingReports.add(newReport.toMap());
+
+      // Update Firestore document
+      await reviewDocRef.update({
+        'reports': existingReports,
+      });
+    } on SocketException {
+      throw Exception('Please connect your WiFi');
+    } catch (e) {
+      throw Exception('Error reporting review: $e');
     }
   }
 }

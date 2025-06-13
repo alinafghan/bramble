@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'package:journal_app/utils/reorderable_list.dart';
@@ -18,6 +19,7 @@ class _BooklistScreenState extends State<BooklistScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<AuthenticationBloc>().add(GetUserEvent());
     getBooks(); // Fetch books only once when the widget initializes
   }
 
@@ -26,17 +28,22 @@ class _BooklistScreenState extends State<BooklistScreen> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0, // Ensures alignment of the leading widget with padding
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 8.0), // Add padding to the left
-          child: Row(
-            mainAxisSize: MainAxisSize
-                .min, // Ensures the Row takes only as much space as needed
-            children: [
-              PopupMenu(
-                selectedVal: 'Book',
-                isModerator: false,
-              ),
-            ],
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0), // Add padding to the left
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is GetUserLoaded) {
+                return PopupMenu(
+                  selectedVal: 'Book',
+                  isModerator: state.myUser.mod,
+                );
+              } else {
+                return const PopupMenu(
+                  selectedVal: 'Book',
+                  isModerator: false,
+                );
+              }
+            },
           ),
         ),
         actions: [

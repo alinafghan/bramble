@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
+import 'package:journal_app/utils/constants.dart';
+import 'package:journal_app/utils/popup_menu.dart';
+import 'package:lottie/lottie.dart';
 
 class ModerateReviewsScreen extends StatefulWidget {
   const ModerateReviewsScreen({super.key});
@@ -9,7 +15,137 @@ class ModerateReviewsScreen extends StatefulWidget {
 
 class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
   @override
+  void initState() {
+    context.read<ReviewCubit>().getReportedReviews();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        leadingWidth: 64,
+        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is GetUserLoaded) {
+                return PopupMenu(
+                  selectedVal: 'Reviews',
+                  isModerator: state.myUser.mod,
+                );
+              } else {
+                return const PopupMenu(
+                  selectedVal: 'Reviews',
+                  isModerator: false,
+                );
+              }
+            },
+          ),
+        ),
+        title: const Text('Moderate Reviews'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: BlocBuilder<ReviewCubit, ReviewState>(
+          builder: (context, state) {
+            if (state is GetReportedReviewsLoaded) {
+              final reviews = state.reportedReviews;
+
+              if (reviews.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Lottie.asset('assets/lottie/typing_laptop.json',
+                          height: 200, width: 200),
+                      const SizedBox(height: 4),
+                      const Text('No reports yet'),
+                    ],
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: state.reportedReviews.length,
+                itemBuilder: (context, i) {
+                  final bookTitle = state.reportedReviews[i].book.title;
+                  final reviews = state.reportedReviews;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          bookTitle,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      ...reviews.map((review) {
+                        final String formattedDate = review.createdAt;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              leading: const Icon(
+                                Icons.report,
+                                color: AppTheme.palette5,
+                              ),
+                              title: Text('${review.user} • $formattedDate'),
+                              subtitle: Text(
+                                review.text,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete_outline),
+                                onPressed: () {
+                                  context
+                                      .read<ReviewCubit>()
+                                      .deleteReview(review);
+                                },
+                                color: Colors.red.shade300,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                '${review.reports?.length ?? 0} report(s): ${review.reports?.join(', ')}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 6.0),
+                              child: Text(
+                                maxLines: 1,
+                                '-----------------------------------------------------------',
+                                style: TextStyle(
+                                    color: Color.fromARGB(86, 122, 117, 117)),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ],
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: Lottie.asset('assets/plant.json'),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 }

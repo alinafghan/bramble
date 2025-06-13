@@ -71,3 +71,41 @@ final class GetReviewForBookSuccess extends ReviewState {
   @override
   List<Object> get props => [reviews];
 }
+
+final class ReportReviewLoading extends ReviewState {}
+
+final class ReportedReviewLoaded extends ReviewState {
+  final Review review;
+
+  const ReportedReviewLoaded({required this.review});
+}
+
+final class ReportedReviewFailure extends ReviewState {
+  final String message;
+
+  const ReportedReviewFailure({required this.message});
+}
+
+final class GetReportedReviewsLoading extends ReviewState {}
+
+final class GetReportedReviewsLoaded extends ReviewState {
+  final List<Review> reportedReviews;
+
+  const GetReportedReviewsLoaded({required this.reportedReviews});
+}
+
+final class GetReportedReviewsFailure extends ReviewState {
+  final String message;
+
+  const GetReportedReviewsFailure({required this.message});
+}
+
+final class DeleteReviewLoading extends ReviewState {}
+
+final class DeleteReviewLoaded extends ReviewState {}
+
+final class DeleteReviewFailure extends ReviewState {
+  final String message;
+
+  const DeleteReviewFailure({required this.message});
+}

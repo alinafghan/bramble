@@ -1,4 +1,5 @@
 import 'package:journal_app/models/book.dart';
+import 'package:journal_app/models/report.dart';
 import 'package:journal_app/models/user.dart';
 
 class Review {
@@ -9,6 +10,7 @@ class Review {
   String createdAt;
   int numLikes;
   bool isLikedByCurrentUser = false;
+  List<Report>? reports;
 
   Review({
     required this.text,
@@ -17,6 +19,7 @@ class Review {
     required this.user,
     required this.book,
     required this.createdAt,
+    this.reports,
   });
 
   Map<String, Object?> toDocument() {
@@ -27,6 +30,7 @@ class Review {
       'user': user.toDocument(),
       'book': book.toJson(),
       'numLikes': numLikes,
+      'reports': reports?.map((r) => r.toMap()).toList() ?? [],
     };
   }
 
@@ -44,6 +48,12 @@ class Review {
       author: doc['book']['author'] as String,
       title: doc['book']['title'] as String,
     );
+    List<Report>? reports;
+    if (doc['reports'] != null) {
+      reports = List<Map<String, dynamic>>.from(doc['reports'])
+          .map((r) => Report.fromMap(r))
+          .toList();
+    }
     return Review(
       id: doc['id'] as String,
       user: user,
@@ -51,6 +61,7 @@ class Review {
       createdAt: doc['createdAt'] as String,
       text: doc['text'] as String,
       numLikes: doc['numLikes'] as int,
+      reports: reports,
     );
   }
 

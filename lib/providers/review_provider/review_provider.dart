@@ -24,4 +24,16 @@ class ReviewProvider {
   Future<Review?> likeReview(Review review) async {
     return reviewRepository.likeReview(review);
   }
+
+  Future<List<Review>> getReportedReviews() async {
+    return reviewRepository.getReportedReviews();
+  }
+
+  Future<void> reportReview(Review review, String reason) async {
+    return reviewRepository.reportReview(review: review, reason: reason);
+  }
+
+  Future<void> deleteReview(Review review) async {
+    return reviewRepository.deleteReview(review);
+  }
 }

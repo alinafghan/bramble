@@ -24,6 +24,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return AlertDialog(
+              backgroundColor: AppTheme.backgroundColor,
               insetPadding: const EdgeInsets.all(30),
               title: Text(
                   'Are you sure you want to remove ${book.title} from your saved?'),
@@ -33,12 +34,18 @@ class _MyReorderableListState extends State<MyReorderableList> {
                       context.read<BookListCubit>().removeBook(book);
                       context.pop();
                     },
-                    child: const Text('Yes')),
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: AppTheme.palette5),
+                    )),
                 TextButton(
                     onPressed: () {
                       context.pop();
                     },
-                    child: const Text('No'))
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: AppTheme.palette2),
+                    ))
               ],
             );
           });

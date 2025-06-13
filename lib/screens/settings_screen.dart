@@ -99,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                         fontSize: 18,
                         fontFamily: AppTheme.fontFamily)),
                 leading: const HugeIcon(
-                  icon: HugeIcons.strokeRoundedInformationCircle,
+                  icon: HugeIcons.strokeRoundedUser,
                   color: AppTheme.text,
                 ),
                 onTap: () {
@@ -113,7 +113,7 @@ class SettingsScreen extends StatelessWidget {
                       fontSize: 18,
                     )),
                 leading: const HugeIcon(
-                  icon: HugeIcons.strokeRoundedInformationCircle,
+                  icon: HugeIcons.strokeRoundedLogout01,
                   color: AppTheme.text,
                 ),
                 onTap: () async {
@@ -121,6 +121,7 @@ class SettingsScreen extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        backgroundColor: AppTheme.backgroundColor,
                         title: (const Text('Sign Out')),
                         content:
                             const Text('Are you sure you want to sign out?'),
@@ -129,7 +130,10 @@ class SettingsScreen extends StatelessWidget {
                             onPressed: () {
                               context.pop();
                             },
-                            child: const Text('Cancel'),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: AppTheme.palette2),
+                            ),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -138,7 +142,10 @@ class SettingsScreen extends StatelessWidget {
                                 context.go('/');
                               }
                             },
-                            child: const Text('Sign Out'),
+                            child: const Text(
+                              'Sign Out',
+                              style: TextStyle(color: AppTheme.palette5),
+                            ),
                           ),
                         ],
                       );
@@ -153,7 +160,7 @@ class SettingsScreen extends StatelessWidget {
                       fontSize: 18,
                     )),
                 leading: const HugeIcon(
-                  icon: HugeIcons.strokeRoundedInformationCircle,
+                  icon: HugeIcons.strokeRoundedDelete01,
                   color: AppTheme.red,
                 ),
                 onTap: () {
@@ -161,6 +168,7 @@ class SettingsScreen extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        backgroundColor: AppTheme.backgroundColor,
                         title: (const Text('Delete Account')),
                         content: const Text(
                             'Are you sure you want to delete your account? This action cannot be undone.'),
@@ -169,7 +177,10 @@ class SettingsScreen extends StatelessWidget {
                             onPressed: () {
                               context.pop();
                             },
-                            child: const Text('Cancel'),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: AppTheme.palette2),
+                            ),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -179,7 +190,10 @@ class SettingsScreen extends StatelessWidget {
                                 context.go('/');
                               }
                             },
-                            child: const Text('Delete'),
+                            child: const Text(
+                              'Delete',
+                              style: TextStyle(color: AppTheme.palette5),
+                            ),
                           ),
                         ],
                       );

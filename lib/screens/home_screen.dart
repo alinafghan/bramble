@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
+              backgroundColor: AppTheme.backgroundColor,
               title: const Text('Select Mood'),
               content: SizedBox(
                 height: MediaQuery.of(context).size.width * .4,
@@ -108,15 +109,27 @@ class _HomeScreenState extends State<HomeScreen> {
           titleSpacing: 0,
           leadingWidth:
               64, // Ensures alignment of the leading widget with padding
-          leading: const Padding(
-            padding: EdgeInsets.only(left: 12.0), // Add padding to the left
+          leading: Padding(
+            padding:
+                const EdgeInsets.only(left: 12.0), // Add padding to the left
             child: Row(
               mainAxisSize: MainAxisSize
                   .min, // Ensures the Row takes only as much space as needed
               children: [
-                PopupMenu(
-                  selectedVal: 'Diary',
-                  isModerator: false,
+                BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (context, state) {
+                    if (state is GetUserLoaded) {
+                      return PopupMenu(
+                        selectedVal: 'Diary',
+                        isModerator: state.myUser.mod,
+                      );
+                    } else {
+                      return const PopupMenu(
+                        selectedVal: 'Diary',
+                        isModerator: false,
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -310,6 +323,7 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
             context: context,
             builder: (context) {
               return AlertDialog(
+                backgroundColor: AppTheme.backgroundColor,
                 title: const Text('Delete Mood?'),
                 content: const Text(
                     'This will delete the mood and associated journal entry. Are you sure you want to proceed?'),
@@ -318,7 +332,10 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
                     onPressed: () {
                       context.pop();
                     },
-                    child: const Text('Cancel'),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: AppTheme.palette2),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -338,7 +355,10 @@ Widget deleteMoodDialog(BuildContext context, String mood, String docId) {
 
                       context.pop();
                     },
-                    child: const Text('Delete Mood'),
+                    child: const Text(
+                      'Delete Mood',
+                      style: TextStyle(color: AppTheme.palette5),
+                    ),
                   ),
                 ],
               );

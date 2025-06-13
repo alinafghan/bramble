@@ -49,4 +49,34 @@ class ReviewCubit extends Cubit<ReviewState> {
       emit(GetReviewForBookFailure(e.toString()));
     }
   }
+
+  void getReportedReviews() async {
+    emit(GetReportedReviewsLoading());
+    try {
+      List<Review> reportedReviews = await reviewProvider.getReportedReviews();
+      emit(GetReportedReviewsLoaded(reportedReviews: reportedReviews));
+    } catch (e) {
+      emit(GetReportedReviewsFailure(message: e.toString()));
+    }
+  }
+
+  void reportReview(Review review, String reason) async {
+    emit(ReportReviewLoading());
+    try {
+      await reviewProvider.reportReview(review, reason);
+      emit(ReportedReviewLoaded(review: review));
+    } catch (e) {
+      emit(ReportedReviewFailure(message: e.toString()));
+    }
+  }
+
+  void deleteReview(Review review) async {
+    emit(DeleteReviewLoading());
+    try {
+      await reviewProvider.deleteReview(review);
+      emit(DeleteReviewLoaded());
+    } catch (e) {
+      emit(DeleteReviewFailure(message: e.toString()));
+    }
+  }
 }
