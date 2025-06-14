@@ -4,6 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
+import 'package:journal_app/blocs/mood_bloc/mood_bloc.dart';
 import 'package:journal_app/models/journal.dart';
 import 'package:journal_app/models/user.dart';
 import 'package:journal_app/providers/auth_provider/auth_provider.dart';
@@ -87,6 +88,9 @@ class _JournalScreenState extends State<JournalScreen> {
         canPop: true,
         onPopInvoked: (didPop) {
           if (didPop) {
+            context
+                .read<MoodBloc>()
+                .add(GetMonthlyMoodEvent(month: DateTime.now()));
             context.read<TaskCubitCubit>().closeTextfield();
           }
         },
