@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
 import 'package:journal_app/utils/popup_menu.dart';
@@ -23,7 +24,7 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
+        // titleSpacing: 0,
         leadingWidth: 64,
         centerTitle: true,
         leading: Padding(
@@ -52,7 +53,6 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
           builder: (context, state) {
             if (state is GetReportedReviewsLoaded) {
               final reviews = state.reportedReviews;
-
               if (reviews.isEmpty) {
                 return Center(
                   child: Column(
@@ -85,7 +85,6 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
                       ),
                       const SizedBox(height: 8),
                       ...reviews.map((review) {
-                        final String formattedDate = review.createdAt;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -94,10 +93,13 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
                                 Icons.report,
                                 color: Theme.of(context).colorScheme.error,
                               ),
-                              title: Text('${review.user} • $formattedDate'),
+                              title: Text(
+                                  '${review.user.username} • ${format(review.createdAt)}'),
                               subtitle: Text(
                                 review.text,
-                                style: const TextStyle(fontSize: 14),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.delete_outline),
@@ -113,7 +115,7 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Text(
-                                '${review.reports?.length ?? 0} report(s): ${review.reports?.join(', ')}',
+                                '${review.reports?.length ?? 0} report(s)}',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,
@@ -146,5 +148,19 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
         ),
       ),
     );
+  }
+
+  String format(String createdAt) {
+    final DateTime now = DateTime.now();
+    final DateTime created = DateTime.tryParse(createdAt)?.toLocal() ?? now;
+    final difference = now.difference(created);
+
+    if (difference.inMinutes < 1) return 'Just now';
+    if (difference.inHours < 24 && now.day == created.day) return 'Today';
+    if (difference.inHours < 48 && now.day == created.day + 1) {
+      return 'Yesterday';
+    }
+
+    return DateFormat('MMM dd, yyyy').format(created); // e.g. Jun 13, 2025
   }
 }

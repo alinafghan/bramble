@@ -106,7 +106,8 @@ void main() {
       },
       act: (bloc) => bloc.add(GetMonthlyJournal(month: DateTime.now())),
       skip: 1, //skip loading
-      expect: () => <JournalState>[GetMonthlyJournalError()],
+      expect: () =>
+          <JournalState>[const GetMonthlyJournalError(message: 'error')],
     );
     blocTest<JournalBloc, JournalState>(
       'handles addimage successfully',

@@ -55,7 +55,7 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
             await journalProvider.getMonthlyJournal(event.month);
         emit(GetMonthlyJournalSuccess(journals: journal));
       } catch (e) {
-        emit(GetMonthlyJournalError());
+        emit(GetMonthlyJournalError(message: e.toString()));
       }
     });
   }

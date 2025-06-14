@@ -100,7 +100,6 @@ class _MyReorderableListState extends State<MyReorderableList> {
                           title: Text(item.title),
                           subtitle: Text(item.author),
                           subtitleTextStyle: TextStyle(
-                            fontFamily: 'DoveMayo',
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),

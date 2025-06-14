@@ -41,7 +41,11 @@ class GetJournalSuccess extends JournalState {
 
 class GetMonthlyJournalLoading extends JournalState {}
 
-class GetMonthlyJournalError extends JournalState {}
+class GetMonthlyJournalError extends JournalState {
+  final String message;
+
+  const GetMonthlyJournalError({required this.message});
+}
 
 class GetMonthlyJournalSuccess extends JournalState {
   final List<Journal> journals;

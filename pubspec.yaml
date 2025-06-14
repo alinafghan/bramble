@@ -100,6 +100,9 @@ flutter:
   assets:
     - .env
     - assets/fonts/Dovemayo.otf
+    - assets/fonts/Gaegu-Light.ttf
+    - assets/fonts/Hubballi-Regular.ttf
+    - assets/fonts/ComingSoon-Regular.ttf
     - assets/bramble_icon.png  # You list the font file here
     - assets/white-paper-texture-background.jpg
     - assets/lottie/loading.json
@@ -129,6 +132,15 @@ flutter:
     - family: Dovemayo
       fonts:
         - asset: assets/fonts/Dovemayo.otf
+    - family: Gaegu
+      fonts:
+        - asset: assets/fonts/Gaegu-Light.ttf
+    - family: Hubballi
+      fonts:
+        - asset: assets/fonts/Hubballi-Regular.ttf
+    - family: ComingSoon
+      fonts:
+        - asset: assets/fonts/ComingSoon-Regular.ttf
     # - family: Trajan Pro
     #   fonts:
     #     - asset: fonts/TrajanPro.ttf

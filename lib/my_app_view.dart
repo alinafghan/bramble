@@ -5,12 +5,14 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/calendar_bloc/calendar_bloc.dart';
+import 'package:journal_app/blocs/font_cubit/font_cubit.dart';
 import 'package:journal_app/blocs/theme_cubit/theme_cubit.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/repositories/auth_repository.dart';
 import 'package:journal_app/screens/about_screen.dart';
 import 'package:journal_app/screens/book_screen.dart';
 import 'package:journal_app/screens/booklist_screen.dart';
+import 'package:journal_app/screens/font_screen.dart';
 import 'package:journal_app/screens/home_screen.dart';
 import 'package:journal_app/screens/journal_list_screen.dart';
 import 'package:journal_app/screens/journal_screen.dart';
@@ -101,6 +103,12 @@ class MyAppView extends StatelessWidget {
                           return const ProfileScreen();
                         },
                       ),
+                      GoRoute(
+                        path: 'font',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const FontScreen();
+                        },
+                      ),
                     ],
                   ),
                   GoRoute(
@@ -180,15 +188,19 @@ class MyAppView extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
-          return MaterialApp.router(
-            theme: AppThemes.lightTheme, // Light mode
-            darkTheme: AppThemes.darkTheme, // Dark mode
-            themeMode: themeMode,
-            debugShowCheckedModeBanner: false,
-            // routeInformationProvider: router.routeInformationProvider,
-            // routerDelegate: router.routerDelegate,
-            // routeInformationParser: router.routeInformationParser,
-            routerConfig: router,
+          return BlocBuilder<FontCubit, String>(
+            builder: (context, fontFamily) {
+              return MaterialApp.router(
+                theme: AppThemes.lightTheme(fontFamily), // Light mode
+                darkTheme: AppThemes.darkTheme(fontFamily), // Dark mode
+                themeMode: themeMode,
+                debugShowCheckedModeBanner: false,
+                // routeInformationProvider: router.routeInformationProvider,
+                // routerDelegate: router.routerDelegate,
+                // routeInformationParser: router.routeInformationParser,
+                routerConfig: router,
+              );
+            },
           );
         },
       ),

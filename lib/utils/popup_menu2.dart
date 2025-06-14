@@ -43,7 +43,6 @@ class PopupMenuState2 extends State<PopupMenu2> {
               Text(
                 'Edit',
                 style: TextStyle(
-                  fontFamily: 'Dovemayo',
                   color: _selectedValue == 'Edit'
                       ? Colors.grey
                       : Colors.black, // Change color if selected
@@ -69,7 +68,6 @@ class PopupMenuState2 extends State<PopupMenu2> {
                 Text(
                   'Delete',
                   style: TextStyle(
-                    fontFamily: 'Dovemayo',
                     color: _selectedValue == 'Delete'
                         ? const Color.fromARGB(255, 165, 64, 64)
                         : const Color.fromARGB(

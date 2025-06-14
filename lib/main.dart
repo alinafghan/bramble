@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
+import 'package:journal_app/blocs/font_cubit/font_cubit.dart';
 import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/blocs/library_bloc/get_library_bloc.dart';
@@ -74,6 +75,9 @@ class MyApp extends StatelessWidget {
       ),
       BlocProvider<ThemeCubit>(
         create: (_) => ThemeCubit(),
+      ),
+      BlocProvider<FontCubit>(
+        create: (_) => FontCubit(),
       ),
     ], child: const MyAppView());
   }

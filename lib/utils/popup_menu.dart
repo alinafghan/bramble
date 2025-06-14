@@ -51,7 +51,6 @@ class PopupMenuState extends State<PopupMenu> {
               child: Text(
                 'Diary',
                 style: TextStyle(
-                    fontFamily: 'Dovemayo',
                     color: _selectedValue == 'Diary'
                         ? Theme.of(context).colorScheme.onSurface
                         : Theme.of(context)
@@ -70,7 +69,6 @@ class PopupMenuState extends State<PopupMenu> {
               child: Text(
                 'Book',
                 style: TextStyle(
-                    fontFamily: 'Dovemayo',
                     color: _selectedValue == 'Book'
                         ? Theme.of(context).colorScheme.onSurface
                         : Theme.of(context)
@@ -95,7 +93,6 @@ class PopupMenuState extends State<PopupMenu> {
                 child: Text(
                   'Reviews',
                   style: TextStyle(
-                      fontFamily: 'Dovemayo',
                       color: _selectedValue == 'Reviews'
                           ? Theme.of(context).colorScheme.onSurface
                           : Theme.of(context)
