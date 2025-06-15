@@ -58,5 +58,8 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
         emit(GetMonthlyJournalError(message: e.toString()));
       }
     });
+    on<ClearJournalEvent>((event, emit) async {
+      emit(ClearJournaState());
+    });
   }
 }

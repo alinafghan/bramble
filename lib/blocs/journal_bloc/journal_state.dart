@@ -20,6 +20,8 @@ final class SetJournalSuccess extends JournalState {
   List<Object> get props => [journal];
 }
 
+final class ClearJournaState extends JournalState {}
+
 final class DeleteJournalLoading extends JournalState {}
 
 final class DeleteJournalFailure extends JournalState {}

@@ -34,6 +34,7 @@ class _JournalScreenState extends State<JournalScreen> {
   @override
   void initState() {
     super.initState();
+    journalController.clear();
     _fetchJournal();
   }
 
@@ -45,6 +46,8 @@ class _JournalScreenState extends State<JournalScreen> {
 
   // Fetch the journal content from the backend via the GetJournalBloc.
   void _fetchJournal() async {
+    _hasInitializedContent = false; // reset for new journal
+    journalController.clear(); // clear old journal tex
     Users user = await MyAuthProvider().getCurrentUser();
     String docId = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
     String id = user.userId + docId;
@@ -88,6 +91,10 @@ class _JournalScreenState extends State<JournalScreen> {
         canPop: true,
         onPopInvoked: (didPop) {
           if (didPop) {
+            context.read<JournalBloc>().add(ClearJournalEvent());
+            _hasInitializedContent = false;
+            journalController.clear();
+            journal = null;
             context
                 .read<MoodBloc>()
                 .add(GetMonthlyMoodEvent(month: DateTime.now()));
@@ -152,6 +159,13 @@ class _JournalScreenState extends State<JournalScreen> {
                             listener: (context, getListenerState) {
                               if (getListenerState is GetJournalSuccess) {
                                 journal = getListenerState.journal;
+                              }
+                              if (getListenerState is GetJournalFailure) {
+                                journal = null;
+                                journalController
+                                    .clear(); // Clear text for new/empty journal
+                                _hasInitializedContent =
+                                    true; // prevent stale content being set
                               }
                             },
                             child: BlocBuilder<JournalBloc, JournalState>(

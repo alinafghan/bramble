@@ -50,3 +50,8 @@ class GetMonthlyJournal extends JournalEvent {
   @override
   List<Object> get props => [month];
 }
+
+class ClearJournalEvent extends JournalEvent {
+  @override
+  List<Object> get props => [];
+}
