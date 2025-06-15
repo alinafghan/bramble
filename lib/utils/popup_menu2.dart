@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
-import 'package:journal_app/utils/constants.dart';
 
 class PopupMenu2 extends StatefulWidget {
   final String date;
@@ -25,9 +24,9 @@ class PopupMenuState2 extends State<PopupMenu2> {
       color: Theme.of(context).colorScheme.surface,
       position: PopupMenuPosition.under,
       popUpAnimationStyle: AnimationStyle.noAnimation,
-      child: const HugeIcon(
+      child: HugeIcon(
         icon: HugeIcons.strokeRoundedMoreVertical,
-        color: Colors.black,
+        color: Theme.of(context).colorScheme.onSurface,
         size: 18,
       ),
       itemBuilder: (context) => [
@@ -37,16 +36,19 @@ class PopupMenuState2 extends State<PopupMenu2> {
             spacing: 8,
             children: [
               HugeIcon(
-                icon: HugeIcons.strokeRoundedPencilEdit01,
-                color: _selectedValue == 'Edit' ? Colors.grey : Colors.black,
-              ),
+                  icon: HugeIcons.strokeRoundedPencilEdit01,
+                  color: _selectedValue == 'Edit'
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Theme.of(context).colorScheme.onSurfaceVariant),
               Text(
                 'Edit',
                 style: TextStyle(
-                  color: _selectedValue == 'Edit'
-                      ? Colors.grey
-                      : Colors.black, // Change color if selected
-                ),
+                    color: _selectedValue == 'Edit'
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurfaceVariant // Change color if selected
+                    ),
               ),
             ],
           ),
@@ -77,11 +79,41 @@ class PopupMenuState2 extends State<PopupMenu2> {
               ],
             ),
             onTap: () {
-              //TODO//add dialog to confirm delete
-              context.read<JournalBloc>().add(
-                    DeleteJournal(date: widget.date),
-                  );
-              context.pop();
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      title: (const Text('Delete Journal')),
+                      content: const Text(
+                          'Are you sure you want to delete this journal entry? This action cannot be undone.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            context.read<JournalBloc>().add(
+                                  DeleteJournal(date: widget.date),
+                                );
+                            context.pop();
+                          },
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error),
+                          ),
+                        ),
+                      ],
+                    );
+                  });
             }),
       ],
     );

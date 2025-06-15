@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'assets/moods/listen_music.png',
         'assets/moods/sick.png'
       ]; // Add more moods here
+      final moodString = ['cosy', 'chilling', 'study', 'happy', 'sick'];
       final stringDate = DateFormat('yyyy-MM-dd').format(selectedDay);
 
       if (moodMap.containsKey(stringDate)) {
@@ -69,24 +70,33 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: Theme.of(context).colorScheme.surface,
               title: const Text('Select Mood'),
               content: SizedBox(
-                height: MediaQuery.of(context).size.width * .4,
+                height: MediaQuery.of(context).size.width * .45,
                 width: MediaQuery.of(context).size.width * .5,
                 child: GridView.builder(
+                    shrinkWrap: true,
                     itemCount: moods.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3),
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                    ),
                     itemBuilder: (context, i) {
-                      final moodAsset = moods[i];
                       return GestureDetector(
                         onTap: () {
                           context.pop();
-                          onMoodSelected(moodAsset, selectedDay);
+                          onMoodSelected(moods[i], selectedDay);
                         },
-                        child: Image.asset(
-                          moodAsset,
-                          height: 100,
-                          width: 100,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset(
+                                moods[i],
+                                width: 100,
+                              ),
+                            ),
+                            Text(moodString[i]),
+                          ],
                         ),
                       );
                     }),

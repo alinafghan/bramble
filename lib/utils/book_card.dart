@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookCard extends StatelessWidget {

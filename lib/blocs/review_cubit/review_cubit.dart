@@ -31,12 +31,10 @@ class ReviewCubit extends Cubit<ReviewState> {
     try {
       final result = await reviewProvider.likeReview(review);
       if (result != null) {
-        final index = _currentReviews.indexWhere((r) => r?.id == result?.id);
-        print(review);
+        final index = _currentReviews.indexWhere((r) => r?.id == result.id);
         if (index != -1) {
           _currentReviews[index] = result;
         }
-        print('check');
         emit(GetReviewForBookSuccess(_currentReviews));
       } else {
         emit(const LikeReviewFailure('Failed to like review'));

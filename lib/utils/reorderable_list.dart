@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:journal_app/blocs/booklist_cubit/booklistcubit.dart';
 import 'package:journal_app/models/book.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:lottie/lottie.dart';
 
 class MyReorderableList extends StatefulWidget {

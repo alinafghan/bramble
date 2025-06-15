@@ -50,7 +50,7 @@ class Review extends Equatable {
   static Review fromDocument(Map<String, dynamic> doc) {
     Users user = Users(
       userId: doc['user']['userId'] as String,
-      username: doc['user']['username'] as String,
+      username: doc['user']['username'] as String?,
       email: doc['user']['email'] as String,
       profileUrl: doc['user']['profileUrl'] as String?,
       mod: doc['user']['mod'] as bool,

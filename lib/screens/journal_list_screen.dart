@@ -40,12 +40,11 @@ class _JournalListScreenState extends State<JournalListScreen> {
 
                       final DateTime parsedDate = DateTime.parse(journal.date);
                       final String currentMonth =
-                          DateFormat('MMMM').format(parsedDate); // e.g., "May"
+                          DateFormat('MMMM').format(parsedDate);
                       final String currentDate =
-                          DateFormat('d').format(parsedDate); // e.g., "1"
-                      final String currentDay = DateFormat('EEEE')
-                          .format(parsedDate); // e.g., "Wednesday"
-
+                          DateFormat('d').format(parsedDate);
+                      final String currentDay =
+                          DateFormat('EEEE').format(parsedDate);
                       if (state.journals.isNotEmpty) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,9 +56,6 @@ class _JournalListScreenState extends State<JournalListScreen> {
                                       widget.moodMap[journal.date]!)),
                               title: Text('$currentMonth $currentDate'),
                               subtitle: Text(currentDay),
-                              onTap: () {
-                                // Handle journal tap
-                              },
                             ),
                             Padding(
                               padding:

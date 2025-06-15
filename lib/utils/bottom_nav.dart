@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/journal_bloc/journal_bloc.dart';
 import 'package:journal_app/models/journal.dart';
-import 'package:journal_app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BottomNav extends StatefulWidget {
