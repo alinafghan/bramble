@@ -7,15 +7,18 @@ import 'package:journal_app/providers/auth_provider/auth_provider.dart';
 import 'package:toastification/toastification.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final MyAuthProvider _provider;
+
+  SplashScreen({
+    super.key,
+    MyAuthProvider? provider,
+  }) : _provider = provider ?? MyAuthProvider();
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final MyAuthProvider _provider = MyAuthProvider();
-
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -59,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
         email: email,
         savedBooks: []);
 
-    Users? user2 = await _provider.emailSignUp(user, password);
+    Users? user2 = await widget._provider.emailSignUp(user, password);
 
     if (user2 != null && mounted) {
       //TODO//add toast message
@@ -88,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void signUpWithGoogle() async {
-    UserCredential user = await _provider.signUpWithGoogle();
+    UserCredential user = await widget._provider.signUpWithGoogle();
     if (user.user != null) {
       Users user2 = Users(
         userId: user.user!.uid,
@@ -98,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
         mod: false,
       );
 
-      await _provider.saveUserToFirestore(user2);
+      await widget._provider.saveUserToFirestore(user2);
 
       if (mounted) {
         context.go('/home');
@@ -133,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen> {
         email: email,
         savedBooks: []);
 
-    Users? user2 = await _provider.emailSignUp(user, password);
+    Users? user2 = await widget._provider.emailSignUp(user, password);
 
     if (user2 != null && mounted) {
       //TODO//add toast message
@@ -155,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    User? user = await _provider.emailLogin(emailOrusername, password);
+    User? user = await widget._provider.emailLogin(emailOrusername, password);
 
     if (user != null && mounted) {
       context.go('/home');
@@ -216,11 +219,12 @@ class _SplashScreenState extends State<SplashScreen> {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: TextField(
+                              key: const Key('email/username'),
                               controller: emailOrUsernameController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        const Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     borderSide: BorderSide(
                                       color:
                                           Theme.of(context).colorScheme.primary,
@@ -364,6 +368,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             padding: const EdgeInsets.only(
                                 left: 20.0, right: 20.0, bottom: 20.0),
                             child: TextField(
+                              key: const Key('email textfield'),
                               controller: emailController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(

@@ -119,6 +119,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             title: Text('Sign Out',
+                key: const Key('Sign out 1'),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 18,
@@ -133,8 +134,11 @@ class SettingsScreen extends StatelessWidget {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     backgroundColor: Theme.of(context).colorScheme.surface,
-                    title: (const Text('Sign Out')),
-                    content: const Text('Are you sure you want to sign out?'),
+                    title: (const Text('Signing Out')),
+                    content: const Text(
+                      'Are you sure you want to sign out?',
+                      key: Key('signoutkey'),
+                    ),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
@@ -154,6 +158,7 @@ class SettingsScreen extends StatelessWidget {
                           }
                         },
                         child: Text(
+                          key: const Key('Sign out 2'),
                           'Sign Out',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.error),

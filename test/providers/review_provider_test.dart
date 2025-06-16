@@ -79,4 +79,35 @@ void main() {
       verify(() => mockRepo.likeReview(testReview)).called(1);
     });
   });
+  test('getReportedReviews returns list of reported reviews', () async {
+    final reportedReviews = [testReview];
+
+    when(() => mockRepo.getReportedReviews())
+        .thenAnswer((_) async => reportedReviews);
+
+    final result = await provider.getReportedReviews();
+
+    expect(result, equals(reportedReviews));
+    verify(() => mockRepo.getReportedReviews()).called(1);
+  });
+
+  test('reportReview calls repository method', () async {
+    when(() =>
+            mockRepo.reportReview(review: testReview, reason: 'inappropriate'))
+        .thenAnswer((_) async {});
+
+    await provider.reportReview(testReview, 'inappropriate');
+
+    verify(() =>
+            mockRepo.reportReview(review: testReview, reason: 'inappropriate'))
+        .called(1);
+  });
+
+  test('deleteReview calls repository method', () async {
+    when(() => mockRepo.deleteReview(testReview)).thenAnswer((_) async {});
+
+    await provider.deleteReview(testReview);
+
+    verify(() => mockRepo.deleteReview(testReview)).called(1);
+  });
 }

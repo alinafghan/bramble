@@ -88,4 +88,39 @@ void main() {
       ],
     );
   });
+  group('MoodBlocEvent Tests', () {
+    test('SetMoodEvent equality and props', () {
+      const event1 = SetMoodEvent(date: '2025-06-15', moodAsset: 'happy.png');
+      const event2 = SetMoodEvent(date: '2025-06-15', moodAsset: 'happy.png');
+      const event3 = SetMoodEvent(date: '2025-06-16', moodAsset: 'sad.png');
+
+      expect(event1, equals(event2));
+      expect(event1.props, ['happy.png', '2025-06-15']);
+      expect(event1 == event3, isFalse);
+    });
+
+    test('GetMonthlyMoodEvent equality and props', () {
+      final month1 = DateTime(2025, 6);
+      final month2 = DateTime(2025, 6);
+      final month3 = DateTime(2025, 5);
+
+      final event1 = GetMonthlyMoodEvent(month: month1);
+      final event2 = GetMonthlyMoodEvent(month: month2);
+      final event3 = GetMonthlyMoodEvent(month: month3);
+
+      expect(event1, equals(event2));
+      expect(event1.props, [month1]);
+      expect(event1 == event3, isFalse);
+    });
+
+    test('DeleteMoodEvent equality and props', () {
+      const event1 = DeleteMoodEvent(date: '2025-06-15');
+      const event2 = DeleteMoodEvent(date: '2025-06-15');
+      const event3 = DeleteMoodEvent(date: '2025-06-16');
+
+      expect(event1, equals(event2));
+      expect(event1.props, ['2025-06-15']);
+      expect(event1 == event3, isFalse);
+    });
+  });
 }

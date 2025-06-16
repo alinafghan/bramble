@@ -39,6 +39,7 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
       GestureDetector(
+        key: const Key('BookCardGestureDetector'),
         onTap: () {
           context.push('/book', extra: book);
         },

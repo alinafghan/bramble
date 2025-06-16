@@ -62,6 +62,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
                               height: MediaQuery.of(context).size.height / 3.6,
                               child: SingleChildScrollView(
                                 child: TextField(
+                                  key: const Key('textfield'),
                                   maxLines: null,
                                   controller: reviewTextController,
                                   cursorColor:

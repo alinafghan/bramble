@@ -1,6 +1,6 @@
 part of '../get_book_details_cubit/get_book_details_cubit.dart';
 
-sealed class GetBookDetailsState extends Equatable {
+abstract class GetBookDetailsState extends Equatable {
   const GetBookDetailsState();
 
   @override

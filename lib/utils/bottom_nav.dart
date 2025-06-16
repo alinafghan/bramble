@@ -16,13 +16,18 @@ class BottomNav extends StatefulWidget {
   final TextEditingController textController;
   final bool allowImagePick;
 
+  final ImagePicker? testImagePicker;
+  final SupabaseClient? testSupabase;
+
   const BottomNav(
       {super.key,
       required this.onSave,
       this.journal,
       this.onImagePick,
       required this.textController,
-      this.allowImagePick = true});
+      this.allowImagePick = true,
+      this.testImagePicker,
+      this.testSupabase});
 
   @override
   State<BottomNav> createState() => _BottomNavState();
@@ -30,11 +35,11 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   Future<void> _pickImage(Journal journal) async {
-    final ImagePicker picker = ImagePicker();
+    final picker = widget.testImagePicker ?? ImagePicker();
     final pickedImages = await picker.pickMultiImage();
 
     if (pickedImages.isNotEmpty) {
-      final supabase = Supabase.instance.client;
+      final supabase = widget.testSupabase ?? Supabase.instance.client;
       final savedPaths = <String>[];
 
       for (var xf in pickedImages.take(4)) {

@@ -22,7 +22,7 @@ class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
 void main() {
   late MockAuthRepository mockAuthRepo;
-  late MockFirebaseFirestore mockFirestore;
+
   late MockCollectionReference mockCollection;
   late MockDocumentReference mockDoc;
   late MockDocumentSnapshot mockSnapshot;
@@ -32,7 +32,6 @@ void main() {
 
   setUp(() {
     mockAuthRepo = MockAuthRepository();
-    mockFirestore = MockFirebaseFirestore();
     mockCollection = MockCollectionReference();
     mockDoc = MockDocumentReference();
     mockSnapshot = MockDocumentSnapshot();

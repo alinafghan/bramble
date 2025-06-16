@@ -676,11 +676,6 @@ void main() {
       final mockGoogleAuth = MockGoogleSignInAuthentication();
       final mockCredential = MockUserCredential();
 
-      final testCredential = GoogleAuthProvider.credential(
-        idToken: 'id_token',
-        accessToken: 'access_token',
-      );
-
       when(() => mockGoogleSignIn.signIn())
           .thenAnswer((_) async => mockGoogleUser);
       when(() => mockGoogleUser.authentication)

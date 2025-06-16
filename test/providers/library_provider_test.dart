@@ -34,7 +34,7 @@ void main() {
     });
 
     test('searchBook returns matching books', () async {
-      final keyword = '1984';
+      const keyword = '1984';
       final bookList = [testBook];
       when(() => mockRepo.searchBook(keyword))
           .thenAnswer((_) async => bookList);

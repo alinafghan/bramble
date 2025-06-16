@@ -141,6 +141,7 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
               );
             } else {
               return Center(
+                key: const Key('plantcenter'),
                 child: Lottie.asset('assets/plant.json'),
               );
             }

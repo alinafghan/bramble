@@ -25,6 +25,7 @@ void main() {
           title: 'Pride and Prejudice',
           coverUrl: 'https://example.com/cover.jpg'),
     );
+    List<Review> reviews = [];
 
     blocTest<ReviewCubit, ReviewState>(
       'set review successfully',
@@ -52,8 +53,8 @@ void main() {
       setUp: () => when(() => mockProvider.likeReview(review))
           .thenAnswer((_) async => review),
       act: (cubit) => cubit.likeReview(review),
-      skip: 1, //skip loading
-      expect: () => <ReviewState>[SetReviewSuccess(review)],
+      skip: 1,
+      expect: () => <ReviewState>[GetReviewForBookSuccess(reviews)],
     );
     blocTest<ReviewCubit, ReviewState>(
       'like review fails',
@@ -88,5 +89,101 @@ void main() {
         const GetReviewForBookFailure('Exception: Failed to get reviews')
       ],
     );
+  });
+  group('review cubit tests', () {
+    final mockProvider = MockReviewProvider();
+    final review = Review(
+      id: '1',
+      text: 'Great book!',
+      numLikes: 5,
+      createdAt: 'just now',
+      user: Users(userId: '1', email: 'test@gmail.com', mod: false),
+      book: Book(
+        key: '1',
+        bookId: 1,
+        author: 'Jane Austen',
+        title: 'Pride and Prejudice',
+        coverUrl: 'https://example.com/cover.jpg',
+      ),
+    );
+
+    group('getReportedReviews', () {
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Loaded] when successful',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.getReportedReviews())
+            .thenAnswer((_) async => [review]),
+        act: (cubit) => cubit.getReportedReviews(),
+        expect: () => [
+          GetReportedReviewsLoading(),
+          GetReportedReviewsLoaded(reportedReviews: [review]),
+        ],
+      );
+
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Failure] when error occurs',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.getReportedReviews())
+            .thenThrow(Exception('Failed to fetch')),
+        act: (cubit) => cubit.getReportedReviews(),
+        expect: () => [
+          GetReportedReviewsLoading(),
+          const GetReportedReviewsFailure(
+              message: 'Exception: Failed to fetch'),
+        ],
+      );
+    });
+
+    group('reportReview', () {
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Loaded] when successful',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.reportReview(review, 'spam'))
+            .thenAnswer((_) async {}),
+        act: (cubit) => cubit.reportReview(review, 'spam'),
+        expect: () => [
+          ReportReviewLoading(),
+          ReportedReviewLoaded(review: review),
+        ],
+      );
+
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Failure] when error occurs',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.reportReview(review, 'spam'))
+            .thenThrow(Exception('Report failed')),
+        act: (cubit) => cubit.reportReview(review, 'spam'),
+        expect: () => [
+          ReportReviewLoading(),
+          const ReportedReviewFailure(message: 'Exception: Report failed'),
+        ],
+      );
+    });
+
+    group('deleteReview', () {
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Loaded] when successful',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.deleteReview(review))
+            .thenAnswer((_) async {}),
+        act: (cubit) => cubit.deleteReview(review),
+        expect: () => [
+          DeleteReviewLoading(),
+          DeleteReviewLoaded(),
+        ],
+      );
+
+      blocTest<ReviewCubit, ReviewState>(
+        'emits [Loading, Failure] when error occurs',
+        build: () => ReviewCubit(reviewProvider: mockProvider),
+        setUp: () => when(() => mockProvider.deleteReview(review))
+            .thenThrow(Exception('Delete failed')),
+        act: (cubit) => cubit.deleteReview(review),
+        expect: () => [
+          DeleteReviewLoading(),
+          const DeleteReviewFailure(message: 'Exception: Delete failed'),
+        ],
+      );
+    });
   });
 }

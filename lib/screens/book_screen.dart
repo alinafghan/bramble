@@ -42,6 +42,7 @@ class _BookScreenState extends State<BookScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
+                        key: const Key('image'),
                         book.coverUrl!,
                         fit: BoxFit.cover,
                         height: MediaQuery.of(context).size.height / 4,

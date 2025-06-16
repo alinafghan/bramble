@@ -17,13 +17,11 @@ import 'package:journal_app/screens/home_screen.dart';
 import 'package:journal_app/screens/journal_list_screen.dart';
 import 'package:journal_app/screens/journal_screen.dart';
 import 'package:journal_app/screens/library_screen.dart';
-import 'package:journal_app/screens/login_screen.dart';
 import 'package:journal_app/screens/moderate_reviews_screen.dart';
 import 'package:journal_app/screens/profile_screen.dart';
 import 'package:journal_app/screens/review_screen.dart';
 import 'package:journal_app/screens/reviews_book_screen.dart';
 import 'package:journal_app/screens/settings_screen.dart';
-import 'package:journal_app/screens/signup_screen.dart';
 import 'package:journal_app/utils/constants.dart';
 import 'screens/splash_screen.dart';
 
@@ -62,7 +60,7 @@ class MyAppView extends StatelessWidget {
         GoRoute(
           path: '/',
           builder: (BuildContext context, GoRouterState state) {
-            return const SplashScreen();
+            return SplashScreen();
           },
           routes: <RouteBase>[
             GoRoute(
@@ -133,18 +131,6 @@ class MyAppView extends StatelessWidget {
                     },
                   ),
                 ]),
-            GoRoute(
-              path: 'login',
-              builder: (BuildContext context, GoRouterState state) {
-                return const LoginScreen();
-              },
-            ),
-            GoRoute(
-              path: 'signup',
-              builder: (BuildContext context, GoRouterState state) {
-                return const SignupScreen();
-              },
-            ),
             GoRoute(
               path: 'booklist',
               builder: (BuildContext context, GoRouterState state) {
