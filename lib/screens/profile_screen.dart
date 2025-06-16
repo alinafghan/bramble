@@ -41,9 +41,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             supabase.storage.from('images').getPublicUrl(fileName);
 
         // Dispatch update user event
-        context
-            .read<AuthenticationBloc>()
-            .add(AddProfilePicEvent(profileUrl: publicUrl));
+        if (mounted) {
+          context
+              .read<AuthenticationBloc>()
+              .add(AddProfilePicEvent(profileUrl: publicUrl));
+        }
       }
     }
   }
@@ -90,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Theme.of(context)
                               .colorScheme
                               .secondary
-                              .withOpacity(0.4),
+                              .withAlpha((0.4 * 255).toInt()),
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: Theme.of(context).colorScheme.secondary,
@@ -153,12 +155,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  state.myUser.email,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    HugeIcon(
+                        icon: HugeIcons.strokeRoundedMail01,
+                        color: Theme.of(context).colorScheme.onSurface),
+                    const SizedBox(width: 4),
+                    Text(
+                      state.myUser.email,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -214,11 +225,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Text(
                             'No saved books yet',
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.5),
-                            ),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withAlpha(128)),
                           ),
                         ),
                 ),
@@ -251,8 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 : Container(
                     height: 120,
                     width: 120,
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    color: Theme.of(context).colorScheme.primary.withAlpha(51),
                     child: Icon(
                       Icons.book,
                       color: Theme.of(context).colorScheme.primary,
@@ -273,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             book.author,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              color: Theme.of(context).colorScheme.onSurface.withAlpha(153),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
