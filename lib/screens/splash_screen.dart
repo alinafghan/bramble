@@ -65,7 +65,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Users? user2 = await widget._provider.emailSignUp(user, password);
 
     if (user2 != null && mounted) {
-      //TODO//add toast message
       context.go('/home');
     }
   }
@@ -139,7 +138,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Users? user2 = await widget._provider.emailSignUp(user, password);
 
     if (user2 != null && mounted) {
-      //TODO//add toast message
       context.go('/home');
     }
   }
@@ -187,7 +185,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Text('Bramble', style: TextStyle(fontSize: 36)),
               ),
               TabBar(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
                 indicatorColor: Theme.of(context).colorScheme.primary,
                 dividerColor: Colors.transparent,
                 dividerHeight: 0,

@@ -79,9 +79,6 @@ void main() {
           .thenAnswer((_) async => testUser);
       when(() => mockCollection.doc(testUser.userId)).thenReturn(mockDoc);
       when(() => mockDoc.update(any())).thenAnswer((_) async => {});
-
-      print(
-          'savedBooks contains testBook? ${testUser.savedBooks!.contains(testBook)}');
       await bookListRepo.saveBook(testBook);
 
       verify(() => mockDoc.update(any())).called(1);

@@ -11,18 +11,22 @@ import 'package:mocktail/mocktail.dart';
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
+// ignore: subtype_of_sealed_class
 class MockCollectionReference extends Mock
     implements CollectionReference<Map<String, dynamic>> {}
 
+// ignore: subtype_of_sealed_class
 class MockDocumentReference extends Mock
     implements DocumentReference<Map<String, dynamic>> {}
 
+// ignore: subtype_of_sealed_class
 class MockDocumentSnapshot extends Mock
     implements DocumentSnapshot<Map<String, dynamic>> {}
 
 class MockQuerySnapshot extends Mock
     implements QuerySnapshot<Map<String, dynamic>> {}
 
+// ignore: subtype_of_sealed_class
 class MockQueryDocumentSnapshot extends Mock
     implements QueryDocumentSnapshot<Map<String, dynamic>> {}
 
@@ -151,7 +155,7 @@ void main() {
 
     test('throws SocketException', () async {
       when(() => mockReviewCollection.where("book.bookId", isEqualTo: 1))
-          .thenThrow(SocketException('No internet'));
+          .thenThrow(const SocketException('No internet'));
 
       expect(
         () async => await reviewRepo.getReviewsForBook(testBook),

@@ -76,7 +76,7 @@ void main() {
       final mockData = testJournal.toDocument();
       when(() => mockSnapshot.data()).thenReturn(mockData);
 
-      final result = await journalRepo.getJournalFromFirebase(testJournal.id!);
+      final result = await journalRepo.getJournalFromFirebase(testJournal.id);
       expect(result, isA<Journal>());
     });
 
@@ -87,7 +87,7 @@ void main() {
       when(() => mockDocRef.get()).thenAnswer((_) async => mockSnapshot);
       when(() => mockSnapshot.exists).thenReturn(false);
 
-      final result = await journalRepo.getJournalFromFirebase(testJournal.id!);
+      final result = await journalRepo.getJournalFromFirebase(testJournal.id);
       expect(result, isNull);
     });
 
@@ -97,7 +97,7 @@ void main() {
       when(() => mockDocRef.get())
           .thenThrow(const SocketException('No connection'));
 
-      expect(() => journalRepo.getJournalFromFirebase(testJournal.id!),
+      expect(() => journalRepo.getJournalFromFirebase(testJournal.id),
           throwsException);
     });
 
@@ -108,7 +108,7 @@ void main() {
       when(() => mockDocRef.get()).thenThrow(Exception('Unexpected error'));
 
       expect(
-        () => journalRepo.getJournalFromFirebase(testJournal.id!),
+        () => journalRepo.getJournalFromFirebase(testJournal.id),
         throwsA(isA<Exception>().having(
             (e) => e.toString(), 'description', contains('Unexpected error'))),
       );

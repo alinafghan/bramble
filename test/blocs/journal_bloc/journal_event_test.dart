@@ -26,6 +26,7 @@ void main() {
     });
 
     test('AddImage props', () {
+      // ignore: prefer_const_literals_to_create_immutables
       final event = AddImage(journal: mockJournal, image: ['img1.png']);
       expect(event.props, [
         ['img1.png']

@@ -227,7 +227,7 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar>
                           }
                         } catch (e) {
                           ///print the error if the try block fails
-                          print(e);
+                          throw Exception(e);
                         }
                       },
 

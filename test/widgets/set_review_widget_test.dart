@@ -12,11 +12,7 @@ import 'package:mocktail/mocktail.dart';
 class MockReviewProvider extends Mock implements ReviewProvider {}
 
 void main() {
-  late MockReviewProvider mockReviewProvider;
-
-  setUp(() {
-    mockReviewProvider = MockReviewProvider();
-  });
+  setUp(() {});
   testWidgets('SetReviewScreen displays date, text field, and button',
       (WidgetTester tester) async {
     // Mock book object

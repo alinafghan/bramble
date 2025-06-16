@@ -31,36 +31,35 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.19.0 #for datetime
-  table_calendar: ^3.1.3
-  hugeicons: ^0.0.7
-  firebase_core: ^3.10.0
-  cloud_firestore: ^5.6.1
-  firebase_auth: ^5.4.0
-  flutter_bloc: ^9.0.0
-  equatable: ^2.0.0
-  uuid: ^4.5.1
-  flutter_keyboard_visibility: ^6.0.0
-  image_picker: ^1.1.2
-  carousel_slider: ^5.0.0
-  http: ^1.3.0
-  cached_network_image: ^3.4.1
-  google_sign_in: ^6.3.0
-  lottie: ^3.3.1
-  meta: ^1.15.0
-  logger: ^2.5.0
-  flutter_dotenv: ^5.2.1
-  path_provider: ^2.0.0
-  supabase_flutter: ^2.9.0
+  table_calendar: ^3.1.3 #for custom calendar
+  hugeicons: ^0.0.7 #icon lib
+  firebase_core: ^3.10.0 #firebase
+  cloud_firestore: ^5.6.1 #firebase firestore
+  firebase_auth: ^5.4.0 #auth
+  flutter_bloc: ^9.0.0 #bloc 
+  equatable: ^2.0.0 #== in dart is only reference 
+  uuid: ^4.5.1 #uid for user
+  flutter_keyboard_visibility: ^6.0.0 #keyboard bottomnav bar
+  image_picker: ^1.1.2 #img
+  carousel_slider: ^5.0.0 #img slider
+  http: ^1.3.0 #http for library 
+  cached_network_image: ^3.4.1 #cache network img for loading
+  google_sign_in: ^6.3.0 
+  lottie: ^3.3.1 #animation
+  meta: ^1.15.0 #@override @immutable
+  logger: ^2.5.0 #logging
+  flutter_dotenv: ^5.2.1 #api key for firebase
+  path_provider: ^2.0.0 #image storing path getter
+  supabase_flutter: ^2.9.0 #storage for images
   go_router: ^15.1.2
-  golden_toolkit: 0.15.0
-  toastification: ^3.0.3
+  golden_toolkit: 0.15.0 #golden testing
+  toastification: ^3.0.3 #toatss
   
 
 dev_dependencies:
   flutter_launcher_icons: "^0.14.3"
   bloc_test: ^10.0.0
   mocktail: ^1.0.4
-  cached_network_image: ^3.4.1
   flutter_test:
     sdk: flutter
 
