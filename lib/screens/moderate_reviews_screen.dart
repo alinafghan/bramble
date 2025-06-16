@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/blocs/review_cubit/review_cubit.dart';
+import 'package:journal_app/models/review.dart';
 import 'package:journal_app/utils/popup_menu.dart';
 import 'package:lottie/lottie.dart';
 
@@ -24,24 +25,16 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // titleSpacing: 0,
         leadingWidth: 64,
         centerTitle: true,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
-              if (state is GetUserLoaded) {
-                return PopupMenu(
-                  selectedVal: 'Reviews',
-                  isModerator: state.myUser.mod,
-                );
-              } else {
-                return const PopupMenu(
-                  selectedVal: 'Reviews',
-                  isModerator: false,
-                );
-              }
+              final isModerator =
+                  state is GetUserLoaded ? state.myUser.mod : false;
+              return PopupMenu(
+                  selectedVal: 'Reviews', isModerator: isModerator);
             },
           ),
         ),
@@ -53,7 +46,7 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
           builder: (context, state) {
             if (state is GetReportedReviewsLoaded) {
               final reviews = state.reportedReviews;
-              if (reviews.isEmpty) {
+              if (state.reportedReviews.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -66,85 +59,77 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
                   ),
                 );
               }
-
-              return ListView.builder(
-                itemCount: state.reportedReviews.length,
-                itemBuilder: (context, i) {
-                  final bookTitle = state.reportedReviews[i].book.title;
-                  final reviews = state.reportedReviews;
+              final grouped = <String, List<Review>>{};
+              for (var review in reviews) {
+                final title = review.book.title;
+                grouped.putIfAbsent(title, () => []).add(review);
+              }
+              return ListView(
+                children: grouped.entries.map((entry) {
+                  final title = entry.key;
+                  final bookReviews = entry.value;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
-                          bookTitle,
+                          title,
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      ...reviews.map((review) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.report,
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                              title: Text(
-                                  '${review.user.username} • ${format(review.createdAt)}'),
-                              subtitle: Text(
-                                review.text,
-                                style: const TextStyle(
-                                  fontSize: 14,
+                      ...bookReviews.map((review) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                leading: Icon(Icons.report,
+                                    color: Theme.of(context).colorScheme.error),
+                                title: Text(
+                                  '${review.user.username} • ${format(review.createdAt)}',
+                                ),
+                                subtitle: Text(review.text),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete_outline),
+                                  onPressed: () {
+                                    context
+                                        .read<ReviewCubit>()
+                                        .deleteReview(review);
+                                  },
+                                  color: Colors.red.shade300,
                                 ),
                               ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                onPressed: () {
-                                  context
-                                      .read<ReviewCubit>()
-                                      .deleteReview(review);
-                                },
-                                color: Colors.red.shade300,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text(
-                                '${review.reports?.length ?? 0} report(s)}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Text(
+                                  '${review.reports?.length ?? 0} report(s)',
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.grey),
                                 ),
                               ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 6.0),
-                              child: Text(
-                                maxLines: 1,
-                                '-----------------------------------------------------------',
-                                style: TextStyle(
-                                    color: Color.fromARGB(86, 122, 117, 117)),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 6.0),
+                                child: Text(
+                                  maxLines: 1,
+                                  '-----------------------------------------------------------',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(86, 122, 117, 117)),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }),
+                            ],
+                          )),
                     ],
                   );
-                },
-              );
-            } else {
-              return Center(
-                key: const Key('plantcenter'),
-                child: Lottie.asset('assets/plant.json'),
+                }).toList(),
               );
             }
+            return Center(
+              key: const Key('plantcenter'),
+              child: Lottie.asset('assets/plant.json'),
+            );
           },
         ),
       ),
@@ -152,16 +137,14 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
   }
 
   String format(String createdAt) {
-    final DateTime now = DateTime.now();
-    final DateTime created = DateTime.tryParse(createdAt)?.toLocal() ?? now;
-    final difference = now.difference(created);
+    final now = DateTime.now();
+    final created = DateTime.tryParse(createdAt)?.toLocal() ?? now;
+    final diff = now.difference(created);
 
-    if (difference.inMinutes < 1) return 'Just now';
-    if (difference.inHours < 24 && now.day == created.day) return 'Today';
-    if (difference.inHours < 48 && now.day == created.day + 1) {
-      return 'Yesterday';
-    }
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inHours < 24 && now.day == created.day) return 'Today';
+    if (diff.inHours < 48 && now.day == created.day + 1) return 'Yesterday';
 
-    return DateFormat('MMM dd, yyyy').format(created); // e.g. Jun 13, 2025
+    return DateFormat('MMM dd, yyyy').format(created);
   }
 }
