@@ -80,7 +80,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
                       }
                     },
                   );
-                } else {
+                } else if (state.journals.isEmpty) {
                   return Center(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

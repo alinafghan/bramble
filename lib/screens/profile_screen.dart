@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:journal_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -293,7 +294,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             );
           } else {
-            return const SizedBox.shrink();
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: Lottie.asset('assets/plant.json'),
+              ),
+            );
           }
         }),
       ),
@@ -315,6 +321,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.broken_image, size: 120);
+                    },
                   )
                 : Container(
                     height: 120,
