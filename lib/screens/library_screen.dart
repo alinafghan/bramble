@@ -71,6 +71,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
               List searchedBooks = [];
               List books = [];
 
+              if (libraryState is LibraryError) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset('assets/lottie/no_internet.json'),
+                    const SizedBox(height: 14),
+                    const Text('No Internet.'),
+                  ],
+                ));
+              }
+
               if (libraryState is SearchBookLoaded) {
                 searchedBooks = libraryState.books; //searchedbooks are saved
                 books = searchedBooks; //displayed booksare the searched books

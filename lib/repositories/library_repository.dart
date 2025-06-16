@@ -30,7 +30,7 @@ class LibraryRepository {
       return allBooks;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
-      throw Exception('No internet connection. Please check your network.');
+      rethrow;
     } catch (e) {
       _logger.e('error getting all books from api $e');
       throw Exception('error getting books from api');
@@ -56,7 +56,7 @@ class LibraryRepository {
       return searchedBooks;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
-      throw Exception('No internet connection. Please check your network.');
+      rethrow;
     } catch (e) {
       _logger.e('error searching books from api $e');
       throw Exception(

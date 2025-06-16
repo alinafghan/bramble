@@ -114,6 +114,7 @@ flutter:
     - assets/plant.json
     - assets/lottie/water_plants.json
     - assets/lottie/typing_laptop.json
+    - assets/lottie/no_internet.json
     - assets/lottie/watch_film.json
     - assets/google_icon.png
 

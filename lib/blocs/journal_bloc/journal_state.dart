@@ -54,3 +54,5 @@ class GetMonthlyJournalSuccess extends JournalState {
 
   const GetMonthlyJournalSuccess({required this.journals});
 }
+
+class JournalInternetIssue extends JournalState {}

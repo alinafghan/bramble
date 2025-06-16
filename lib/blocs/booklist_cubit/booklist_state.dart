@@ -13,6 +13,8 @@ class GetAllBooksLoading extends SavedBooksState {}
 
 class GetAllBooksFailed extends SavedBooksState {}
 
+class GetAllBooksInternetError extends SavedBooksState {}
+
 class GetAllBooksLoaded extends SavedBooksState {
   final List<Book>? bookList;
 

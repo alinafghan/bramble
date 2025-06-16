@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/models/journal.dart';
@@ -54,6 +56,8 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
         List<Journal> journal =
             await journalProvider.getMonthlyJournal(event.month);
         emit(GetMonthlyJournalSuccess(journals: journal));
+      } on SocketException {
+        emit(JournalInternetIssue());
       } catch (e) {
         emit(GetMonthlyJournalError(message: e.toString()));
       }

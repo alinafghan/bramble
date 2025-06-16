@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/models/book.dart';
@@ -15,6 +17,8 @@ class BookListCubit extends Cubit<SavedBooksState> {
     try {
       List<Book>? list = await listProvider.returnBookList();
       emit(GetAllBooksLoaded(bookList: list));
+    } on SocketException {
+      emit(GetAllBooksInternetError());
     } catch (e) {
       emit(GetAllBooksFailed());
     }

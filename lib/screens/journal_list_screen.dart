@@ -95,7 +95,21 @@ class _JournalListScreenState extends State<JournalListScreen> {
                   ));
                 }
               }
-              return const SizedBox.shrink();
+              if (state is JournalInternetIssue ||
+                  state is GetMonthlyJournalError) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset('assets/lottie/no_internet.json'),
+                    const SizedBox(height: 14),
+                    const Text('No Internet.'),
+                  ],
+                ));
+              }
+              return Center(
+                child: Lottie.asset('assets/plant.json'),
+              );
             })),
       ),
     );

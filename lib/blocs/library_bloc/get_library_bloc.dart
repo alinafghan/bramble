@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:journal_app/models/book.dart';
@@ -15,6 +17,8 @@ class LibraryBloc extends Bloc<GetLibraryEvent, LibraryState> {
       try {
         List<Book> library = await libraryProvider.getLibrary();
         emit(GetLibraryLoaded(booklist: library));
+      } on SocketException {
+        emit(const LibraryError(message: 'No Internet'));
       } catch (e) {
         emit(GetLibraryFailed());
       }

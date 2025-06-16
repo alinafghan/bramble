@@ -92,6 +92,9 @@ class _MyReorderableListState extends State<MyReorderableList> {
                             fit: BoxFit.cover,
                             height: 50,
                             width: 50,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image, size: 50);
+                            },
                           )),
                           trailing: Icon(
                             HugeIcons.strokeRoundedMenu09,
@@ -124,8 +127,20 @@ class _MyReorderableListState extends State<MyReorderableList> {
               ],
             ));
           }
+        } else if (state is GetAllBooksInternetError) {
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/lottie/no_internet.json'),
+              const SizedBox(height: 14),
+              const Text('No Internet.'),
+            ],
+          ));
         } else {
-          return const SizedBox.shrink();
+          return Center(
+            child: Lottie.asset('assets/plant.json'),
+          );
         }
       },
     );

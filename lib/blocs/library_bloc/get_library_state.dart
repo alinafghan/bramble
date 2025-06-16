@@ -53,3 +53,9 @@ final class SearchCleared extends LibraryState {
   @override
   List<Object> get props => [libraryBooks];
 }
+
+final class LibraryError extends LibraryState {
+  final String message;
+
+  const LibraryError({required this.message});
+}

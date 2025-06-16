@@ -29,7 +29,7 @@ class BookListRepository {
       return newUser.savedBooks;
     } on SocketException {
       _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
-      throw Exception('No internet connection. Please check your network.');
+      rethrow;
     } catch (e) {
       _logger.e('error returning booklist $e. user might be null');
       throw Exception('Exception thrown');
