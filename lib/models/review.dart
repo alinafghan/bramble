@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:journal_app/models/book.dart';
 import 'package:journal_app/models/report.dart';
 import 'package:journal_app/models/user.dart';
+// ignore_for_file: must_be_immutable
 
 class Review extends Equatable {
   String id;

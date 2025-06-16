@@ -89,18 +89,32 @@ class _JournalScreenState extends State<JournalScreen> {
 
     return PopScope(
         canPop: true,
-        onPopInvoked: (didPop) {
-          if (didPop) {
-            context.read<JournalBloc>().add(ClearJournalEvent());
-            _hasInitializedContent = false;
-            journalController.clear();
-            journal = null;
-            context
-                .read<MoodBloc>()
-                .add(GetMonthlyMoodEvent(month: DateTime.now()));
-            context.read<TaskCubitCubit>().closeTextfield();
-          }
-        },
+        onPopInvokedWithResult: (didPop, result) => {
+              if (didPop)
+                {
+                  context.read<JournalBloc>().add(ClearJournalEvent()),
+                  _hasInitializedContent = false,
+                  journalController.clear(),
+                  journal = null,
+                  context
+                      .read<MoodBloc>()
+                      .add(GetMonthlyMoodEvent(month: DateTime.now())),
+                  context.read<TaskCubitCubit>().closeTextfield(),
+                }
+            },
+        // onPopInvoked: (didPop) {
+        //   if (didPop) {
+        //     print('we popped off');
+        //     context.read<JournalBloc>().add(ClearJournalEvent());
+        //     _hasInitializedContent = false;
+        //     journalController.clear();
+        //     journal = null;
+        //     context
+        //         .read<MoodBloc>()
+        //         .add(GetMonthlyMoodEvent(month: DateTime.now()));
+        //     context.read<TaskCubitCubit>().closeTextfield();
+        //   }
+        // },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(

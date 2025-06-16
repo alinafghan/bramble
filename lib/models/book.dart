@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+// ignore_for_file: must_be_immutable
 
 class Book extends Equatable {
   final int bookId; //cover_id int from the api, string

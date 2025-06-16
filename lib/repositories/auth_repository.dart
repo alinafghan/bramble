@@ -67,6 +67,7 @@ class AuthRepository {
     try {
       Users? user = await getCurrentUser();
 
+      // ignore: unnecessary_null_comparison
       if (user == null) {
         throw Exception("User is not logged in");
       }
@@ -222,10 +223,29 @@ class AuthRepository {
       _logger.e("Error deleting user: $e");
     }
   }
+
+  Future<String> updateUsername(String username) async {
+    try {
+      Users currentUser = await getCurrentUserFromFirebase();
+      Users updatedUser = currentUser.copyWith(username: username);
+      await _firestore
+          .collection('Users')
+          .doc(currentUser.userId)
+          .update(updatedUser.toDocument());
+      return username;
+    } on SocketException {
+      _logger.e('No internet connection. Check your Wi-Fi or mobile data.');
+      throw Exception('No internet connection. Please check your network.');
+    } catch (e) {
+      _logger.e("Error updating username: $e");
+      throw Exception(e);
+    }
+  }
 }
 
 extension on User {
   /// Maps a [firebase_auth.User] into a [User].
+  // ignore: unused_element
   Users toUser(String userName, bool mod) {
     return Users(userId: uid, email: email!, username: userName, mod: mod);
   }

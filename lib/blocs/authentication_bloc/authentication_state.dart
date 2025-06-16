@@ -50,3 +50,17 @@ class AddProfilePicFailure extends AuthenticationState {
 
   const AddProfilePicFailure({required this.message});
 }
+
+class ChangeUsernameLoading extends AuthenticationState {}
+
+class ChangeUsernameLoaded extends AuthenticationState {
+  final String newUsername;
+
+  const ChangeUsernameLoaded({required this.newUsername});
+}
+
+class ChangeUsernameFailure extends AuthenticationState {
+  final String message;
+
+  const ChangeUsernameFailure({required this.message});
+}

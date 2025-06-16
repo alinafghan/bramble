@@ -53,3 +53,12 @@ class AddProfilePicEvent extends AuthenticationEvent {
   @override
   List<Object?> get props => [profileUrl];
 }
+
+class ChangeUsernameEvent extends AuthenticationEvent {
+  final String newUsername;
+
+  const ChangeUsernameEvent({required this.newUsername});
+
+  @override
+  List<Object?> get props => [newUsername];
+}

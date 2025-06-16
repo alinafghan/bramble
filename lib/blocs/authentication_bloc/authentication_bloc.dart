@@ -50,6 +50,19 @@ class AuthenticationBloc
         emit(AddProfilePicFailure(message: e.toString()));
       }
     });
+    on<ChangeUsernameEvent>((event, emit) async {
+      emit(ChangeUsernameLoading());
+      try {
+        String username =
+            await authRepository.updateUsername(event.newUsername);
+        emit(ChangeUsernameLoaded(newUsername: username));
+        Users currentUser = await authRepository.getCurrentUserFromFirebase();
+        Users updatedUser = currentUser.copyWith(username: username);
+        emit(GetUserLoaded(myUser: updatedUser));
+      } catch (e) {
+        emit(ChangeUsernameFailure(message: e.toString()));
+      }
+    });
   }
   @override
   Future<void> close() {

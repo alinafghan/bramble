@@ -35,6 +35,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
                 if (state.journals.isNotEmpty) {
                   return ListView.builder(
                     itemCount: state.journals.length,
+                    // ignore: body_might_complete_normally_nullable
                     itemBuilder: (context, index) {
                       final journal = state.journals[index];
 

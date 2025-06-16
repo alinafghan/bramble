@@ -98,7 +98,17 @@ class MyAppView extends StatelessWidget {
                       GoRoute(
                         path: 'profile',
                         builder: (BuildContext context, GoRouterState state) {
-                          return const ProfileScreen();
+                          return const ProfileScreen(
+                            readOnly: true,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'edit_profile',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const ProfileScreen(
+                            readOnly: false,
+                          );
                         },
                       ),
                       GoRoute(

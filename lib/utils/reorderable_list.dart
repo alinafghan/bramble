@@ -72,6 +72,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
               },
               children: items
                   .map((item) => Dismissible(
+                        // ignore: body_might_complete_normally_nullable
                         confirmDismiss: (DismissDirection direction) async {
                           deleteBookDialog(item);
                         },

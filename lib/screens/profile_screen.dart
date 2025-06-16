@@ -10,13 +10,17 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final bool readOnly;
+
+  const ProfileScreen({super.key, required this.readOnly});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  TextEditingController usernameController = TextEditingController();
+
   @override
   void initState() {
     context.read<AuthenticationBloc>().add(GetUserEvent());
@@ -54,9 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
+        centerTitle: true,
+        title: Text(
+          widget.readOnly ? 'Profile' : 'Edit Profile',
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
           ),
@@ -65,11 +70,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
             icon: HugeIcon(
               color: Theme.of(context).colorScheme.onSurface,
-              icon: HugeIcons.strokeRoundedEdit01,
+              icon: widget.readOnly
+                  ? HugeIcons.strokeRoundedEdit01
+                  : HugeIcons.strokeRoundedTick02,
             ),
             onPressed: () {
-              // Navigate to edit profile
-              context.push('/home/edit_profile');
+              if (widget.readOnly) {
+                context.go('/home/settings/edit_profile');
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    title: const Text("Save Changes?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.read<AuthenticationBloc>().add(
+                              ChangeUsernameEvent(
+                                  newUsername: usernameController.text));
+                          context.pop();
+                          context.go('/home/settings/profile');
+                        },
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
           ),
           const SizedBox(width: 8),
@@ -79,6 +121,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
           if (state is GetUserLoaded) {
+            if (usernameController.text.isEmpty &&
+                state.myUser.username != null) {
+              usernameController.text += state.myUser.username ?? '';
+            }
             return Column(
               children: [
                 const SizedBox(height: 24),
@@ -147,11 +193,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  state.myUser.username ?? 'Not Found',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: widget.readOnly
+                            ? InputBorder.none
+                            : const UnderlineInputBorder(),
+                      ),
+                      controller: usernameController,
+                      readOnly: widget.readOnly,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
