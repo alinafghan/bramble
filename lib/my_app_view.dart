@@ -37,7 +37,6 @@ class MyAppView extends StatelessWidget {
 
     final GoRouter router = GoRouter(
       refreshListenable: StreamToListenable([authBloc.stream]),
-      //The top-level callback allows the app to redirect to a new location.
       redirect: (context, state) {
         final isAuthenticated =
             authBloc.state.status == AuthenticationStatus.authenticated;
