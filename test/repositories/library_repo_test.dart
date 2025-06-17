@@ -89,7 +89,7 @@ void main() {
       expect(books[0].title, 'Search Result');
     });
 
-    test('searchBook throws on SocketException', () async {
+    test('searchBook rethrows on SocketException', () async {
       final client = MockClient((request) async {
         throw const SocketException('No internet');
       });
@@ -98,8 +98,8 @@ void main() {
 
       expect(
         () => repository.searchBook('test'),
-        throwsA(predicate((e) =>
-            e is Exception && e.toString().contains('No internet connection'))),
+        throwsA(isA<SocketException>()
+            .having((e) => e.message, 'message', contains('No internet'))),
       );
     });
 

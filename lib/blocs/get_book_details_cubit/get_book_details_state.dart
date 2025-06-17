@@ -2,9 +2,6 @@ part of '../get_book_details_cubit/get_book_details_cubit.dart';
 
 abstract class GetBookDetailsState extends Equatable {
   const GetBookDetailsState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class GetBookDetailsInitial extends GetBookDetailsState {

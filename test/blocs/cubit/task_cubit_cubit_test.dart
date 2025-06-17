@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal_app/blocs/cubit/task_cubit_cubit.dart';
+import 'package:journal_app/blocs/get_book_details_cubit/get_book_details_cubit.dart';
 
 void main() {
   group('TaskCubitCubit Tests', () {
@@ -69,6 +70,15 @@ void main() {
       const state2 = ToggleExpandState({'a': false});
 
       expect(state1 == state2, isFalse);
+    });
+  });
+  group('GetBookDetailsLoading', () {
+    test('supports value comparison', () {
+      expect(GetBookDetailsLoading(), GetBookDetailsLoading());
+    });
+
+    test('props are empty', () {
+      expect(GetBookDetailsLoading().props, []);
     });
   });
 }

@@ -70,9 +70,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void showSnackBar(String message) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(content: Text(message)),
-    // );
     toastification.show(
       context: context,
       type: ToastificationType.warning,
@@ -446,10 +443,6 @@ class _SplashScreenState extends State<SplashScreen> {
                                             .surface),
                                   )),
                               OutlinedButton(
-                                  // style: TextButton.styleFrom(
-                                  //     tapTargetSize:
-                                  //         MaterialTapTargetSize.shrinkWrap,
-                                  //     backgroundColor: Theme.of(context).colorScheme.primary),
                                   onPressed: () {
                                     signUpAsModerator();
                                   },
