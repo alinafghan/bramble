@@ -46,6 +46,7 @@ class _ModerateReviewsScreenState extends State<ModerateReviewsScreen> {
       listener: (context, state) {
         if (state is DeleteReviewLoaded) {
           showSnackBar('Review deleted successfully!');
+          context.read<ReviewCubit>().getReportedReviews();
         }
       },
       child: Scaffold(

@@ -31,17 +31,6 @@ class SettingsScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           ListTile(
-            title: Text('Reminder',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 18,
-                )),
-            leading: HugeIcon(
-              icon: HugeIcons.strokeRoundedNotification01,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-          ListTile(
             title: Text('Font',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
@@ -77,17 +66,6 @@ class SettingsScreen extends StatelessWidget {
                 ),
               );
             },
-          ),
-          ListTile(
-            title: Text('Export Data',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 18,
-                )),
-            leading: HugeIcon(
-              icon: HugeIcons.strokeRoundedFolder01,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
           ),
           ListTile(
             title: Text('About Us',
