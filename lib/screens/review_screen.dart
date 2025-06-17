@@ -140,6 +140,7 @@ class _ReviewScreenState extends State<SetReviewScreen> {
           ),
           book,
         );
+    context.pop();
   }
 
   Widget bottomNav() {
